@@ -1,0 +1,2 @@
+=> layers overlay to large transparent canvas
+=> cleanup obvi

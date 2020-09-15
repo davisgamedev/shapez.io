@@ -52,8 +52,13 @@ export function getBufferStats() {
 
 export function clearBufferBacklog() {
     while (freeCanvasList.length > 50) {
-        freeCanvasList.pop();
+        let canvasEl = freeCanvasList.pop();
+        if(canvasEl) {
+            console.log(canvasEl);
+            document.body.removeChild(canvasEl.canvas);
+        }
     }
+    console.dir(freeCanvasList);
 }
 
 /**
@@ -137,6 +142,8 @@ export function makeOffscreenBuffer(w, h, { smooth = true, reusable = true, labe
     if (!canvas) {
         canvas = document.createElement("canvas");
         context = canvas.getContext("2d" /*, { alpha } */);
+
+        document.body.appendChild(canvas);
 
         canvas.width = w;
         canvas.height = h;

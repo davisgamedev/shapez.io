@@ -344,6 +344,9 @@ export class KeyActionMapper {
         /** @type {Object.<string, Keybinding>} */
         this.keybindings = {};
 
+        /** @type {Object.<string, Array<string>>} */
+        this.keybindingIdsByKeyCode = {};
+
         const overrides = root.app.settings.getKeybindingOverrides();
 
         for (const category in KEYMAPPINGS) {
@@ -354,8 +357,17 @@ export class KeyActionMapper {
                 }
 
                 this.keybindings[key] = new Keybinding(this, this.root.app, payload);
+
+                if(this.getKeybindingIdsByKeyCode(payload.keyCode)) {
+                    this.keybindingIdsByKeyCode['_' + payload.keyCode].push(key);
+                }
+                else {
+                    this.keybindingIdsByKeyCode['_' + payload.keyCode] = [key];
+                }
             }
         }
+
+        this.preventDefaultShortcutsOnKeybinds();
 
         inputReciever.pageBlur.add(this.onPageBlur, this);
         inputReciever.destroyed.add(this.cleanup, this);
@@ -374,6 +386,15 @@ export class KeyActionMapper {
             }
         }
         return result;
+    }
+
+    /**
+     * Returns all keybinding ids from the given keycode
+     * @param {Number} keyCode
+     * @returns {Array<string>}
+     */
+    getKeybindingIdsByKeyCode(keyCode) {
+        return this.keybindingIdsByKeyCode['_' + keyCode];
     }
 
     /**
@@ -454,5 +475,33 @@ export class KeyActionMapper {
         assert(id, "Not a valid keybinding: " + JSON.stringify(binding));
         assert(this.keybindings[id], "Keybinding " + id + " not known!");
         return this.keybindings[id];
+    }
+
+    // TODO this can be added to the default key event
+    /**
+     * Prevents any ctrl+[key] combinations if [key] is an exisiting keybinding
+     * Fixes issue with Chrome shortcuts interfering with controls
+     * Does not prevent Chrome navigation shortcuts (ctrl+w, ctrl+tab, etc)
+     */
+    preventDefaultShortcutsOnKeybinds() {
+
+        // Hijacks the body.onkeydown method
+        // onkeydown?.onkeydown.bind??[anonFunc]
+        this.defaultDocumentOnKeyDown = 
+        (document.body.onkeydown && document.body.onkeydown.bind(document.body)) || (() => { return true; });
+        
+        
+        document.body.onkeydown = (event) => {
+            if(event.ctrlKey && this.getKeybindingIdsByKeyCode(event.keyCode)) {
+                event.preventDefault();
+                event.stopPropagation();
+                event.returnValue = false;
+                return false;
+            }
+            else {
+                return this.defaultDocumentOnKeyDown(event);
+            }
+        };
+
     }
 }
