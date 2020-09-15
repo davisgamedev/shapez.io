@@ -60,9 +60,6 @@ export class BufferMaintainer {
      */
     garbargeCollect() {
 
-        console.log("%cbefore", "color: red");
-        console.dir(this.cache);
-
         let totalKeys = 0;
         let deletedKeys = 0;
         const minIteration = this.iterationIndex;
@@ -114,8 +111,6 @@ export class BufferMaintainer {
 
         ++this.iterationIndex;
         
-        console.log("%cafter", "color: green");
-        console.dir(this.cache);
     }
 
     update() {

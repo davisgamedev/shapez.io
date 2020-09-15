@@ -54,8 +54,12 @@ export function clearBufferBacklog() {
     while (freeCanvasList.length > 50) {
         let canvasEl = freeCanvasList.pop();
         if(canvasEl) {
-            console.log(canvasEl);
-            document.body.removeChild(canvasEl.canvas);
+            try{
+                document.body.removeChild(canvasEl.canvas);
+            }
+            catch(e){
+                console.warn("Could not remove debug canvas buffer, likely already deleted");
+            };
         }
     }
     console.dir(freeCanvasList);

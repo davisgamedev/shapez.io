@@ -1,2 +1,4 @@
 => layers overlay to large transparent canvas
 => cleanup obvi
+
+=> disable grid and low quality resources doesn't really make a difference
