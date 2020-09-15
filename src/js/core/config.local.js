@@ -65,6 +65,9 @@ export default {
     // Disables the automatic switch to an overview when zooming out
     // disableMapOverview: true,
     // -----------------------------------------------------------------------------------
+    // Enables debug overlays on static entities (buildings and stuff)
+    // renderStaticEntityDebugOverlays: true,
+    // -----------------------------------------------------------------------------------
     // Disables the notification when there are new entries in the changelog since last played
     // disableUpgradeNotification: true,
     // -----------------------------------------------------------------------------------

@@ -443,7 +443,7 @@ export class GameCore {
             context.globalAlpha = 1;
         }
 
-        if (G_IS_DEV) {
+        if (G_IS_DEV && globalConfig.debug.renderStaticEntityDebugOverlays) {
             root.map.drawStaticEntityDebugOverlays(params);
         }
 
