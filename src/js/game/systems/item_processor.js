@@ -22,6 +22,9 @@ export class ItemProcessorSystem extends GameSystemWithFilter {
     }
 
     update() {
+
+        // TODO mark entities active
+
         for (let i = 0; i < this.allEntities.length; ++i) {
             const entity = this.allEntities[i];
 

@@ -11,35 +11,20 @@ export class ItemAcceptorSystem extends GameSystemWithFilter {
         super(root, [ItemAcceptorComponent]);
     }
 
-    update() {
-        const progress =
-            this.root.dynamicTickrate.deltaSeconds *
-            2 *
-            this.root.hubGoals.getBeltBaseSpeed() *
-            globalConfig.itemSpacingOnBelts; // * 2 because its only a half tile
-
-        for (let i = 0; i < this.allEntities.length; ++i) {
-            const entity = this.allEntities[i];
-            const aceptorComp = entity.components.ItemAcceptor;
-            const animations = aceptorComp.itemConsumptionAnimations;
-
-            // Process item consumption animations to avoid items popping from the belts
-            for (let animIndex = 0; animIndex < animations.length; ++animIndex) {
-                const anim = animations[animIndex];
-                anim.animProgress += progress;
-                if (anim.animProgress > 1) {
-                    fastArrayDelete(animations, animIndex);
-                    animIndex -= 1;
-                }
-            }
-        }
-    }
+    update() {}
 
     /**
      * @param {DrawParameters} parameters
      * @param {MapChunkView} chunk
      */
     drawChunk(parameters, chunk) {
+
+        const progress =
+            this.root.dynamicTickrate.deltaSeconds *
+            2 *
+            this.root.hubGoals.getBeltBaseSpeed() *
+            globalConfig.itemSpacingOnBelts; // * 2 because its only a half tile
+
         const contents = chunk.containedEntitiesByLayer.regular;
         for (let i = 0; i < contents.length; ++i) {
             const entity = contents[i];
@@ -49,10 +34,14 @@ export class ItemAcceptorSystem extends GameSystemWithFilter {
             }
 
             const staticComp = entity.components.StaticMapEntity;
-            for (let animIndex = 0; animIndex < acceptorComp.itemConsumptionAnimations.length; ++animIndex) {
-                const { item, slotIndex, animProgress, direction } = acceptorComp.itemConsumptionAnimations[
-                    animIndex
-                ];
+            for (let animIndex = acceptorComp.itemConsumptionAnimations.length - 1; animIndex >= 0; --animIndex) {
+                
+                const { item, slotIndex, animProgress, direction } = acceptorComp.itemConsumptionAnimations[animIndex];
+
+                if (animProgress > 1) {
+                    fastArrayDelete(acceptorComp.itemConsumptionAnimations, animIndex);
+                    continue;
+                }
 
                 const slotData = acceptorComp.slots[slotIndex];
                 const realSlotPos = staticComp.localTileToWorld(slotData.pos);
@@ -74,6 +63,8 @@ export class ItemAcceptorSystem extends GameSystemWithFilter {
                     parameters,
                     globalConfig.defaultItemDiameter
                 );
+
+                acceptorComp.itemConsumptionAnimations[animIndex].animProgress += progress;
             }
         }
     }
