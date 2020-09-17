@@ -5,7 +5,9 @@ import { Entity } from "./entity";
 
 import { GameRoot } from "./root";
 import { GameSystem } from "./game_system";
-import { arrayDelete, arrayDeleteValue } from "../core/utils";
+import { arrayDelete, arrayDeleteValue, fastArrayDelete } from "../core/utils";
+
+// TODO check indexOf and other O(n) operations in loops
 
 export class GameSystemWithFilter extends GameSystem {
     /**
@@ -21,9 +23,15 @@ export class GameSystemWithFilter extends GameSystem {
 
         /**
          * All entities which match the current components
-         * @type {Array<Entity>}
+         * @type {Map<Number, Entity>}
          */
-        this.allEntities = [];
+        this.allEntitiesMap = new Map();
+
+        /**
+         * All allEntitiesMap keys for faster iteration
+         * @type {Array<Number>}
+         */
+        this.allEntitiesKeys = [];
 
         this.root.signals.entityAdded.add(this.internalPushEntityIfMatching, this);
         this.root.signals.entityGotNewComponent.add(this.internalReconsiderEntityToAdd, this);
@@ -44,16 +52,17 @@ export class GameSystemWithFilter extends GameSystem {
             }
         }
 
-        assert(this.allEntities.indexOf(entity) < 0, "entity already in list: " + entity);
+        assert(this.allEntitiesMap.has(entity.uid), "entity already in list: " + entity);
         this.internalRegisterEntity(entity);
     }
 
+    // TODO double check we are clearing both Map and Keys!!!!!!
     /**
      *
      * @param {Entity} entity
      */
     internalCheckEntityAfterComponentRemoval(entity) {
-        if (this.allEntities.indexOf(entity) < 0) {
+        if (this.allEntitiesMap.has(entity.uid)) {
             // Entity wasn't interesting anyways
             return;
         }
@@ -61,7 +70,7 @@ export class GameSystemWithFilter extends GameSystem {
         for (let i = 0; i < this.requiredComponentIds.length; ++i) {
             if (!entity.components[this.requiredComponentIds[i]]) {
                 // Entity is not interesting anymore
-                arrayDeleteValue(this.allEntities, entity);
+                this.allEntitiesMap.delete(entity.uid);
             }
         }
     }
@@ -76,20 +85,19 @@ export class GameSystemWithFilter extends GameSystem {
                 return;
             }
         }
-        if (this.allEntities.indexOf(entity) >= 0) {
+        if (this.allEntitiesMap.has(entity.uid)) {
             return;
         }
         this.internalRegisterEntity(entity);
     }
 
     refreshCaches() {
-        this.allEntities.sort((a, b) => a.uid - b.uid);
-
         // Remove all entities which are queued for destroy
-        for (let i = 0; i < this.allEntities.length; ++i) {
-            const entity = this.allEntities[i];
+        for (let i = 0; i < this.allEntitiesKeys.length; ++i) {
+            const entity = this.allEntitiesMap[this.allEntitiesKeys[i]];
             if (entity.queuedForDestroy || entity.destroyed) {
-                this.allEntities.splice(i, 1);
+                this.allEntitiesMap.delete(entity.uid);
+                fastArrayDelete(this.allEntitiesKeys, i);
             }
         }
     }
@@ -106,11 +114,12 @@ export class GameSystemWithFilter extends GameSystem {
      * @param {Entity} entity
      */
     internalRegisterEntity(entity) {
-        this.allEntities.push(entity);
+        this.allEntitiesMap[entity.uid] = entity;
+        this.allEntitiesKeys.push(entity.uid);
 
         if (this.root.gameInitialized && !this.root.bulkOperationRunning) {
             // Sort entities by uid so behaviour is predictable
-            this.allEntities.sort((a, b) => a.uid - b.uid);
+            this.allEntitiesKeys.sort((a, b) => a - b);
         }
     }
 
@@ -123,9 +132,8 @@ export class GameSystemWithFilter extends GameSystem {
             // We do this in refreshCaches afterwards
             return;
         }
-        const index = this.allEntities.indexOf(entity);
-        if (index >= 0) {
-            arrayDelete(this.allEntities, index);
+        if (this.allEntitiesMap.delete(entity.uid)) {
+            arrayDeleteValue(this.allEntitiesKeys, entity.uid);
         }
     }
 }

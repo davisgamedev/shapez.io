@@ -1,4 +1,4 @@
-import { globalConfig } from "../core/config";
+import { globalConfig, THIRDPARTY_URLS } from "../core/config";
 import { DrawParameters } from "../core/draw_parameters";
 import { createLogger } from "../core/logging";
 import { Rectangle } from "../core/rectangle";
@@ -84,7 +84,15 @@ export class BeltPath extends BasicSerializableObject {
         if (G_IS_DEV && globalConfig.debug.checkBeltPaths) {
             this.debug_checkIntegrity("constructor");
         }
+
+        this.reporter = this.root.systemMgr.systems.systemUpdateReporter;
     }
+
+    /**
+     * set by belt system
+     */
+    uid = 0;
+
     /**
      * Initializes the path by computing the properties which are not saved
      * @param {boolean} computeSpacing Whether to also compute the spacing
@@ -141,8 +149,16 @@ export class BeltPath extends BasicSerializableObject {
                 this.debug_checkIntegrity("accept-item");
             }
 
+            if (this.empty) {
+                this.reporter.resolveBeltPath(this);
+                this.empty = false;
+            }
+
             return true;
         }
+
+        this.reporter.reportFullBeltPath(this);
+
         return false;
     }
 
@@ -175,6 +191,7 @@ export class BeltPath extends BasicSerializableObject {
      */
     onPathChanged() {
         this.acceptorTarget = this.computeAcceptingEntityAndSlot();
+        this.reporter.resolveBeltPath(this);
     }
 
     /**
@@ -972,6 +989,11 @@ export class BeltPath extends BasicSerializableObject {
             this.debug_checkIntegrity("pre-update");
         }
 
+        if (this.items.length <= 0) {
+            this.reporter.reportEmptyBeltPath(this);
+            return;
+        }
+
         // Divide by item spacing on belts since we use throughput and not speed
         let beltSpeed =
             this.root.hubGoals.getBeltBaseSpeed() *
@@ -1055,6 +1077,9 @@ export class BeltPath extends BasicSerializableObject {
         // Check if the acceptor has a filter for example
         if (targetAcceptorComp && !targetAcceptorComp.canAcceptItem(this.acceptorTarget.slot, item)) {
             // Well, this item is not accepted
+
+            this.idle = true;
+
             return false;
         }
 
@@ -1076,6 +1101,8 @@ export class BeltPath extends BasicSerializableObject {
                     remainingProgress
                 );
             }
+
+            this.idle = false;
 
             return true;
         }

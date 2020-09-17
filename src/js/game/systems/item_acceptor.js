@@ -11,14 +11,11 @@ export class ItemAcceptorSystem extends GameSystemWithFilter {
         super(root, [ItemAcceptorComponent]);
     }
 
-    update() {}
-
     /**
      * @param {DrawParameters} parameters
      * @param {MapChunkView} chunk
      */
     drawChunk(parameters, chunk) {
-
         const progress =
             this.root.dynamicTickrate.deltaSeconds *
             2 *
@@ -34,9 +31,14 @@ export class ItemAcceptorSystem extends GameSystemWithFilter {
             }
 
             const staticComp = entity.components.StaticMapEntity;
-            for (let animIndex = acceptorComp.itemConsumptionAnimations.length - 1; animIndex >= 0; --animIndex) {
-                
-                const { item, slotIndex, animProgress, direction } = acceptorComp.itemConsumptionAnimations[animIndex];
+            for (
+                let animIndex = acceptorComp.itemConsumptionAnimations.length - 1;
+                animIndex >= 0;
+                --animIndex
+            ) {
+                const { item, slotIndex, animProgress, direction } = acceptorComp.itemConsumptionAnimations[
+                    animIndex
+                ];
 
                 if (animProgress > 1) {
                     fastArrayDelete(acceptorComp.itemConsumptionAnimations, animIndex);

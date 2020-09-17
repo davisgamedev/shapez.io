@@ -38,7 +38,7 @@
         "cssnano-preset-advanced": "^4.0.7",
         "debounce-promise": "^3.1.2",
         "email-validator": "^2.0.4",
-        "eslint": "7.1.0",
+        "eslint": "^7.9.0",
         "fastdom": "^1.0.8",
         "flatted": "^2.0.1",
         "howler": "^2.1.2",

@@ -4,3 +4,6 @@
 => disable grid and low quality resources doesn't really make a difference
 
 => CHECK ANIMATION CHANGES (item acceptor) on new, slower belts
+=> CHECK SERIALIZATION ISSUES
+
+=> look into Webworker threading and Atomics
