@@ -29,6 +29,27 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
 
     reportOnResolved = false;
 
+    tryReportEmpty(entity) {
+        if (!this.reportOnResolved) {
+            this.reportOnResolved = true;
+            this.reporter.reportEjectorEmpty(entity);
+        }
+    }
+
+    tryReportFull(entity, target) {
+        if (!this.reportOnResolved) {
+            this.reportOnResolved = true;
+            this.reporter.reportEjectorFull(entity, target);
+        }
+    }
+
+    tryReportResolve(entity) {
+        if (this.reportOnResolved) {
+            this.reportOnResolved = false;
+            this.reporter.resolveDependencies(entity, ItemEjectorComponent.getId());
+        }
+    }
+
     /**
      *
      * @param {Entity} entity
@@ -80,8 +101,8 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
             }
 
             // Try to find acceptors for every ejector
-            for (let i = 0; i < this.allEntities.length; ++i) {
-                const entity = this.allEntities[i];
+            for (let i = 0; i < this.allEntitiesKeys.length; ++i) {
+                const entity = this.allEntitiesMap[this.allEntitiesKeys[i]];
                 this.recomputeSingleEntityCache(entity);
             }
         }
@@ -198,9 +219,11 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
             progressGrowth = 1;
         }
 
+        const activeEntityKeys = this.reporter.getActiveEntitiesByComponent(ItemEjectorComponent.getId());
+
         // Go over all cache entries
-        for (let i = 0; i < this.allEntities.length; ++i) {
-            const sourceEntity = this.allEntities[i];
+        for (let i = 0; i < activeEntityKeys.length; ++i) {
+            const sourceEntity = this.allEntitiesMap[activeEntityKeys[i]];
             const sourceEjectorComp = sourceEntity.components.ItemEjector;
             if (!sourceEjectorComp.enabled) {
                 continue;
@@ -212,6 +235,7 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
                 const item = sourceSlot.item;
                 if (!item) {
                     // No item available to be ejected
+                    this.tryReportEmpty(sourceEntity.uid);
                     continue;
                 }
 
@@ -241,6 +265,7 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
                     // Try passing the item over
                     if (destPath.tryAcceptItem(item)) {
                         sourceSlot.item = null;
+                        this.tryReportResolve(sourceEntity.uid);
                     }
 
                     // Always stop here, since there can *either* be a belt path *or*
@@ -261,13 +286,10 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
                         // Handover successful, clear slot
                         targetAcceptorComp.onItemAccepted(destSlot.index, destSlot.acceptedDirection, item);
                         sourceSlot.item = null;
-                        if (this.reportOnResolved) {
-                            this.reporter.resolveDependencies(this.allEntitiesKeys[i]);
-                        }
+                        this.tryReportResolve(sourceEntity);
                         continue;
                     } else {
-                        this.reportOnResolved = true;
-                        this.reporter.reportEjectorFull(this.allEntitiesKeys[i]);
+                        this.tryReportFull(sourceEntity.uid, targetEntity.uid);
                     }
                 }
             }

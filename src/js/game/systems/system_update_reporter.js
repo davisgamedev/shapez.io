@@ -1,5 +1,4 @@
 import { Container } from "pixi.js";
-import { forEachChild } from "typescript";
 import { fastArrayDelete, fastArrayDeleteValueIfContained } from "../../core/utils";
 import { Component } from "../component";
 import { BeltComponent } from "../components/belt";
@@ -15,9 +14,10 @@ import { GameSystemWithFilter } from "../game_system_with_filter";
 import { SystemUpdateResolver } from "./system_update_resolver";
 
 // TODO object docs
+// TODO CHECK LOGIC WIRES ISSUES
 
 
-const BELTPATH_TRACE_THRESHOLD = 30;
+const ENTITY_IDLE_WATCHLIST = 30;
 
 
 /**
@@ -50,7 +50,9 @@ const BELTPATH_TRACE_THRESHOLD = 30;
 
 /**
  * 
- * @typedef {Map<EntityUid, Array<}
+ * @typedef {Object} Dependency
+ * @property {Component} dependentComponent
+ * @property {Set<EntityUid>} dependents
  */
 
 /**
@@ -79,20 +81,45 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
     }
 
 
-     /**
-      * @type {Map<ComponentId, EntityUid>}
-      */
-    entityComponentContainers = new Map();
+    //  /**
+    //   * @type {Map<ComponentId, EntityUid>}
+    //   */
+     entityComponentContainers = new Map();
+
+    // /**
+    //  * @type {Set<Entity|BeltPathFwd>}
+    //  */
+    // deactivateAllEntityComponentsQueue = new Set();
+
+    // /**
+    //  * @type {Set<Entity|BeltPathFwd>}
+    //  */
+    // activateAllEntityComponentsQueue = new Set();
+
+
 
     /**
-     * @type {Set<Entity|BeltPathFwd>}
+     * @type {Map<EntityUid, Dependency>}
      */
-    deactivateAllEntityComponentsQueue = new Set();
+    dependencies = new Map();
 
     /**
-     * @type {Set<Entity|BeltPathFwd>}
+     * Dependency => Dependents
+     * @type {Map<EntityUid, Dependency>}
      */
-    activateAllEntityComponentsQueue = new Set();
+    dependencyQueue = new Map();
+
+    /**
+     * Dependent => Dependency
+     * @type {Map<EntityUid, EntityUid>}
+     */
+    dependencyQueueReverse = new Map();
+
+    /**
+     * @type {Array<Dependency>}
+     * 
+     */
+    dependencyResolveQueue = [];
 
 
     /**
@@ -158,9 +185,25 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
 
 
     update() {
+        
+        if(this.dependencyQueue.size > 0) {
 
-        if(this.deactivateAllEntityComponentsQueue.size > 0) {
-            this.deactivateAllEntityComponentsQueue.forEach(entityId => {})
+
+
+
+
+
+            for(let [entity, dependency] of this.dependencyQueue.entries()) {
+                
+                if(dependency.dependents.size > 0) {
+                    switch(dependency.dependentComponent) {
+                        case()
+                    }
+                }
+
+
+
+            }
         }
 
         for(let i = 0; i < this.requiredComponentIds.length; ++i) {
@@ -221,14 +264,32 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
 
     /**
      * @param {EntityUid} entityWithEjector
+     * @param {EntityUid} entityWithEjector
+     * 
      */
-    reportEjectorFull(entityWithEjector){
+    reportEjectorFull(entityWithEjector, targetAcceptor){
         /**
          * IF we have an acceptor which is also blocked, then the depency is the ejector
+         *  otherwise, we wait for the acceptor to be full
          */
-        const entity = this.allEntitiesKeys[entityWithEjector];
-        if(entity.)
+      
+        const entity = this.allEntitiesMap[entityWithEjector];
+        if(entity.components.ItemAcceptor && this.) {
+
+        }
     }
+
+    reportEjectorEmpty(entityWithEjector) {
+        /**
+         * IF we have an ejector, and the acceptor is empty we are idle, dependent on acceptor
+         */
+    }
+
+
+    reportAcceptorEmpty(entityWithAcceptor) {
+        if(entityWithAcceptor.empty)
+    }
+
 
     /**
      * @param {EntityUid} entityWithAcceptor
@@ -238,12 +299,16 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
     }
 
 
-
-
     /////////////////// Dependencies ////////////////
 
-    resolveDependencies(entityUid) {
-        
+    resolveDependencies(entityResolvedUid, component) {
+        let dependency = this.dependencyQueueReverse[entityResolvedUid];
+        if(this.dependencyQueueReverse.delete(entityResolvedUid)) {
+            this.dependencyQueue[dependency].dependents.delete(entityResolvedUid);
+        }
+        if(this.dependencies[entityResolvedUid]) {
+            this.dependencyResolveQueue.push(this.dependencies[entityResolvedUid]);
+        }
     }
 
 
@@ -255,26 +320,6 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
     reportEntityIdleDependent(entity, dependent) {
         if(this.inactiveEntityComponentUids)
     }
-
-
-    /**
-     * map<componentId, array<entity.uid>>
-     * @type {Map<string, Array<number>>}
-     */
-    inactiveEntityComponentUids;
-
-
-    /**
-     * entity idle because of depentity
-     */
-    idleEntities = new Map();
-
-    /**
-     * (reverse lookup)
-     * dependity causing entity idle
-     * @type {Map<number, number>}
-     */
-    idleEntityDependents= new Map();
 
 
     // tooooooo do
