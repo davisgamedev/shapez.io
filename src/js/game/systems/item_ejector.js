@@ -23,7 +23,11 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
          * @type {Rectangle}
          */
         this.areaToRecompute = null;
+
+        this.reporter = this.root.systemMgr.systems.systemUpdateReporter;
     }
+
+    reportOnResolved = false;
 
     /**
      *
@@ -257,7 +261,13 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
                         // Handover successful, clear slot
                         targetAcceptorComp.onItemAccepted(destSlot.index, destSlot.acceptedDirection, item);
                         sourceSlot.item = null;
+                        if (this.reportOnResolved) {
+                            this.reporter.resolveDependencies(this.allEntitiesKeys[i]);
+                        }
                         continue;
+                    } else {
+                        this.reportOnResolved = true;
+                        this.reporter.reportEjectorFull(this.allEntitiesKeys[i]);
                     }
                 }
             }

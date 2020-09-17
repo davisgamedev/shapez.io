@@ -94,6 +94,18 @@ export class BeltPath extends BasicSerializableObject {
     uid = 0;
 
     /**
+     * just need a little something for reporter
+     */
+    isBeltPath = true;
+
+    /**
+     * @returns {number}
+     */
+    getItemAcceptorComponentUid() {
+        return this.acceptorTarget.entity.uid;
+    }
+
+    /**
      * Initializes the path by computing the properties which are not saved
      * @param {boolean} computeSpacing Whether to also compute the spacing
      */

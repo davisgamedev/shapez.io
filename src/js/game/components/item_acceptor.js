@@ -44,6 +44,16 @@ export class ItemAcceptorComponent extends Component {
         });
     }
 
+    reportOnAccept = false;
+    reporter = null;
+    entityUid = null;
+
+    reportOnItemAccepted(reporter, entityUid) {
+        this.reportOnAccept = true;
+        this.reporter = reporter;
+        this.entityUid = entityUid;
+    }
+
     /**
      *
      * @param {object} param0
@@ -109,6 +119,10 @@ export class ItemAcceptorComponent extends Component {
             direction,
             animProgress: Math.min(1, remainingProgress * 2),
         });
+        if (this.reportOnAccept) {
+            this.reporter.reportDependencyResolved(this.entityUid);
+            this.reportOnAccept = false;
+        }
     }
 
     /**
