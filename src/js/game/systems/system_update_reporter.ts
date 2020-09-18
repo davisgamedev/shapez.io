@@ -38,7 +38,7 @@ type ComponentId = string;
  interface BeltPathFwd {
     uid: EntityUid,
     isBeltPath: boolean,
-    getItemAcceptorTargetEntity(): Entity
+    //getItemAcceptorTargetEntity(): Entity
  }
 
 /**
@@ -325,13 +325,17 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
 
 
     addBeltPath(beltPath) {
-        this.beltPaths.allBeltPaths.set(beltPath.uid, beltPath);
-        this.beltPaths.container.activateEntityQueue.add(beltPath.uid);
+        if(!this.beltPaths.allBeltPaths.has(beltPath)){
+            this.beltPaths.allBeltPaths.set(beltPath.uid, beltPath);
+            this.beltPaths.container.activateEntityQueue.push(beltPath.uid);
+        }
     }
 
     removeBeltPath(beltPath) {
-        this.beltPaths.allBeltPaths.delete(beltPath.uid);
-        this.beltPaths.container.deactivateEntityQueue.add(beltPath.uid);
+        if(!this.beltPaths.allBeltPaths.has(beltPath)){
+            this.beltPaths.allBeltPaths.delete(beltPath.uid);
+            this.beltPaths.container.deactivateEntityQueue.push(beltPath.uid);
+        }
     }
 
 
@@ -355,14 +359,6 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
         }
     }
 
-    reportBeltPathBlocked(beltPath: BeltPathFwd, targetAcceptor: Entity|null) {
-        this.queueNewDependency(beltPath, beltPath.uid);
-        if(targetAcceptor) {
-            this.queueNewDependency(beltPath, targetAcceptor.uid);
-            this.giveItemAcceptorListener(targetAcceptor);
-        }
-    }
-
     reportBeltPathEmpty(beltPath: BeltPathFwd) 
     {
         this.queueNewDependency(beltPath, beltPath.uid);
@@ -377,7 +373,7 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
         this.giveItemAcceptorListener(targetAcceptor);
      }
 
-    reportEjectorEmpty(entityWithEjector) {
+    reportEjectorEmpty(entityWithEjector: Entity) {
         this.queueNewDependency(entityWithEjector, entityWithEjector.uid);
     }
 
@@ -386,15 +382,15 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
         this.giveItemAcceptorListener(entityWithAcceptor);
     }
 
-    reportAcceptorFull(entityWithAcceptor) {
+    reportAcceptorFull(entityWithAcceptor: Entity) {
         this.queueNewDependency(entityWithAcceptor, entityWithAcceptor.uid);
         this.giveItemAcceptorListener(entityWithAcceptor);
     }
 
 
-
-    reportBeltPathResolved(beltPath) {        
-        this.dependencyResolveQueue.push(beltPath);
+    reportBeltPathResolved(beltPathUid, targetAcceptorUid) {    
+        if(targetAcceptorUid) this.dependencyResolveQueue.push(targetAcceptorUid);  
+        this.dependencyResolveQueue.push(beltPathUid);
     }
 
     reportItemAcceptorAcceptedItem(entityUid) {

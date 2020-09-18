@@ -88,7 +88,6 @@ export class BeltPath extends BasicSerializableObject {
         this.reporter = this.root.systemMgr.systems.systemUpdateReporter;
     }
 
-
     /**
      * set by belt system
      */
@@ -97,24 +96,38 @@ export class BeltPath extends BasicSerializableObject {
     /**
      * just need a little something for reporter
      */
-    isBeltPath = true
+    isBeltPath = true;
 
     empty = false;
     full = false;
 
-    tryReportEmpty(setEmpty=true){
-        if(setEmpty && !this.empty) {
+    tryReportEmpty(s) {
+        if (!this.empty) {
             this.empty = true;
             this.reporter.reportBeltPathEmpty(this);
         }
     }
 
-    /**
-     * @returns {Entity}
-     */
-    getItemAcceptorTargetEntity() {
-        return this.acceptorTarget.entity;
+    tryReportFull() {
+        if (!this.full) {
+            this.full = true;
+            this.reporter.reportBeltPathFull(this, this.acceptorTarget && this.acceptorTarget.entity);
+        }
     }
+
+    tryReportResolved(force = false) {
+        if (this.empty || this.full || force) {
+            this.empty = this.full = false;
+            this.reporter.reportBeltPathResolved(this, this.acceptorTarget && this.acceptorTarget.entity);
+        }
+    }
+
+    // /**
+    //  * @returns {Entity}
+    //  */
+    // getItemAcceptorTargetEntity() {
+    //     return this.acceptorTarget.entity;
+    // }
 
     /**
      * Initializes the path by computing the properties which are not saved
@@ -172,15 +185,14 @@ export class BeltPath extends BasicSerializableObject {
                 this.debug_checkIntegrity("accept-item");
             }
 
-            if (this.empty) {
-                this.reporter.reportBeltPathResolved(this);
-                this.empty = false;
-            }
+            // if we were empty and idle we are now resolved
+            this.tryReportResolved();
 
             return true;
         }
 
-        this.reporter.reportBeltPathFull(this);
+        // we are full if we cannot accept an item
+        this.tryReportFull();
 
         return false;
     }
@@ -214,7 +226,7 @@ export class BeltPath extends BasicSerializableObject {
      */
     onPathChanged() {
         this.acceptorTarget = this.computeAcceptingEntityAndSlot();
-        this.reporter.resolveBeltPath(this);
+        this.tryReportResolved(true);
     }
 
     /**
@@ -1013,7 +1025,7 @@ export class BeltPath extends BasicSerializableObject {
         }
 
         if (this.items.length <= 0) {
-            this.reporter.reportBeltPathEmpty(this);
+            this.tryReportEmpty();
             return;
         }
 
@@ -1100,9 +1112,6 @@ export class BeltPath extends BasicSerializableObject {
         // Check if the acceptor has a filter for example
         if (targetAcceptorComp && !targetAcceptorComp.canAcceptItem(this.acceptorTarget.slot, item)) {
             // Well, this item is not accepted
-
-            this.idle = true;
-
             return false;
         }
 
@@ -1125,10 +1134,7 @@ export class BeltPath extends BasicSerializableObject {
                 );
             }
 
-            sdfsdfsdfsdfsfd
-            fix here!!!
-            this.idle = false;
-
+            this.tryReportResolved();
             return true;
         }
 
