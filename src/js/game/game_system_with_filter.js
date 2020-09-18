@@ -9,6 +9,10 @@ import { arrayDelete, arrayDeleteValue, fastArrayDelete } from "../core/utils";
 
 // TODO check indexOf and other O(n) operations in loops
 
+/**
+ * @typedef {number} EntityUid
+ */
+
 export class GameSystemWithFilter extends GameSystem {
     /**
      * Constructs a new game system with the given component filter. It will process
@@ -23,13 +27,13 @@ export class GameSystemWithFilter extends GameSystem {
 
         /**
          * All entities which match the current components
-         * @type {Map<Number, Entity>}
+         * @type {Map<EntityUid, Entity>}
          */
         this.allEntitiesMap = new Map();
 
         /**
          * All allEntitiesMap keys for faster iteration
-         * @type {Array<Number>}
+         * @type {Array<EntityUid>}
          */
         this.allEntitiesKeys = [];
 

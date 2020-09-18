@@ -101,7 +101,7 @@ export class BeltPath extends BasicSerializableObject {
     /**
      * @returns {number}
      */
-    getItemAcceptorComponentUid() {
+    getItemAcceptorTargetEntityUid() {
         return this.acceptorTarget.entity.uid;
     }
 
@@ -169,7 +169,7 @@ export class BeltPath extends BasicSerializableObject {
             return true;
         }
 
-        this.reporter.reportFullBeltPath(this);
+        this.reporter.reportBeltPathFull(this);
 
         return false;
     }
@@ -1002,7 +1002,7 @@ export class BeltPath extends BasicSerializableObject {
         }
 
         if (this.items.length <= 0) {
-            this.reporter.reportEmptyBeltPath(this);
+            this.reporter.reportBeltPathEmpty(this);
             return;
         }
 

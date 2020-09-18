@@ -54,6 +54,13 @@ export class ItemAcceptorComponent extends Component {
         this.entityUid = entityUid;
     }
 
+    tryReportItemAccepted() {
+        if (this.reportOnAccept) {
+            this.reporter.reportItemAcceptorUnblocked(this.entityUid);
+            this.reportOnAccept = false;
+        }
+    }
+
     /**
      *
      * @param {object} param0
@@ -119,10 +126,7 @@ export class ItemAcceptorComponent extends Component {
             direction,
             animProgress: Math.min(1, remainingProgress * 2),
         });
-        if (this.reportOnAccept) {
-            this.reporter.reportDependencyResolved(this.entityUid);
-            this.reportOnAccept = false;
-        }
+        this.tryReportItemAccepted();
     }
 
     /**

@@ -7,3 +7,5 @@
 => CHECK SERIALIZATION ISSUES
 
 => look into Webworker threading and Atomics
+
+=> move reporter to signals
