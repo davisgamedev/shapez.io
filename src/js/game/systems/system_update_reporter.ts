@@ -38,7 +38,7 @@ type ComponentId = string;
  interface BeltPathFwd {
     uid: EntityUid,
     isBeltPath: boolean,
-    getItemAcceptorComponentId(): EntityUid
+    getItemAcceptorTargetEntity(): Entity
  }
 
 /**
@@ -77,6 +77,24 @@ interface Dependency{
     idleTime: number,
     idled: boolean
 }
+
+
+
+///////////////////////////////////////////////////////////////////////////
+//                                                                       //
+// THIS SYSTEM IS BASED ON THREE VERY IMPORTANT THINGS SO I MUST SCREAM  //
+//                                                                       //
+//  1. IDLE BELTPATHS CAN BE RESOLVED BY THE BELTPATH ITEM ACCEPTOR AND  //
+//      COMPONENT BASED CHANGES                                          //
+//  2. IDLE ENTITIES WITH ITEM ACCEPTORS ARE RESOLVED BY ITEM ACCEPTOR   //
+//      BASED CHANGES                                                    //
+//  3. IDLE ENTITIES WITH ITEM EJECTORS ARE RESOLVED BY A DEPENDENT      //
+//          ENTITY'S ITEM ACCEPTOR CHANGES                               //
+//                                                                       //
+// IN OTHER WORDS, THIS IS ALL DEPENDENT ON AUTONOMOUS CHANGES TO ITEM   //
+//      ACCEPTOR COMPONENTS                                              //
+//                                                                       //
+///////////////////////////////////////////////////////////////////////////
 
 /**
  * Holds onto any updates that
@@ -192,6 +210,22 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
     }
 
 
+    queueNewDependency(dependentEntity: Entity|BeltPathFwd, entityUid: EntityUid) {
+        const dependency: Dependency = {
+            dependentEntity: dependentEntity,
+            idleTime: 0,
+            idled: false
+        }
+        if(this.dependencyQueue.has(entityUid)) {
+            this.dependencyQueue[entityUid].push(dependency);
+        }
+        else {
+            this.dependencyQueue[entityUid] = [dependency];
+        }
+    }
+
+
+
     /**
      * @param {EntityComponentContainer} container
      */
@@ -273,7 +307,7 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
             this.updateEntityComponentContainer(
                 this.entityComponentContainers[this.requiredComponentIds[i]]);
         }
-        this.updateEntityComponentContainer(this.beltPaths.container, this.beltPaths.allBeltPaths);
+        this.updateEntityComponentContainer(this.beltPaths.container);
     }
 
 
@@ -300,96 +334,79 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
         this.beltPaths.container.deactivateEntityQueue.add(beltPath.uid);
     }
 
-    resolveBeltPath(beltPath) {        
-        this.beltPaths.container.activateEntityQueue.add(beltPath.uid);
 
-        let container = this.entityComponentContainers[ItemAcceptorComponent.getId()];
-        let acceptor = beltPath.acceptorTarget.entity;
-        if(!container.activeEntityMap.has(acceptor.uid)) {
-            container.activateEntityQueue.push();
 
-        }
+    giveItemAcceptorListener(targetAcceptor: Entity) {
+        targetAcceptor.components.ItemAcceptor
+        .reportOnItemAccepted(this, targetAcceptor.uid);
     }
-
-
-
-
-
 
     /**
-     * @param {EntityUid} dependentEntityUid
-     * @param {EntityUid} itemAcceptorEntityUid
-     * @param {ItemAcceptorComponent} itemAcceptorComponent
+     * Report and create dependencies
+     * On items with a 
      */
-    addItemAcceptorDependency(dependentEntityUid, itemAcceptorEntityUid, itemAcceptorComponent) {
-
-        
 
 
-        let dependencyArray
-
-
-
-        if(this.dependencyQueue.has(dependentEntityUid)) {
-            const dependency: Dependency = {
-
-            }
-            this.dependencyQueue[dependentEntityUid].push()
+    reportBeltPathFull(beltPath: BeltPathFwd, targetAcceptor: Entity|null) {
+        this.queueNewDependency(beltPath, beltPath.uid);
+        if(targetAcceptor) {
+            this.queueNewDependency(beltPath, targetAcceptor.uid);
+            this.giveItemAcceptorListener(targetAcceptor);
         }
     }
 
-    addItemEjectorDependency(dependentEntityUid, itemAcceptorEntityUid) {
+    reportBeltPathBlocked(beltPath: BeltPathFwd, targetAcceptor: Entity|null) {
+        this.queueNewDependency(beltPath, beltPath.uid);
+        if(targetAcceptor) {
+            this.queueNewDependency(beltPath, targetAcceptor.uid);
+            this.giveItemAcceptorListener(targetAcceptor);
+        }
+    }
 
+    reportBeltPathEmpty(beltPath: BeltPathFwd) 
+    {
+        this.queueNewDependency(beltPath, beltPath.uid);
     }
 
 
 
+    reportEjectorFull(entityWithEjector: Entity, targetAcceptor: Entity){
+        this.queueNewDependency(entityWithEjector, entityWithEjector.uid);
 
-
-    reportBeltPathFull(beltPath) {
-        this.beltPaths.container.deactivateEntityQueue.add(beltPath.uid);
-        this.addItemAcceptorDependency(beltPath.getItemAcceptorComponentId);
-    }
-
-    reportBeltPathEmpty(beltPath) {
-        this.beltPaths.container.deactivateEntityQueue.add(beltPath.uid);
-    }
-
-
-
-
-    reportEjectorFull(entityWithEjector: EntityUid, targetAcceptor: EntityUid){
-        /**
-         * if we have an acceptor which is also blocked, add a 
-         * dependency to the ejector and target acceptor
-         */
-        this.addItemAcceptorDependency(entityWithEjector, targetAcceptor);
-    }
+        this.queueNewDependency(entityWithEjector, targetAcceptor.uid);
+        this.giveItemAcceptorListener(targetAcceptor);
+     }
 
     reportEjectorEmpty(entityWithEjector) {
-        /**
-         * IF we have an ejector, and the acceptor is empty we are idle, dependent on acceptor
-         */
+        this.queueNewDependency(entityWithEjector, entityWithEjector.uid);
     }
 
-    
-
-
-
-
-
-
-    reportAcceptorEmpty(entityWithAcceptor) {
-        if(entityWithAcceptor.empty)
+    reportAcceptorEmpty(entityWithAcceptor: Entity) {
+        this.queueNewDependency(entityWithAcceptor, entityWithAcceptor.uid);
+        this.giveItemAcceptorListener(entityWithAcceptor);
     }
 
-
-    /**
-     * @param {EntityUid} entityWithAcceptor
-     */
     reportAcceptorFull(entityWithAcceptor) {
-
+        this.queueNewDependency(entityWithAcceptor, entityWithAcceptor.uid);
+        this.giveItemAcceptorListener(entityWithAcceptor);
     }
+
+
+
+    reportBeltPathResolved(beltPath) {        
+        this.dependencyResolveQueue.push(beltPath);
+    }
+
+    reportItemAcceptorAcceptedItem(entityUid) {
+        this.dependencyResolveQueue.push(entityUid);
+    }
+
+    reportItemEjectorEjectedItem(entityUid, targetUid) {
+        this.dependencyResolveQueue.push(entityUid);
+        if(targetUid) this.dependencyResolveQueue.push(targetUid);
+    }
+
+
 
 
     /////////////////// Dependencies ////////////////
@@ -405,51 +422,20 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
     //     }
     // }
 
-    resolveDependencies(dependencyUid: EntityUid, componentId: ComponentId) {
-        if(this.)
-    }
-
-    reportItemAcceptorUnblocked(entityUid) {
-        this.resolveDependencies(entityUid, ItemAcceptorComponent.getId());
-    }
-
-
-    // tooooooo do
-    //  we ~could~ ignore an active state on entity, but this may not work well
-    //  we ~should~ have a case to try to assign activity or inactivity based on the condition
-    //      like, for instance, most items are inactive if it cannot accept or eject an item
-    //          but what does that mean in terms of components and what can be updated
-    //          we'll have to crawl through these systems again
-
-    /**
-     * @param {string} componentId
-     * 
-     */
-    getActiveEntityComponents(componentId) {
-        return this.activeEntityComponentUids[componentId];
-    }
-
-    setEntityActive(entity) {
-
-    }
-
-    reportEntityActive(entity) {
-        assert(!entity.active, "entity was reported active but it is not!");
-        let it;
-        if(it = this.idleEntityDependents.delete(entity.uid)) {
-            this.allEntitiesMap[it].active = true;
-        }
-    }
-
-    reportEntityInactive(entity) {
-
-    }
+    // resolveDependencies(dependencyUid: EntityUid, componentId: ComponentId) {
+    //     if(this.dependencyQueue.has(dependencyUid)) {
+    //         let resolveArray: Array<Dependency> = this.dependencyQueue[dependencyUid];
+    //         this.dependencyQueue.delete(dependencyUid);
+    //         this.dependencyResolveQueue.push(...resolveArray);
+    //     }
+    //     let dependencyQueue: Array<Dependency> = this.dependencyQueue[dependencyUid];
+    //     let dependencies: Array<Dependency> = this.dependencyMap[dependencyUid];
+    //     if(this.dependencyQueue.delete())
+    // }
 
 
-    /**
-     *
-     * @param {Entity} entity
-     */
+
+
     internalRegisterEntity(entity) {
 
         this.allEntitiesMap[entity.uid] = entity;
@@ -476,14 +462,6 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
 
 
     
-
-    /*
-     * indicates an enitity cannot perform update logic due to (usually)
-     *  an entity it is depent is blocked and cannot pass an item
-     * Will not report idle if entities are codepenent
-     * Codependencies are resolved if an item that was inactive or idled is now active or unidled
-     */
-    tryReportIdleDromDependent(entityIndex, system, dependentIndex, dependentSysem) {}
 
 
     // TODO: UI activity-checker

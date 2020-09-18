@@ -56,7 +56,7 @@ export class ItemAcceptorComponent extends Component {
 
     tryReportItemAccepted() {
         if (this.reportOnAccept) {
-            this.reporter.reportItemAcceptorUnblocked(this.entityUid);
+            this.reporter.reportItemAcceptorAcceptedItem(this.entityUid);
             this.reportOnAccept = false;
         }
     }

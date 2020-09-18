@@ -11,6 +11,9 @@ export class ItemAcceptorSystem extends GameSystemWithFilter {
         super(root, [ItemAcceptorComponent]);
     }
 
+    // ITEM ACCEPTORS SHOULD NEVER BE UPDATED IN A LOOP
+    update() {} // <= NO TOUCHY
+
     /**
      * @param {DrawParameters} parameters
      * @param {MapChunkView} chunk

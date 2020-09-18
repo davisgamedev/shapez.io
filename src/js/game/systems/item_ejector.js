@@ -27,26 +27,37 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
         this.reporter = this.root.systemMgr.systems.systemUpdateReporter;
     }
 
-    reportOnResolved = false;
+    reportOnEjected = false;
 
+    /**
+     * @param {Entity} entity
+     */
     tryReportEmpty(entity) {
-        if (!this.reportOnResolved) {
-            this.reportOnResolved = true;
+        if (!this.reportOnEjected) {
+            this.reportOnEjected = true;
             this.reporter.reportEjectorEmpty(entity);
         }
     }
 
+    /**
+     * @param {Entity} entity
+     * @param {Entity} target
+     */
     tryReportFull(entity, target) {
-        if (!this.reportOnResolved) {
-            this.reportOnResolved = true;
+        if (!this.reportOnEjected) {
+            this.reportOnEjected = true;
             this.reporter.reportEjectorFull(entity, target);
         }
     }
 
-    tryReportResolve(entity) {
-        if (this.reportOnResolved) {
-            this.reportOnResolved = false;
-            this.reporter.resolveDependencies(entity, ItemEjectorComponent.getId());
+    /**
+     * @param {Entity} entity
+     * @param {?Entity} target
+     */
+    tryReportEjected(entity, target) {
+        if (this.reportOnEjected) {
+            this.reportOnEjected = false;
+            this.reporter.reportItemEjectorEjectedItem(entity, target);
         }
     }
 
@@ -265,7 +276,7 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
                     // Try passing the item over
                     if (destPath.tryAcceptItem(item)) {
                         sourceSlot.item = null;
-                        this.tryReportResolve(sourceEntity.uid);
+                        this.tryReportEjected(sourceEntity);
                     }
 
                     // Always stop here, since there can *either* be a belt path *or*
@@ -286,10 +297,10 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
                         // Handover successful, clear slot
                         targetAcceptorComp.onItemAccepted(destSlot.index, destSlot.acceptedDirection, item);
                         sourceSlot.item = null;
-                        this.tryReportResolve(sourceEntity);
+                        this.tryReportEjected(sourceEntity, targetEntity);
                         continue;
                     } else {
-                        this.tryReportFull(sourceEntity.uid, targetEntity.uid);
+                        this.tryReportFull(sourceEntity, targetEntity);
                     }
                 }
             }

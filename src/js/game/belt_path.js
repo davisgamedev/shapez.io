@@ -88,6 +88,7 @@ export class BeltPath extends BasicSerializableObject {
         this.reporter = this.root.systemMgr.systems.systemUpdateReporter;
     }
 
+
     /**
      * set by belt system
      */
@@ -96,13 +97,23 @@ export class BeltPath extends BasicSerializableObject {
     /**
      * just need a little something for reporter
      */
-    isBeltPath = true;
+    isBeltPath = true
+
+    empty = false;
+    full = false;
+
+    tryReportEmpty(setEmpty=true){
+        if(setEmpty && !this.empty) {
+            this.empty = true;
+            this.reporter.reportBeltPathEmpty(this);
+        }
+    }
 
     /**
-     * @returns {number}
+     * @returns {Entity}
      */
-    getItemAcceptorTargetEntityUid() {
-        return this.acceptorTarget.entity.uid;
+    getItemAcceptorTargetEntity() {
+        return this.acceptorTarget.entity;
     }
 
     /**
@@ -162,7 +173,7 @@ export class BeltPath extends BasicSerializableObject {
             }
 
             if (this.empty) {
-                this.reporter.resolveBeltPath(this);
+                this.reporter.reportBeltPathResolved(this);
                 this.empty = false;
             }
 
