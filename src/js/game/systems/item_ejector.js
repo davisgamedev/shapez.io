@@ -276,7 +276,7 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
                     // Try passing the item over
                     if (destPath.tryAcceptItem(item)) {
                         sourceSlot.item = null;
-                        this.tryReportEjected(sourceEntity);
+                        this.tryReportEjected(sourceEntity, null);
                     }
 
                     // Always stop here, since there can *either* be a belt path *or*
