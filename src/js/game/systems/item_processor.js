@@ -22,11 +22,10 @@ export class ItemProcessorSystem extends GameSystemWithFilter {
     }
 
     update() {
-
         // TODO mark entities active
 
-        for (let i = 0; i < this.allEntities.length; ++i) {
-            const entity = this.allEntities[i];
+        for (let i = 0; i < this.allEntitiesKeys.length; ++i) {
+            const entity = this.allEntitiesMap[this.allEntitiesKeys[i]];
 
             const processorComp = entity.components.ItemProcessor;
             const ejectorComp = entity.components.ItemEjector;

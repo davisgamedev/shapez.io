@@ -23,11 +23,8 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
          * @type {Rectangle}
          */
         this.areaToRecompute = null;
-
-        this.reporter = this.root.systemMgr.systems.systemUpdateReporter;
+        this.reportOnEjected = false;
     }
-
-    reportOnEjected = false;
 
     /**
      * @param {Entity} entity

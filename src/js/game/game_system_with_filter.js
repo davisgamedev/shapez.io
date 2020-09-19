@@ -44,6 +44,17 @@ export class GameSystemWithFilter extends GameSystem {
 
         this.root.signals.postLoadHook.add(this.internalPostLoadHook, this);
         this.root.signals.bulkOperationFinished.add(this.refreshCaches, this);
+
+        this.reporter = null;
+    }
+
+    acceptSystemUpdateResolver(resolver) {
+        super.acceptSystemUpdateResolver(resolver);
+        resolver.requireReporter(this);
+    }
+
+    acceptSystemUpdateReporter(reporter) {
+        this.reporter = reporter;
     }
 
     /**
@@ -56,7 +67,7 @@ export class GameSystemWithFilter extends GameSystem {
             }
         }
 
-        assert(this.allEntitiesMap.has(entity.uid), "entity already in list: " + entity);
+        //assert(this.allEntitiesMap.has(entity.uid), "entity already in list: " + entity);
         this.internalRegisterEntity(entity);
     }
 

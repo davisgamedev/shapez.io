@@ -14,9 +14,8 @@ export class LeverSystem extends GameSystemWithFilter {
     }
 
     update() {
-        for (let i = 0; i < this.allEntities.length; ++i) {
-            const entity = this.allEntities[i];
-
+        for (let i = 0; i < this.allEntitiesKeys.length; ++i) {
+            const entity = this.allEntitiesMap[this.allEntitiesKeys[i]];
             const leverComp = entity.components.Lever;
             const pinsComp = entity.components.WiredPins;
 

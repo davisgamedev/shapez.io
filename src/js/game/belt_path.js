@@ -40,10 +40,11 @@ export class BeltPath extends BasicSerializableObject {
      * @param {Object} data
      * @returns {BeltPath|string}
      */
-    static fromSerialized(root, data) {
+    static fromSerialized(root, data, reporter) {
         // Create fake object which looks like a belt path but skips the constructor
         const fakeObject = /** @type {BeltPath} */ (Object.create(BeltPath.prototype));
         fakeObject.root = root;
+        fakeObject.reporter = reporter;
 
         // Deserialize the data
         const errorCodeDeserialize = fakeObject.deserialize(data);
@@ -52,7 +53,7 @@ export class BeltPath extends BasicSerializableObject {
         }
 
         // Compute other properties
-        fakeObject.init(false);
+        fakeObject.init(false, reporter);
 
         return fakeObject;
     }
@@ -61,7 +62,7 @@ export class BeltPath extends BasicSerializableObject {
      * @param {GameRoot} root
      * @param {Array<Entity>} entityPath
      */
-    constructor(root, entityPath) {
+    constructor(root, entityPath, reporter) {
         super();
         this.root = root;
 
@@ -79,27 +80,16 @@ export class BeltPath extends BasicSerializableObject {
          * Stores the spacing to the first item
          */
 
-        this.init();
+        this.init(true, reporter);
 
         if (G_IS_DEV && globalConfig.debug.checkBeltPaths) {
             this.debug_checkIntegrity("constructor");
         }
 
-        this.reporter = this.root.systemMgr.systems.systemUpdateReporter;
+        this.uid = 0;
+        this.isBeltPath = true;
+        this.empty = this.full = false;
     }
-
-    /**
-     * set by belt system
-     */
-    uid = 0;
-
-    /**
-     * just need a little something for reporter
-     */
-    isBeltPath = true;
-
-    empty = false;
-    full = false;
 
     tryReportEmpty(s) {
         if (!this.empty) {
@@ -133,7 +123,12 @@ export class BeltPath extends BasicSerializableObject {
      * Initializes the path by computing the properties which are not saved
      * @param {boolean} computeSpacing Whether to also compute the spacing
      */
-    init(computeSpacing = true) {
+    init(computeSpacing = true, reporter) {
+        // this assertion could be important but for some reason doesn't work?
+        //assert(!reporter, "BeltPath requires a SystemUpdateReporter but none was provided!");
+
+        this.reporter = reporter;
+
         this.onPathChanged();
 
         this.totalLength = this.computeTotalLength();
@@ -226,7 +221,7 @@ export class BeltPath extends BasicSerializableObject {
      */
     onPathChanged() {
         this.acceptorTarget = this.computeAcceptingEntityAndSlot();
-        this.tryReportResolved(true);
+        if (this.reporter) this.tryReportResolved(true);
     }
 
     /**
@@ -600,7 +595,7 @@ export class BeltPath extends BasicSerializableObject {
             );
 
         // Create second path
-        const secondPath = new BeltPath(this.root, secondEntities);
+        const secondPath = new BeltPath(this.root, secondEntities, this.reporter);
 
         // Remove all items which are no longer relevant and transfer them to the second path
         let itemPos = this.spacingToFirstItem;

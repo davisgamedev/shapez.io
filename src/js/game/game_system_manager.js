@@ -22,8 +22,8 @@ import { LeverSystem } from "./systems/lever";
 import { DisplaySystem } from "./systems/display";
 import { ItemProcessorOverlaysSystem } from "./systems/item_processor_overlays";
 import { BeltReaderSystem } from "./systems/belt_reader";
-import { SystemUpdateResolver } from "./systems/system_update_resolver";
 import { SystemUpdateReporter } from "./systems/system_update_reporter";
+import { SystemUpdateResolver } from "./systems/system_update_resolver";
 
 const logger = createLogger("game_system_manager");
 
@@ -109,11 +109,18 @@ export class GameSystemManager {
      */
     internalInitSystems() {
         const add = (id, systemClass) => {
-            this.systems[id] = new systemClass(this.root);
+            const system = new systemClass(this.root);
+            this.systems[id] = system;
             this.systemUpdateOrder.push(id);
+            const resolver = this.systems["systemUpdateResolver"];
+            system.acceptSystemUpdateResolver(resolver);
         };
 
         // Order is important!
+
+        // this is special
+        add("systemUpdateResolver", SystemUpdateResolver);
+        add("systemUpdateReporter", SystemUpdateReporter);
 
         // IMPORTANT: Item acceptor must be before the belt, because it may not tick after the belt
         // has put in the item into the acceptor animation, otherwise its off
@@ -157,8 +164,6 @@ export class GameSystemManager {
         add("display", DisplaySystem);
 
         add("itemProcessorOverlays", ItemProcessorOverlaysSystem);
-
-        add("systemUpdateReporter", SystemUpdateReporter);
 
         logger.log("📦 There are", this.systemUpdateOrder.length, "game systems");
     }

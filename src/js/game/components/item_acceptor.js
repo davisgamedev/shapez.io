@@ -44,10 +44,6 @@ export class ItemAcceptorComponent extends Component {
         });
     }
 
-    reportOnAccept = false;
-    reporter = null;
-    entityUid = null;
-
     reportOnItemAccepted(reporter, entityUid) {
         this.reportOnAccept = true;
         this.reporter = reporter;
@@ -81,6 +77,9 @@ export class ItemAcceptorComponent extends Component {
         this.itemConsumptionAnimations = [];
 
         this.setSlots(slots);
+
+        this.reportOnAccept = false;
+        this.reporter = this.entityUid = null;
     }
 
     /**

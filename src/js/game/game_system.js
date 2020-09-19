@@ -15,6 +15,10 @@ export class GameSystem {
         this.root = root;
     }
 
+    acceptSystemUpdateResolver(resolver) {
+        this.resolver = resolver;
+    }
+
     ///// PUBLIC API /////
 
     /**

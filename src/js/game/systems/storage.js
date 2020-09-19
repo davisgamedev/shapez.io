@@ -26,8 +26,8 @@ export class StorageSystem extends GameSystemWithFilter {
     }
 
     update() {
-        for (let i = 0; i < this.allEntities.length; ++i) {
-            const entity = this.allEntities[i];
+        for (let i = 0; i < this.allEntitiesKeys.length; ++i) {
+            const entity = this.allEntitiesMap[this.allEntitiesKeys[i]];
             const storageComp = entity.components.Storage;
             const pinsComp = entity.components.WiredPins;
 

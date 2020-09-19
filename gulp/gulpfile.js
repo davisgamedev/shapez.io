@@ -7,6 +7,7 @@ const browserSync = require("browser-sync").create({});
 const path = require("path");
 const deleteEmpty = require("delete-empty");
 const execSync = require("child_process").execSync;
+const ts = require("gulp-typescript");
 
 const lfsOutput = execSync("git lfs install", { encoding: "utf-8" });
 if (!lfsOutput.toLowerCase().includes("git lfs initialized")) {
@@ -165,6 +166,8 @@ function serve({ standalone }) {
     // Watch .scss files, those trigger a css rebuild
     gulp.watch(["../src/**/*.scss"], gulp.series("css.dev"));
 
+    gulp.watch(["../**/*.ts"], gulp.series("ts.dev"));
+
     // Watch .html files, those trigger a html rebuild
     gulp.watch("../src/**/*.html", gulp.series(standalone ? "html.standalone-dev" : "html.dev"));
 
@@ -219,6 +222,24 @@ gulp.task("step.deleteEmpty", cb => {
 
 gulp.task("step.postbuild", gulp.series("imgres.cleanupUnusedCssInlineImages", "step.deleteEmpty"));
 
+gulp.task("ts.dev", function () {
+    return gulp
+        .src(["../src/**/*.ts", "!../src/**/*.d.ts"])
+        .pipe(
+            /* prettier-ignore */
+            ts({
+                    "target": "es6",
+                    "module": "commonjs",
+                    "sourceMap": true,
+            })
+        )
+        .pipe(
+            gulp.dest(function (file) {
+                return file.base;
+            })
+        );
+});
+
 // Builds everything (dev)
 gulp.task(
     "build.dev",
@@ -239,6 +260,7 @@ gulp.task(
 gulp.task(
     "build.standalone.dev",
     gulp.series(
+        "ts.dev",
         "utils.cleanup",
         "imgres.atlas",
         "sounds.dev",

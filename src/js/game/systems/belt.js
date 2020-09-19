@@ -66,8 +66,6 @@ export class BeltSystem extends GameSystemWithFilter {
         this.beltPaths = [];
 
         this.nextBeltId = 1000;
-
-        this.reporter = this.root.systemMgr.systems.systemUpdateReporter;
     }
 
     /**
@@ -87,12 +85,15 @@ export class BeltSystem extends GameSystemWithFilter {
      * @param {Array<any>} data
      */
     deserializePaths(data) {
+        console.log("%cDESERIALIZING HERES THE REPORTER", "color: white; background-color: purple");
+        console.dir(this.reporter);
+
         if (!Array.isArray(data)) {
             return "Belt paths are not an array: " + typeof data;
         }
 
         for (let i = 0; i < data.length; ++i) {
-            const path = BeltPath.fromSerialized(this.root, data[i]);
+            const path = BeltPath.fromSerialized(this.root, data[i], this.reporter);
             // If path is a string, that means its an error
             if (!(path instanceof BeltPath)) {
                 return "Failed to create path from belt data: " + path;
@@ -300,7 +301,7 @@ export class BeltSystem extends GameSystemWithFilter {
                 toPath.extendOnBeginning(entity);
             } else {
                 // This is an empty belt path
-                const path = new BeltPath(this.root, [entity]);
+                const path = new BeltPath(this.root, [entity], this.reporter);
                 path.uid = this.nextBeltId++;
                 this.beltPaths.push(path);
                 this.reporter.addBeltPath(path);
@@ -468,7 +469,7 @@ export class BeltSystem extends GameSystemWithFilter {
             }
 
             assert(maxIter > 1, "Ran out of iterations");
-            result.push(new BeltPath(this.root, path));
+            result.push(new BeltPath(this.root, path, this.reporter));
         }
 
         logger.log("Found", this.beltPaths.length, "belt paths");
@@ -484,8 +485,11 @@ export class BeltSystem extends GameSystemWithFilter {
         }
 
         const belts = this.reporter.getActiveBeltPaths();
+        //console.dir(belts);
+        //console.dir(this.beltPaths);
         for (let i = 0; i < belts.length; ++i) {
-            this.beltPaths[belts[i]].update();
+            const belt = this.beltPaths[belts[i]];
+            if (belt) belt.update();
         }
 
         if (G_IS_DEV && globalConfig.debug.checkBeltPaths) {
