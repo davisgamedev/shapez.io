@@ -78,7 +78,7 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
                 reactivateEntityQueue: new Set(),
                 deactivateEntityQueue: new Set(),
             };
-            this.entityComponentContainers[this.requiredComponentIds[i]] = container;
+            this.entityComponentContainers.set(this.requiredComponentIds[i], container);
         }
     }
 
@@ -99,7 +99,7 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
         }
         for (let i = 0; i < this.requiredComponentIds.length; ++i) {
             if (entity.components[this.requiredComponentIds[i]] != null) {
-                const container = this.entityComponentContainers[this.requiredComponentIds[i]];
+                const container = this.entityComponentContainers.get(this.requiredComponentIds[i]);
                 (container[setKey] as Set<Entity>).add(entity);
             }
         }
@@ -127,9 +127,9 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
                 this.allEntitiesSet.delete(entity);
                 for (let i = 0; i < this.requiredComponentIds.length; ++i) {
                     if (entity.components[this.requiredComponentIds[i]] != null) {
-                        this.entityComponentContainers[this.requiredComponentIds[i]].activeEntitySet.delete(
-                            entity
-                        );
+                        this.entityComponentContainers
+                            .get(this.requiredComponentIds[i])
+                            .activeEntitySet.delete(entity);
                     }
                 }
             }
@@ -141,7 +141,7 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
     }
 
     reactivateRequiredComponents(entity: Entity) {
-        this.addToRelevantQueues(entity, "activateEntityQueue");
+        this.addToRelevantQueues(entity, "reactivateEntityQueue");
     }
 
     // entDependencyUid: [effectedUidEntities]
@@ -177,7 +177,9 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
      * @returns {Array<Entity>}
      */
     getActiveEntitiesByComponent(componentId: ComponentId): Array<Entity> {
-        return [...(this.entityComponentContainers[componentId] as EntityComponentContainer).activeEntitySet];
+        return [
+            ...(this.entityComponentContainers.get(componentId) as EntityComponentContainer).activeEntitySet,
+        ];
     }
 
     queueNewDependency(entity: Entity, entDependency: Entity) {
@@ -254,7 +256,7 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
                 (entDependency = it.next().value);
 
             ) {
-                fastSetAppend(resolveEntities, this.entDependencyMap.get(entDependency));
+                fastSetAppend(resolveEntities, this.entDependencyMap.get(entDependency) || new Set());
                 this.entDependencyMap.delete(entDependency);
             }
             // reactivate all of their components
@@ -282,7 +284,9 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
     update() {
         this.updateDepContainers();
         for (let i = 0; i < this.requiredComponentIds.length; ++i) {
-            this.updateEntityComponentContainer(this.entityComponentContainers[this.requiredComponentIds[i]]);
+            this.updateEntityComponentContainer(
+                this.entityComponentContainers.get(this.requiredComponentIds[i])
+            );
         }
         this.updateEntityComponentContainer(this.beltPaths.container);
     }

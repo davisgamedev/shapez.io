@@ -109,8 +109,12 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
             }
 
             // Try to find acceptors for every ejector
-            for (let i = 0; i < this.allEntitiesKeys.length; ++i) {
-                const entity = this.allEntitiesMap[this.allEntitiesKeys[i]];
+            const entitiesArray = this.getUpdatedEntitiesArray();
+            for (
+                let i = entitiesArray.length - 1, entity = entitiesArray[i];
+                i >= 0;
+                --i, entity = entitiesArray[i]
+            ) {
                 this.recomputeSingleEntityCache(entity);
             }
         }
