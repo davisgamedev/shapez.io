@@ -194,6 +194,18 @@ export function arrayDeleteValue(array, value) {
 }
 
 /**
+ * Appends the elements of set2 to set1
+ * Should be faster than creating a new set of both
+ * @param {Set<any>} set
+ * @param {Set<any>} set2
+ * @returns {Set<any>} can usually be ignored
+ */
+export function fastSetAppend(set, set2) {
+    for (let it = set2.values(), val = null; (val = it.next().value); ) set.add(val);
+    return set;
+}
+
+/**
  * Compare two floats for epsilon equality
  * @param {number} a
  * @param {number} b

@@ -24,9 +24,6 @@ export class Entity extends BasicSerializableObject {
          */
         this.root = root;
 
-        // ignore me
-        this.isBeltPath = false;
-
         /**
          * The components of the entity
          */

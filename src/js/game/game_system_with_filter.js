@@ -25,17 +25,9 @@ export class GameSystemWithFilter extends GameSystem {
         this.requiredComponents = requiredComponents;
         this.requiredComponentIds = requiredComponents.map(component => component.getId());
 
-        /**
-         * All entities which match the current components
-         * @type {Map<EntityUid, Entity>}
-         */
-        this.allEntitiesMap = new Map();
-
-        /**
-         * All allEntitiesMap keys for faster iteration
-         * @type {Array<EntityUid>}
-         */
-        this.allEntitiesKeys = [];
+        this.allEntitiesSet = new Set();
+        this.allEntitiesAsArray = [];
+        this.allEntitiesOutdated = true;
 
         this.root.signals.entityAdded.add(this.internalPushEntityIfMatching, this);
         this.root.signals.entityGotNewComponent.add(this.internalReconsiderEntityToAdd, this);
@@ -57,18 +49,25 @@ export class GameSystemWithFilter extends GameSystem {
         this.reporter = reporter;
     }
 
+    getUpdatedEntitiesArray() {
+        if (this.allEntitiesOutdated) {
+            return [...this.allEntitiesSet];
+        } else {
+            return this.allEntitiesAsArray;
+        }
+    }
+
     /**
      * @param {Entity} entity
      */
     internalPushEntityIfMatching(entity) {
+        if (this.allEntitiesSet.has(entity)) return;
         for (let i = 0; i < this.requiredComponentIds.length; ++i) {
-            if (!entity.components[this.requiredComponentIds[i]]) {
+            if (entity.components[this.requiredComponentIds[i]]) {
+                this.internalRegisterEntity(entity);
                 return;
             }
         }
-
-        //assert(this.allEntitiesMap.has(entity.uid), "entity already in list: " + entity);
-        this.internalRegisterEntity(entity);
     }
 
     // TODO double check we are clearing both Map and Keys!!!!!!
@@ -77,15 +76,14 @@ export class GameSystemWithFilter extends GameSystem {
      * @param {Entity} entity
      */
     internalCheckEntityAfterComponentRemoval(entity) {
-        if (this.allEntitiesMap.has(entity.uid)) {
+        if (this.allEntitiesSet.has(entity.uid)) {
             // Entity wasn't interesting anyways
             return;
         }
 
         for (let i = 0; i < this.requiredComponentIds.length; ++i) {
             if (!entity.components[this.requiredComponentIds[i]]) {
-                // Entity is not interesting anymore
-                this.allEntitiesMap.delete(entity.uid);
+                this.allEntitiesSet.delete(entity);
             }
         }
     }
@@ -100,7 +98,7 @@ export class GameSystemWithFilter extends GameSystem {
                 return;
             }
         }
-        if (this.allEntitiesMap.has(entity.uid)) {
+        if (this.allEntitiesSet.delete(entity)) {
             return;
         }
         this.internalRegisterEntity(entity);
@@ -108,13 +106,13 @@ export class GameSystemWithFilter extends GameSystem {
 
     refreshCaches() {
         // Remove all entities which are queued for destroy
-        for (let i = 0; i < this.allEntitiesKeys.length; ++i) {
-            const entity = this.allEntitiesMap[this.allEntitiesKeys[i]];
+        for (let it = this.allEntitiesSet.values(), entity = null; (entity = it.next().value); ) {
             if (entity.queuedForDestroy || entity.destroyed) {
-                this.allEntitiesMap.delete(entity.uid);
-                fastArrayDelete(this.allEntitiesKeys, i);
+                this.allEntitiesSet.delete(entity);
             }
         }
+        this.allEntitiesAsArray = [...this.allEntitiesSet];
+        this.allEntitiesOutdated = false;
     }
 
     /**
@@ -129,12 +127,11 @@ export class GameSystemWithFilter extends GameSystem {
      * @param {Entity} entity
      */
     internalRegisterEntity(entity) {
-        this.allEntitiesMap[entity.uid] = entity;
-        this.allEntitiesKeys.push(entity.uid);
+        this.allEntitiesSet.add(entity);
 
         if (this.root.gameInitialized && !this.root.bulkOperationRunning) {
             // Sort entities by uid so behaviour is predictable
-            this.allEntitiesKeys.sort((a, b) => a - b);
+            this.allEntitiesSet = new Set([...this.allEntitiesSet].sort((a, b) => a - b));
         }
     }
 
@@ -147,8 +144,6 @@ export class GameSystemWithFilter extends GameSystem {
             // We do this in refreshCaches afterwards
             return;
         }
-        if (this.allEntitiesMap.delete(entity.uid)) {
-            arrayDeleteValue(this.allEntitiesKeys, entity.uid);
-        }
+        this.allEntitiesSet.delete(entity);
     }
 }

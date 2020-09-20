@@ -227,11 +227,12 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
             progressGrowth = 1;
         }
 
-        const activeEntityKeys = this.reporter.getActiveEntitiesByComponent(ItemEjectorComponent.getId());
-
-        // Go over all cache entries
-        for (let i = 0; i < activeEntityKeys.length; ++i) {
-            const sourceEntity = this.allEntitiesMap[activeEntityKeys[i]];
+        const entitiesArray = this.reporter.getActiveEntitiesByComponent(ItemEjectorComponent.getId());
+        for (
+            let i = entitiesArray.length - 1, sourceEntity = entitiesArray[i];
+            i >= 0;
+            --i, sourceEntity = entitiesArray[i]
+        ) {
             const sourceEjectorComp = sourceEntity.components.ItemEjector;
             if (!sourceEjectorComp.enabled) {
                 continue;

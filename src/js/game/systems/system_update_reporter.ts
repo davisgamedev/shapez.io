@@ -1,4 +1,5 @@
-import { fastArrayDelete } from "../../core/utils";
+import { ModuleResolutionKind } from "typescript";
+import { arrayDeleteValue, fastArrayDelete, fastSetAppend } from "../../core/utils";
 import { ItemAcceptorComponent } from "../components/item_acceptor";
 import { ItemEjectorComponent } from "../components/item_ejector";
 import { ItemProcessorComponent } from "../components/item_processor";
@@ -15,63 +16,32 @@ import { GameSystemWithFilter } from "../game_system_with_filter";
  * => frame based to scale by target performance, lower targeted simulation tick
  *      should probably take a bit slower to perform the idle process
  */
-const ENTITY_IDLE_AFTER_FRAMES = 15;
+const ENTITY_IDLE_AFTER_FRAMES = 150;
 
-/**
- * @typedef {number} EntityUid
- * @typedef {string} ComponentId
- */
-type EntityUid = number;
 type ComponentId = string;
 
-/**
- * @typedef {Object} BeltPathFwd
- * @property {number} uid
- * @property {function} getItemAcceptorComponentId
- */
-
-interface BeltPathFwd {
-    uid: EntityUid;
-    isBeltPath: boolean;
-    //getItemAcceptorTargetEntity(): Entity
-}
-
-/**
- * @typedef {Object} EntityComponentContainer
- * @property {Set<EntityUid>} activeEntitySet
- * @property {Array<EntityUid>} activeEntityArray
- * @property {Array<EntityUid>} activateEntityQueue
- * @property {Array<EntityUid>} deactivateEntityQueue
- */
-
 interface EntityComponentContainer {
-    activeEntitySet: Set<EntityUid>;
-    activeEntityArray: Array<EntityUid>;
-    activateEntityQueue: Array<EntityUid>;
-    deactivateEntityQueue: Array<EntityUid>;
+    activeEntitySet: Set<Entity>;
+    reactivateEntityQueue: Set<Entity>;
+    deactivateEntityQueue: Set<Entity>;
 }
 
-/**
- * @typedef {Object} BeltPathContainer
- * @property {EntityComponentContainer} container
- * @property {Map<EntityUid, BeltPathFwd>} allBeltPaths
- */
 interface BeltPathContainer {
     container: EntityComponentContainer;
-    allBeltPaths: Map<EntityUid, BeltPathFwd>;
+    allBeltPaths: Set<Entity>;
 }
 
-/**
- * @typedef {Object} Dependency
- * @property {EntityUid} dependent
- * @property {number} idleTime
- * @property {boolean} idled
- */
-interface Dependency {
-    dependentEntity: Entity | BeltPathFwd;
-    idleTime: number;
-    idled: boolean;
-}
+// /**
+//  * @typedef {Object} Dep
+//  * @property {EntityUid} effectedUid
+//  * @property {number} idleTime
+//  * @property {boolean} idled
+//  */
+// interface Dep {
+//     effectedUidEntity: Entity | BeltPathFwd;
+//     idleTime: number;
+//     idled: boolean;
+// }
 
 ///////////////////////////////////////////////////////////////////////////
 //                                                                       //
@@ -81,10 +51,10 @@ interface Dependency {
 //      COMPONENT BASED CHANGES                                          //
 //  2. IDLE ENTITIES WITH ITEM ACCEPTORS ARE RESOLVED BY ITEM ACCEPTOR   //
 //      BASED CHANGES                                                    //
-//  3. IDLE ENTITIES WITH ITEM EJECTORS ARE RESOLVED BY A DEPENDENT      //
+//  3. IDLE ENTITIES WITH ITEM EJECTORS ARE RESOLVED BY A effectedUid      //
 //          ENTITY'S ITEM ACCEPTOR CHANGES                               //
 //                                                                       //
-// IN OTHER WORDS, THIS IS ALL DEPENDENT ON AUTONOMOUS CHANGES TO ITEM   //
+// IN OTHER WORDS, THIS IS ALL effectedUid ON AUTONOMOUS CHANGES TO ITEM   //
 //      ACCEPTOR COMPONENTS                                              //
 //                                                                       //
 ///////////////////////////////////////////////////////////////////////////
@@ -102,13 +72,11 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
             UndergroundBeltComponent,
             // (and also BeltPaths added from Belt system)
         ]);
-
         for (let i = 0; i < this.requiredComponentIds.length; ++i) {
             const container: EntityComponentContainer = {
                 activeEntitySet: new Set(),
-                activeEntityArray: [],
-                activateEntityQueue: [],
-                deactivateEntityQueue: [],
+                reactivateEntityQueue: new Set(),
+                deactivateEntityQueue: new Set(),
             };
             this.entityComponentContainers[this.requiredComponentIds[i]] = container;
         }
@@ -124,82 +92,116 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
     //   */
     entityComponentContainers: Map<ComponentId, EntityComponentContainer> = new Map();
 
-    addToRelevantQueues(addEntity: Entity | BeltPathFwd, listKey: string) {
-        if (addEntity.isBeltPath) {
-            (this.beltPaths.container[listKey] as Array<EntityUid>).push(addEntity.uid);
+    addToRelevantQueues(entity: Entity, setKey: string) {
+        if (!entity.components) {
+            (this.beltPaths.container[setKey] as Set<Entity>).add(entity);
+            return;
         }
-        const entity = addEntity as Entity;
         for (let i = 0; i < this.requiredComponentIds.length; ++i) {
-            if (entity.components[this.requiredComponentIds[i]]) {
+            if (entity.components[this.requiredComponentIds[i]] != null) {
                 const container = this.entityComponentContainers[this.requiredComponentIds[i]];
-                (container[listKey] as Array<EntityUid>).push(entity.uid);
+                (container[setKey] as Set<Entity>).add(entity);
             }
         }
     }
 
-    deactivateRequiredComponents(entity: Entity | BeltPathFwd) {
+    checkEntityExists(entity) {
+        if (!entity.comonents) return this.beltPaths.allBeltPaths.has(entity);
+        else return this.allEntitiesSet.has(entity);
+    }
+
+    // TODO
+    //we need to delete it from any and all component records
+    //we will then need to release all of its dependencies
+    deleteComponents(entity: Entity) {
+        if (this.checkEntityExists(entity)) {
+            this.entResolveQueue.add(entity);
+            this.deactivateRequiredComponents(entity);
+
+            this.entIdleWaitSet.delete(entity);
+            this.entIdleSet.delete(entity);
+
+            if (!entity.components) {
+                this.beltPaths.allBeltPaths.delete(entity);
+            } else {
+                this.allEntitiesSet.delete(entity);
+                for (let i = 0; i < this.requiredComponentIds.length; ++i) {
+                    if (entity.components[this.requiredComponentIds[i]] != null) {
+                        this.entityComponentContainers[this.requiredComponentIds[i]].activeEntitySet.delete(
+                            entity
+                        );
+                    }
+                }
+            }
+        }
+    }
+
+    deactivateRequiredComponents(entity: Entity) {
         this.addToRelevantQueues(entity, "deactivateEntityQueue");
     }
 
-    activateRequiredComponents(entity: Entity | BeltPathFwd) {
+    reactivateRequiredComponents(entity: Entity) {
         this.addToRelevantQueues(entity, "activateEntityQueue");
     }
 
-    /**
-     * @type {Array<Entity|BeltPathFwd>}
-     */
-    //reactivateRequiredComponents: Array<Entity|BeltPathFwd> = [];
+    // entDependencyUid: [effectedUidEntities]
+    // contains all entities (idled or not) that are effectedUid on another entity's update
+    entDependencyMap: Map<Entity, Set<Entity>> = new Map();
 
-    /**
-     * @type {Map<EntityUid, Array<Dependency>>}
-     */
-    dependencyMap: Map<EntityUid, Array<Dependency>> = new Map();
+    // queue to determine who is added to map (some entities are removed during updates)
+    entDependencyQueueMap: Map<Entity, Set<Entity>> = new Map();
 
-    /**
-     * Dependency => Dependents
-     * @type {Map<EntityUid, Array<Dependency>>}
-     */
-    dependencyQueue: Map<EntityUid, Array<Dependency>> = new Map();
+    // all entDependencyedencies queued to be resolved
+    entResolveQueue: Set<Entity> = new Set();
 
-    /**
-     * @type {Array<EntityUid>}
-     *
-     */
-    dependencyResolveQueue: Array<EntityUid> = [];
+    // all entities that have been idled (removed from updates);
+    entIdleSet: Set<Entity> = new Set();
 
-    /**
-     * @type {BeltPathContainer}
-     */
+    // all entities that are awaiting idled, Entity: Frames
+    entIdleWaitSet: Set<Entity> = new Set();
+    entIdleWaitFrames: number = 0;
+
     beltPaths: BeltPathContainer = {
         container: {
             activeEntitySet: new Set(),
-            activeEntityArray: [],
-            activateEntityQueue: [],
-            deactivateEntityQueue: [],
+            reactivateEntityQueue: new Set(),
+            deactivateEntityQueue: new Set(),
         },
-        allBeltPaths: new Map(),
+        allBeltPaths: new Set(),
     };
 
     ////////////////// Entities and Updates ///////////////
 
     /**
      * @param {string} componentId
-     * @returns {Array<EntityUid>}
+     * @returns {Array<Entity>}
      */
-    getActiveEntitiesByComponent(componentId: ComponentId): Array<EntityUid> {
-        return this.entityComponentContainers[componentId].activeEntityArray;
+    getActiveEntitiesByComponent(componentId: ComponentId): Array<Entity> {
+        return [...(this.entityComponentContainers[componentId] as EntityComponentContainer).activeEntitySet];
     }
 
-    queueNewDependency(dependentEntity: Entity | BeltPathFwd, entityUid: EntityUid) {
-        const dependency: Dependency = {
-            dependentEntity: dependentEntity,
-            idleTime: 0,
-            idled: false,
-        };
-        if (this.dependencyQueue.has(entityUid)) {
-            this.dependencyQueue[entityUid].push(dependency);
+    queueNewDependency(entity: Entity, entDependency: Entity) {
+        if (
+            this.entDependencyMap.has(entDependency) &&
+            this.entDependencyMap.get(entDependency).has(entDependency)
+        ) {
+            return;
+        }
+
+        const set = this.entDependencyQueueMap.get(entDependency);
+        if (set) {
+            set.add(entity);
         } else {
-            this.dependencyQueue[entityUid] = [dependency];
+            this.entDependencyQueueMap.set(entDependency, new Set([entity]));
+        }
+    }
+
+    // TODO: this could be faster
+    resolveDependency(entDependency: Entity) {
+        this.entDependencyQueueMap.delete(entDependency);
+        const set = this.entDependencyMap.get(entDependency);
+        if (set) {
+            fastSetAppend(this.entResolveQueue, set);
         }
     }
 
@@ -207,68 +209,78 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
      * @param {EntityComponentContainer} container
      */
     updateEntityComponentContainer(container: EntityComponentContainer) {
-        const deactivateItems = container.deactivateEntityQueue.length > 0;
+        /**
+         * for anything being reactivated, try deleting it from the deactivate queue
+         *  activation supercedes deactivation
+         * then remove anyting left in the deactivate queue
+         */
 
-        if (deactivateItems) {
-            for (let i = 0; i < container.deactivateEntityQueue.length; ++i) {
-                container.activeEntitySet.delete(container.deactivateEntityQueue[i]);
+        for (let it = container.reactivateEntityQueue.values(), entity = null; (entity = it.next().value); ) {
+            container.deactivateEntityQueue.delete(entity);
+            if (this.checkEntityExists(entity)) {
+                container.activeEntitySet.add(entity);
             }
         }
 
-        for (let i = 0; i < container.activateEntityQueue.length; ++i) {
-            const entityUid: EntityUid = container.activateEntityQueue[i];
-            if (container.activeEntitySet.has(entityUid)) continue;
-            else {
-                container.activeEntitySet.add(entityUid);
-                container.activeEntityArray.push(entityUid);
-            }
-        }
-
-        if (deactivateItems) {
-            for (let i = container.activeEntityArray.length - 1; i >= 0; --i) {
-                const uid = container.activeEntityArray[i];
-                if (container.activeEntitySet.delete(uid)) {
-                    fastArrayDelete(container.activeEntityArray, i);
-                }
-            }
-            container.deactivateEntityQueue = [];
+        for (let it = container.deactivateEntityQueue.values(), entity = null; (entity = it.next().value); ) {
+            container.activeEntitySet.delete(entity);
         }
     }
 
-    updateDependencyContainers() {
-        if (this.dependencyQueue.size > 0) {
-            for (const [dependencyEntityUid, dependencyArray] of this.dependencyQueue.entries()) {
-                if (this.dependencyMap.has(dependencyEntityUid)) {
-                    this.dependencyMap[dependencyEntityUid].push(...dependencyArray);
-                } else this.dependencyMap[dependencyEntityUid] = dependencyArray;
+    updateDepContainers() {
+        if (this.entDependencyQueueMap.size > 0) {
+            // append dependencies to dependency maps
+            for (
+                let keys = [...this.entDependencyQueueMap.keys()],
+                    vals = [...this.entDependencyQueueMap.values()],
+                    i = keys.length - 1,
+                    entDependency: Entity = keys[i],
+                    entitiesSet: Set<Entity> = vals[i];
+                i >= 0;
+                --i, entDependency = keys[i], entitiesSet = vals[i]
+            ) {
+                const set = this.entDependencyMap.get(entDependency) || new Set();
+                this.entDependencyMap.set(entDependency, fastSetAppend(set, entitiesSet));
+                fastSetAppend(this.entIdleWaitSet, entitiesSet);
             }
+            this.entDependencyQueueMap.clear();
         }
 
-        for (let i = this.dependencyResolveQueue.length - 1; i >= 0; --i) {
-            const dependencyArray = this.dependencyMap[this.dependencyResolveQueue[i]];
+        if (this.entResolveQueue.size > 0) {
+            // collect all of the entities being resolved
+            const resolveEntities = new Set();
+            for (
+                let it = this.entResolveQueue.values(), entDependency = null;
+                (entDependency = it.next().value);
 
-            if (!dependencyArray) continue;
-            for (let j = dependencyArray.length - 1; j >= 0; --j) {
-                if (dependencyArray.idled) {
-                    this.activateRequiredComponents(dependencyArray[i].dependentEntity);
+            ) {
+                fastSetAppend(resolveEntities, this.entDependencyMap.get(entDependency));
+                this.entDependencyMap.delete(entDependency);
+            }
+            // reactivate all of their components
+            for (let it = resolveEntities.values(), entity = null; (entity = it.next().value); ) {
+                this.entIdleWaitSet.delete(entity);
+                this.entIdleSet.delete(entity);
+                this.reactivateRequiredComponents(entity);
+            }
+            this.entResolveQueue.clear();
+        }
+
+        // if we have waited long enough we can start to idle components
+        if (++this.entIdleWaitFrames > ENTITY_IDLE_AFTER_FRAMES) {
+            for (let it = this.entIdleWaitSet.values(), entity = null; (entity = it.next().value); ) {
+                if (!this.entIdleSet.has(entity)) {
+                    this.deactivateRequiredComponents(entity);
+                    this.entIdleSet.add(entity);
                 }
             }
 
-            this.dependencyMap.delete(this.dependencyResolveQueue[i]);
-        }
-
-        for (const [entity, dependencyArray] of this.dependencyMap.entries()) {
-            for (let i = dependencyArray.length - 1; i >= 0; --i) {
-                const dependency = dependencyArray[i];
-                if (++dependency.idleTime > ENTITY_IDLE_AFTER_FRAMES && !dependency.idled) {
-                    this.deactivateRequiredComponents(dependencyArray[i].dependentEntity);
-                }
-            }
+            this.entIdleWaitFrames = 0;
         }
     }
 
     update() {
-        this.updateDependencyContainers();
+        this.updateDepContainers();
         for (let i = 0; i < this.requiredComponentIds.length; ++i) {
             this.updateEntityComponentContainer(this.entityComponentContainers[this.requiredComponentIds[i]]);
         }
@@ -277,25 +289,17 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
 
     /////////////// BeltPaths-Specific Logic /////////////////
 
-    /**
-     * @returns {Array<EntityUid>}
-     */
     getActiveBeltPaths() {
-        return this.beltPaths.container.activeEntityArray;
+        return [...this.beltPaths.container.activeEntitySet];
     }
 
-    addBeltPath(beltPath) {
-        if (!this.beltPaths.allBeltPaths.has(beltPath)) {
-            this.beltPaths.allBeltPaths.set(beltPath.uid, beltPath);
-            this.beltPaths.container.activateEntityQueue.push(beltPath.uid);
-        }
+    addBeltPath(beltPath: Entity) {
+        this.beltPaths.allBeltPaths.add(beltPath);
+        this.beltPaths.container.reactivateEntityQueue.add(beltPath);
     }
 
-    removeBeltPath(beltPath) {
-        if (!this.beltPaths.allBeltPaths.has(beltPath)) {
-            this.beltPaths.allBeltPaths.delete(beltPath.uid);
-            this.beltPaths.container.deactivateEntityQueue.push(beltPath.uid);
-        }
+    removeBeltPath(beltPath: Entity) {
+        this.deleteComponents(beltPath);
     }
 
     giveItemAcceptorListener(targetAcceptor: Entity) {
@@ -303,90 +307,88 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
     }
 
     /**
-     * Report and create dependencies
+     * Report and create entDependencyendencies
      * On items with a
      */
 
-    reportBeltPathFull(beltPath: BeltPathFwd, targetAcceptor: Entity | null) {
-        this.queueNewDependency(beltPath, beltPath.uid);
+    reportBeltPathFull(beltPath: Entity, targetAcceptor: Entity | null) {
+        //console.log("belt full");
+        this.queueNewDependency(beltPath, beltPath);
         if (targetAcceptor) {
-            this.queueNewDependency(beltPath, targetAcceptor.uid);
+            this.queueNewDependency(beltPath, targetAcceptor);
             this.giveItemAcceptorListener(targetAcceptor);
         }
     }
 
-    reportBeltPathEmpty(beltPath: BeltPathFwd) {
-        this.queueNewDependency(beltPath, beltPath.uid);
+    reportBeltPathEmpty(beltPath: Entity) {
+        this.queueNewDependency(beltPath, beltPath);
     }
 
     reportEjectorFull(entityWithEjector: Entity, targetAcceptor: Entity) {
-        this.queueNewDependency(entityWithEjector, entityWithEjector.uid);
+        this.queueNewDependency(entityWithEjector, entityWithEjector);
 
-        this.queueNewDependency(entityWithEjector, targetAcceptor.uid);
+        this.queueNewDependency(entityWithEjector, targetAcceptor);
         this.giveItemAcceptorListener(targetAcceptor);
     }
 
     reportEjectorEmpty(entityWithEjector: Entity) {
-        this.queueNewDependency(entityWithEjector, entityWithEjector.uid);
-    }
+        //console.log("ejector empty");
 
-    reportAcceptorEmpty(entityWithAcceptor: Entity) {
-        this.queueNewDependency(entityWithAcceptor, entityWithAcceptor.uid);
-        this.giveItemAcceptorListener(entityWithAcceptor);
+        this.queueNewDependency(entityWithEjector, entityWithEjector);
     }
 
     reportAcceptorFull(entityWithAcceptor: Entity) {
-        this.queueNewDependency(entityWithAcceptor, entityWithAcceptor.uid);
+        //console.log("acceptor full");
+
+        this.queueNewDependency(entityWithAcceptor, entityWithAcceptor);
+        this.giveItemAcceptorListener(entityWithAcceptor);
+    }
+    reportAcceptorEmpty(entityWithAcceptor: Entity) {
+        //console.log("acceptor empty");
+
+        this.queueNewDependency(entityWithAcceptor, entityWithAcceptor);
         this.giveItemAcceptorListener(entityWithAcceptor);
     }
 
-    reportBeltPathResolved(beltPathUid, targetAcceptorUid) {
-        if (targetAcceptorUid) this.dependencyResolveQueue.push(targetAcceptorUid);
-        this.dependencyResolveQueue.push(beltPathUid);
+    reportBeltPathResolved(beltPath: Entity, target: Entity) {
+        if (target) this.resolveDependency(target);
+        this.resolveDependency(beltPath);
     }
 
-    reportItemAcceptorAcceptedItem(entityUid) {
-        this.dependencyResolveQueue.push(entityUid);
+    reportItemAcceptorAcceptedItem(entity: Entity) {
+        this.resolveDependency(entity);
     }
 
-    reportItemEjectorEjectedItem(entityUid, targetUid) {
-        this.dependencyResolveQueue.push(entityUid);
-        if (targetUid) this.dependencyResolveQueue.push(targetUid);
+    reportItemEjectorEjectedItem(entity: Entity, target: Entity) {
+        this.resolveDependency(entity);
+        if (target) this.resolveDependency(target);
     }
-
-    /////////////////// Dependencies ////////////////
-
-    // resolveDependencies(entityResolvedUid, component) {
-    //     // check if
-    //     let dependency = this.dependencyQueueReverseReference[entityResolvedUid];
-    //     if(this.dependencyQueueReverse.delete(entityResolvedUid)) {
-    //         this.dependencyQueue[dependency].dependents.delete(entityResolvedUid);
-    //     }
-    //     if(this.dependencyMap[entityResolvedUid]) {
-    //         this.dependencyResolveQueue.push(this.dependencyMap[entityResolvedUid]);
-    //     }
-    // }
-
-    // resolveDependencies(dependencyUid: EntityUid, componentId: ComponentId) {
-    //     if(this.dependencyQueue.has(dependencyUid)) {
-    //         let resolveArray: Array<Dependency> = this.dependencyQueue[dependencyUid];
-    //         this.dependencyQueue.delete(dependencyUid);
-    //         this.dependencyResolveQueue.push(...resolveArray);
-    //     }
-    //     let dependencyQueue: Array<Dependency> = this.dependencyQueue[dependencyUid];
-    //     let dependencies: Array<Dependency> = this.dependencyMap[dependencyUid];
-    //     if(this.dependencyQueue.delete())
-    // }
 
     internalCheckEntityAfterComponentRemoval(entity) {
         super.internalCheckEntityAfterComponentRemoval(entity);
-        this.deactivateRequiredComponents(entity);
+        this.deleteComponents(entity);
     }
 
     internalRegisterEntity(entity) {
         super.internalRegisterEntity(entity);
+        this.reactivateRequiredComponents(entity);
+    }
 
-        this.activateRequiredComponents(entity);
+    internalPopEntityIfMatching(entity) {
+        if (this.allEntitiesSet.delete(entity)) {
+            this.deleteComponents(entity);
+        }
+        super.internalPopEntityIfMatching(entity);
+    }
+
+    refreshCaches() {
+        // Remove all entities which are queued for destroy
+        for (let set = [...this.allEntitiesSet], i = set.length - 1, entity = set[i]; i >= 0; --i) {
+            if (entity.queuedForDestroy || entity.destroyed) {
+                this.deactivateRequiredComponents(entity);
+                this.deleteComponents(entity);
+            }
+        }
     }
 
     // TODO: UI activity-checker

@@ -18,6 +18,12 @@ const _item = 1;
 
 const DEBUG = G_IS_DEV && false;
 
+// belt uid's are negative
+let nextUid = -1000;
+function provideUid(belt) {
+    belt.setUid(--nextUid);
+}
+
 /**
  * Stores a path of belts, used for optimizing performance
  */
@@ -87,8 +93,12 @@ export class BeltPath extends BasicSerializableObject {
         }
 
         this.uid = 0;
-        this.isBeltPath = true;
         this.empty = this.full = false;
+        this.isInit = true;
+    }
+
+    setUid(uid) {
+        this.uid = uid;
     }
 
     tryReportEmpty(s) {
@@ -106,6 +116,7 @@ export class BeltPath extends BasicSerializableObject {
     }
 
     tryReportResolved(force = false) {
+        if (this.isInit) return;
         if (this.empty || this.full || force) {
             this.empty = this.full = false;
             this.reporter.reportBeltPathResolved(this, this.acceptorTarget && this.acceptorTarget.entity);
@@ -124,6 +135,8 @@ export class BeltPath extends BasicSerializableObject {
      * @param {boolean} computeSpacing Whether to also compute the spacing
      */
     init(computeSpacing = true, reporter) {
+        this.isInit = true;
+        provideUid(this);
         // this assertion could be important but for some reason doesn't work?
         //assert(!reporter, "BeltPath requires a SystemUpdateReporter but none was provided!");
 
@@ -147,6 +160,8 @@ export class BeltPath extends BasicSerializableObject {
         for (let i = 0; i < this.entityPath.length; ++i) {
             this.entityPath[i].components.Belt.assignedPath = this;
         }
+
+        this.isInit = false;
     }
 
     /**
