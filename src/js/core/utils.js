@@ -682,3 +682,26 @@ export function safeModulo(n, m) {
 export function smoothPulse(time) {
     return Math.sin(time * 4) * 0.5 + 0.5;
 }
+
+let logIntervals = {};
+const intervalStyle = "color: lightgrey; font-style: italic";
+const revertStyle = "color: inherit; font-style: inherit";
+
+export function logInterval(key, frames, message, ...args) {
+    let interval = logIntervals[key] || 0;
+    if (++interval > frames) {
+        console.log(`%clogInterval [${key}]: \t%c` + message, intervalStyle, revertStyle, ...args);
+        interval = 0;
+    }
+    logIntervals[key] = interval;
+}
+
+export function dirInterval(key, frames, object, premessage, ...args) {
+    let interval = logIntervals[key] || 0;
+    if (++interval > frames) {
+        console.log(`%cdirInterval [${key}]: \t%c` + (premessage || ""), intervalStyle, revertStyle, ...args);
+        console.dir(object);
+        interval = 0;
+    }
+    logIntervals[key] = interval;
+}

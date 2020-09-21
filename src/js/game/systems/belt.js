@@ -4,7 +4,7 @@ import { gMetaBuildingRegistry } from "../../core/global_registries";
 import { Loader } from "../../core/loader";
 import { createLogger } from "../../core/logging";
 import { AtlasSprite } from "../../core/sprites";
-import { fastArrayDeleteValue } from "../../core/utils";
+import { dirInterval, fastArrayDeleteValue } from "../../core/utils";
 import { enumDirection, enumDirectionToVector, enumInvertedDirections, Vector } from "../../core/vector";
 import { BeltPath } from "../belt_path";
 import { arrayBeltVariantToRotation, MetaBeltBaseBuilding } from "../buildings/belt_base";
@@ -489,10 +489,11 @@ export class BeltSystem extends GameSystemWithFilter {
         }
 
         const belts = this.reporter.getActiveBeltPaths();
+        dirInterval("recievedBeltPaths", 300, belts);
         //console.dir(belts);
         //console.dir(this.beltPaths);
-        for (let i = 0; i < belts.length; ++i) {
-            const belt = this.beltPaths[belts[i]];
+        for (let i = belts.length - 1; i >= 0; --i) {
+            const belt = belts[i];
             if (belt) belt.update();
         }
 

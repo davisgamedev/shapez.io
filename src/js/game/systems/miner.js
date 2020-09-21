@@ -1,5 +1,6 @@
 import { globalConfig } from "../../core/config";
 import { DrawParameters } from "../../core/draw_parameters";
+import { dirInterval, logInterval } from "../../core/utils";
 import { enumDirectionToVector } from "../../core/vector";
 import { BaseItem } from "../base_item";
 import { MinerComponent } from "../components/miner";

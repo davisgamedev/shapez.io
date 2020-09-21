@@ -44,15 +44,15 @@ export class ItemAcceptorComponent extends Component {
         });
     }
 
-    reportOnItemAccepted(reporter, entityUid) {
+    reportOnItemAccepted(reporter, entity) {
         this.reportOnAccept = true;
         this.reporter = reporter;
-        this.entityUid = entityUid;
+        this.entity = entity;
     }
 
     tryReportItemAccepted() {
         if (this.reportOnAccept) {
-            this.reporter.reportItemAcceptorAcceptedItem(this.entityUid);
+            this.reporter.reportItemAcceptorAcceptedItem(this.entity);
             this.reportOnAccept = false;
         }
     }
@@ -79,7 +79,7 @@ export class ItemAcceptorComponent extends Component {
         this.setSlots(slots);
 
         this.reportOnAccept = false;
-        this.reporter = this.entityUid = null;
+        this.reporter = this.entity = null;
     }
 
     /**
@@ -161,7 +161,6 @@ export class ItemAcceptorComponent extends Component {
                 }
             }
         }
-
         return null;
     }
 }

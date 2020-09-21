@@ -86,15 +86,14 @@ export class BeltPath extends BasicSerializableObject {
          * Stores the spacing to the first item
          */
 
+        this.uid = 0;
+        this.empty = this.full = false;
+
         this.init(true, reporter);
 
         if (G_IS_DEV && globalConfig.debug.checkBeltPaths) {
             this.debug_checkIntegrity("constructor");
         }
-
-        this.uid = 0;
-        this.empty = this.full = false;
-        this.isInit = true;
     }
 
     setUid(uid) {
@@ -109,7 +108,7 @@ export class BeltPath extends BasicSerializableObject {
     }
 
     tryReportFull() {
-        if (!this.full) {
+        if (!this.full && this.isFullIsh()) {
             this.full = true;
             this.reporter.reportBeltPathFull(this, this.acceptorTarget && this.acceptorTarget.entity);
         }
@@ -162,6 +161,7 @@ export class BeltPath extends BasicSerializableObject {
         }
 
         this.isInit = false;
+        this.tryReportResolved();
     }
 
     /**
@@ -170,6 +170,10 @@ export class BeltPath extends BasicSerializableObject {
      */
     canAcceptItem() {
         return this.spacingToFirstItem >= globalConfig.itemSpacingOnBelts;
+    }
+
+    isFullIsh() {
+        return this.items.length > this.totalLength / globalConfig.itemSpacingOnBelts;
     }
 
     /**
@@ -200,10 +204,6 @@ export class BeltPath extends BasicSerializableObject {
 
             return true;
         }
-
-        // we are full if we cannot accept an item
-        this.tryReportFull();
-
         return false;
     }
 
@@ -1084,6 +1084,7 @@ export class BeltPath extends BasicSerializableObject {
 
                 // Try to directly get rid of the item
                 if (this.tryHandOverItem(nextDistanceAndItem[_item], excessVelocity)) {
+                    if (!this.canAcceptItem) this.tryReportFull();
                     this.items.pop();
                 }
             }
@@ -1099,6 +1100,7 @@ export class BeltPath extends BasicSerializableObject {
         const lastItem = this.items[this.items.length - 1];
         if (lastItem && lastItem[_nextDistance] === 0 && this.acceptorTarget) {
             if (this.tryHandOverItem(lastItem[_item])) {
+                if (!this.canAcceptItem) this.tryReportFull();
                 this.items.pop();
             }
         }

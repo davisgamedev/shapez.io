@@ -29,18 +29,15 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
     /**
      * @param {Entity} entity
      */
-    tryReportEmpty(entity) {
-        if (!this.reportOnEjected) {
-            this.reportOnEjected = true;
-            this.reporter.reportEjectorEmpty(entity);
-        }
+    reportEmpty(entity) {
+        this.reporter.reportEjectorEmpty(entity);
     }
 
     /**
      * @param {Entity} entity
      * @param {Entity} target
      */
-    tryReportFull(entity, target) {
+    reportFull(entity, target) {
         if (!this.reportOnEjected) {
             this.reportOnEjected = true;
             this.reporter.reportEjectorFull(entity, target);
@@ -51,7 +48,7 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
      * @param {Entity} entity
      * @param {?Entity} target
      */
-    tryReportEjected(entity, target) {
+    reportEjected(entity, target) {
         if (this.reportOnEjected) {
             this.reportOnEjected = false;
             this.reporter.reportItemEjectorEjectedItem(entity, target);
@@ -180,6 +177,7 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
 
             for (let i = 0; i < targetEntities.length; ++i) {
                 const targetEntity = targetEntities[i];
+                this.reportEjected(entity, targetEntity);
 
                 const targetStaticComp = targetEntity.components.StaticMapEntity;
                 const targetBeltComp = targetEntity.components.Belt;
@@ -243,12 +241,14 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
             }
 
             const slots = sourceEjectorComp.slots;
+            let stalledTargets = [];
+            let emptySlots = 0;
             for (let j = 0; j < slots.length; ++j) {
                 const sourceSlot = slots[j];
                 const item = sourceSlot.item;
                 if (!item) {
                     // No item available to be ejected
-                    this.tryReportEmpty(sourceEntity.uid);
+                    emptySlots++;
                     continue;
                 }
 
@@ -278,7 +278,7 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
                     // Try passing the item over
                     if (destPath.tryAcceptItem(item)) {
                         sourceSlot.item = null;
-                        this.tryReportEjected(sourceEntity, null);
+                        this.reportEjected(sourceEntity, targetEntity);
                     }
 
                     // Always stop here, since there can *either* be a belt path *or*
@@ -299,12 +299,18 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
                         // Handover successful, clear slot
                         targetAcceptorComp.onItemAccepted(destSlot.index, destSlot.acceptedDirection, item);
                         sourceSlot.item = null;
-                        this.tryReportEjected(sourceEntity, targetEntity);
+                        this.reportEjected(sourceEntity, targetEntity);
                         continue;
                     } else {
-                        this.tryReportFull(sourceEntity, targetEntity);
+                        stalledTargets.push(targetEntity);
                     }
                 }
+            }
+            if (stalledTargets >= slots.length) {
+                stalledTargets.forEach(s => this.reportFull(sourceEntity, s));
+            }
+            if (emptySlots >= slots.length) {
+                this.reportEmpty(sourceEntity);
             }
         }
     }

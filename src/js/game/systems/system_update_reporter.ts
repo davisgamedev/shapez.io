@@ -1,5 +1,5 @@
 import { ModuleResolutionKind } from "typescript";
-import { arrayDeleteValue, fastArrayDelete, fastSetAppend } from "../../core/utils";
+import { arrayDeleteValue, dirInterval, fastArrayDelete, fastSetAppend, logInterval } from "../../core/utils";
 import { ItemAcceptorComponent } from "../components/item_acceptor";
 import { ItemEjectorComponent } from "../components/item_ejector";
 import { ItemProcessorComponent } from "../components/item_processor";
@@ -116,7 +116,6 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
     deleteComponents(entity: Entity) {
         if (this.checkEntityExists(entity)) {
             this.entResolveQueue.add(entity);
-            this.deactivateRequiredComponents(entity);
 
             this.entIdleWaitSet.delete(entity);
             this.entIdleSet.delete(entity);
@@ -133,7 +132,31 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
                     }
                 }
             }
+            this.deactivateRequiredComponents(entity);
         }
+    }
+
+    createComponents(entity: Entity) {
+        if (this.entDependencyMap.has(entity) || this.entDependencyQueueMap.has(entity)) {
+            this.resolveDependency(entity);
+        }
+
+        this.entIdleWaitSet.delete(entity);
+        this.entIdleSet.delete(entity);
+
+        if (!entity.components) {
+            this.beltPaths.allBeltPaths.add(entity);
+        } else {
+            this.allEntitiesSet.add(entity);
+            for (let i = 0; i < this.requiredComponentIds.length; ++i) {
+                if (entity.components[this.requiredComponentIds[i]] != null) {
+                    this.entityComponentContainers
+                        .get(this.requiredComponentIds[i])
+                        .activeEntitySet.add(entity);
+                }
+            }
+        }
+        this.reactivateRequiredComponents(entity);
     }
 
     deactivateRequiredComponents(entity: Entity) {
@@ -177,6 +200,7 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
      * @returns {Array<Entity>}
      */
     getActiveEntitiesByComponent(componentId: ComponentId): Array<Entity> {
+        dirInterval("componentContainers", 500, this.entityComponentContainers);
         return [
             ...(this.entityComponentContainers.get(componentId) as EntityComponentContainer).activeEntitySet,
         ];
@@ -205,6 +229,7 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
         if (set) {
             fastSetAppend(this.entResolveQueue, set);
         }
+        this.reactivateRequiredComponents(entDependency);
     }
 
     /**
@@ -219,14 +244,24 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
 
         for (let it = container.reactivateEntityQueue.values(), entity = null; (entity = it.next().value); ) {
             container.deactivateEntityQueue.delete(entity);
+
             if (this.checkEntityExists(entity)) {
-                container.activeEntitySet.add(entity);
+                if (!container.activeEntitySet.has(entity)) {
+                    container.activeEntitySet.add(entity);
+                    this.entIdleSet.delete(entity);
+                    this.entIdleWaitSet.delete(entity);
+                    this.entResolveQueue.add(entity);
+                }
             }
         }
 
+        // prevents activeEntitySet from passing in a deactivated component
         for (let it = container.deactivateEntityQueue.values(), entity = null; (entity = it.next().value); ) {
             container.activeEntitySet.delete(entity);
         }
+
+        container.reactivateEntityQueue.clear();
+        container.deactivateEntityQueue.clear();
     }
 
     updateDepContainers() {
@@ -269,37 +304,54 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
         }
 
         // if we have waited long enough we can start to idle components
+        // THIS ISN't ALWAYS WORKING
         if (++this.entIdleWaitFrames > ENTITY_IDLE_AFTER_FRAMES) {
-            for (let it = this.entIdleWaitSet.values(), entity = null; (entity = it.next().value); ) {
-                if (!this.entIdleSet.has(entity)) {
-                    this.deactivateRequiredComponents(entity);
-                    this.entIdleSet.add(entity);
+            if (this.entIdleWaitSet.size > 0) {
+                console.log(
+                    "%cTime to idle some systems! Total: " + this.entIdleWaitSet.size,
+                    "color: white, background-color: purple"
+                );
+                for (let it = this.entIdleWaitSet.values(), entity = null; (entity = it.next().value); ) {
+                    if (!this.entIdleSet.has(entity)) {
+                        this.deactivateRequiredComponents(entity);
+                        this.entIdleSet.add(entity);
+                    }
                 }
             }
-
+            this.entIdleWaitSet.clear();
             this.entIdleWaitFrames = 0;
         }
     }
 
     update() {
         this.updateDepContainers();
+        let message = "Reporter stats: ";
+
         for (let i = 0; i < this.requiredComponentIds.length; ++i) {
-            this.updateEntityComponentContainer(
-                this.entityComponentContainers.get(this.requiredComponentIds[i])
-            );
+            const container = this.entityComponentContainers.get(this.requiredComponentIds[i]);
+            this.updateEntityComponentContainer(container);
+
+            message += `\n${this.requiredComponentIds[i]}: active: ${container.activeEntitySet.size}`;
         }
         this.updateEntityComponentContainer(this.beltPaths.container);
+        message += `\nbeltPaths: active: ${this.beltPaths.container.activeEntitySet.size}, totalBeltPaths: ${
+            this.beltPaths.allBeltPaths.size
+        }, idled: ${(
+            (this.beltPaths.container.activeEntitySet.size / this.beltPaths.allBeltPaths.size) *
+            100
+        ).toFixed(2)}%`;
+        logInterval("SystemUpdateReporter update summary: ", 100, message);
     }
 
     /////////////// BeltPaths-Specific Logic /////////////////
 
     getActiveBeltPaths() {
+        dirInterval("beltPaths", 500, this.beltPaths.container.activeEntitySet);
         return [...this.beltPaths.container.activeEntitySet];
     }
 
     addBeltPath(beltPath: Entity) {
-        this.beltPaths.allBeltPaths.add(beltPath);
-        this.beltPaths.container.reactivateEntityQueue.add(beltPath);
+        this.createComponents(beltPath);
     }
 
     removeBeltPath(beltPath: Entity) {
@@ -375,7 +427,7 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
 
     internalRegisterEntity(entity) {
         super.internalRegisterEntity(entity);
-        this.reactivateRequiredComponents(entity);
+        this.createComponents(entity);
     }
 
     internalPopEntityIfMatching(entity) {
@@ -393,6 +445,7 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
                 this.deleteComponents(entity);
             }
         }
+        super.refreshCaches();
     }
 
     // TODO: UI activity-checker

@@ -49,12 +49,12 @@ export class GameSystemWithFilter extends GameSystem {
         this.reporter = reporter;
     }
 
-    getUpdatedEntitiesArray() {
-        if (this.allEntitiesOutdated) {
-            return [...this.allEntitiesSet];
-        } else {
-            return this.allEntitiesAsArray;
+    getUpdatedEntitiesArray(outdated = false) {
+        if (this.allEntitiesOutdated || outdated) {
+            this.allEntitiesAsArray = [...this.allEntitiesSet];
+            this.allEntitiesOutdated = false;
         }
+        return this.allEntitiesAsArray;
     }
 
     /**
@@ -84,6 +84,7 @@ export class GameSystemWithFilter extends GameSystem {
         for (let i = 0; i < this.requiredComponentIds.length; ++i) {
             if (!entity.components[this.requiredComponentIds[i]]) {
                 this.allEntitiesSet.delete(entity);
+                this.allEntitiesOutdated = true;
             }
         }
     }
@@ -99,6 +100,7 @@ export class GameSystemWithFilter extends GameSystem {
             }
         }
         if (this.allEntitiesSet.delete(entity)) {
+            this.allEntitiesOutdated = true;
             return;
         }
         this.internalRegisterEntity(entity);
@@ -109,10 +111,10 @@ export class GameSystemWithFilter extends GameSystem {
         for (let it = this.allEntitiesSet.values(), entity = null; (entity = it.next().value); ) {
             if (entity.queuedForDestroy || entity.destroyed) {
                 this.allEntitiesSet.delete(entity);
+                this.allEntitiesOutdated = true;
             }
         }
-        this.allEntitiesAsArray = [...this.allEntitiesSet];
-        this.allEntitiesOutdated = false;
+        this.getUpdatedEntitiesArray();
     }
 
     /**
@@ -128,10 +130,12 @@ export class GameSystemWithFilter extends GameSystem {
      */
     internalRegisterEntity(entity) {
         this.allEntitiesSet.add(entity);
+        this.allEntitiesOutdated = true;
 
         if (this.root.gameInitialized && !this.root.bulkOperationRunning) {
             // Sort entities by uid so behaviour is predictable
             this.allEntitiesSet = new Set([...this.allEntitiesSet].sort((a, b) => a - b));
+            this.getUpdatedEntitiesArray();
         }
     }
 
@@ -145,5 +149,6 @@ export class GameSystemWithFilter extends GameSystem {
             return;
         }
         this.allEntitiesSet.delete(entity);
+        this.allEntitiesOutdated = true;
     }
 }
