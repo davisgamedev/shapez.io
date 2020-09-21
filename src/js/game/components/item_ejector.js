@@ -66,6 +66,19 @@ export class ItemEjectorComponent extends Component {
         this.enabled = true;
     }
 
+    reportOnItemEjected(reporter, entity) {
+        this.reportOnEject = true;
+        this.reporter = reporter;
+        this.entity = entity;
+    }
+
+    tryReportItemEjected() {
+        if (this.reportOnEject) {
+            this.reporter.reportItemEjectorEjectedItem(this.entity);
+            this.reportOnEject = false;
+        }
+    }
+
     /**
      * @param {Array<{pos: Vector, direction: enumDirection }>} slots The slots to eject on
      */
@@ -143,6 +156,7 @@ export class ItemEjectorComponent extends Component {
         }
         this.slots[slotIndex].item = item;
         this.slots[slotIndex].progress = 0;
+        this.tryReportItemEjected();
         return true;
     }
 
@@ -152,6 +166,7 @@ export class ItemEjectorComponent extends Component {
      * @returns {BaseItem|null}
      */
     takeSlotItem(slotIndex) {
+        // TODO not used anywhere?
         const slot = this.slots[slotIndex];
         const item = slot.item;
         slot.item = null;

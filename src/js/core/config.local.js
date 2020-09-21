@@ -3,7 +3,7 @@ export default {
     /* dev:start */
     // -----------------------------------------------------------------------------------
     // Quickly enters the game and skips the main menu - good for fast iterating
-    // fastGameEnter: true,
+    fastGameEnter: true,
     // -----------------------------------------------------------------------------------
     // Skips any delays like transitions between states and such
     // noArtificialDelays: true,
@@ -15,7 +15,7 @@ export default {
     // showEntityBounds: true,
     // -----------------------------------------------------------------------------------
     // Shows arrows for every ejector / acceptor
-    showAcceptorEjectors: true,
+    // showAcceptorEjectors: true,
     // -----------------------------------------------------------------------------------
     // Disables the music (Overrides any setting, can cause weird behaviour)
     // disableMusic: true,
@@ -81,7 +81,7 @@ export default {
     // instantMiners: true,
     // -----------------------------------------------------------------------------------
     // When using fastGameEnter, controls whether a new game is started or the last one is resumed
-    // resumeGameOnFastEnter: true,
+    resumeGameOnFastEnter: true,
     // -----------------------------------------------------------------------------------
     // Special option used to render the trailer
     // renderForTrailer: true,

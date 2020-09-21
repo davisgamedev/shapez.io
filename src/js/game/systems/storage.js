@@ -26,7 +26,7 @@ export class StorageSystem extends GameSystemWithFilter {
     }
 
     update() {
-        const entitiesArray = this.reporter.getActiveEntitiesByComponent(StorageComponent.getId());
+        const entitiesArray = this.getUpdatedEntitiesArray();
         for (
             let i = entitiesArray.length - 1, entity = entitiesArray[i];
             i >= 0;

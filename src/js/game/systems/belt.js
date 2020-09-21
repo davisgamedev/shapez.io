@@ -489,9 +489,6 @@ export class BeltSystem extends GameSystemWithFilter {
         }
 
         const belts = this.reporter.getActiveBeltPaths();
-        dirInterval("recievedBeltPaths", 300, belts);
-        //console.dir(belts);
-        //console.dir(this.beltPaths);
         for (let i = belts.length - 1; i >= 0; --i) {
             const belt = belts[i];
             if (belt) belt.update();

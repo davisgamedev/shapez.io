@@ -201,7 +201,20 @@ export function arrayDeleteValue(array, value) {
  * @returns {Set<any>} can usually be ignored
  */
 export function fastSetAppend(set, set2) {
-    for (let it = set2.values(), val = null; (val = it.next().value); ) set.add(val);
+    if (set2.size <= 0) return set;
+    if (set.size <= 0) {
+        set = new Set([...set2.values()]);
+        return set;
+    }
+
+    dirInterval("set1before: ", 1, set);
+    dirInterval("set2before: ", 1, set2);
+
+    for (let arr = [...set2.values()], i = arr.length - 1, val; (val = arr[i]) && i >= 0; --i) {
+        set.add(val);
+    }
+
+    dirInterval("set1after: ", 1, set);
     return set;
 }
 

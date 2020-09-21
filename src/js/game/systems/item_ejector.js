@@ -177,7 +177,6 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
 
             for (let i = 0; i < targetEntities.length; ++i) {
                 const targetEntity = targetEntities[i];
-                this.reportEjected(entity, targetEntity);
 
                 const targetStaticComp = targetEntity.components.StaticMapEntity;
                 const targetBeltComp = targetEntity.components.Belt;
@@ -186,6 +185,7 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
                 if (targetBeltComp) {
                     const beltAcceptingDirection = targetStaticComp.localDirectionToWorld(enumDirection.top);
                     if (ejectSlotWsDirection === beltAcceptingDirection) {
+                        this.reportEjected(entity, targetEntity);
                         ejectorSlot.cachedTargetEntity = targetEntity;
                         ejectorSlot.cachedBeltPath = targetBeltComp.assignedPath;
                         break;
@@ -212,6 +212,7 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
                 // A slot can always be connected to one other slot only
                 ejectorSlot.cachedTargetEntity = targetEntity;
                 ejectorSlot.cachedDestSlot = matchingSlot;
+                this.reportEjected(entity, targetEntity);
                 break;
             }
         }
@@ -279,8 +280,9 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
                     if (destPath.tryAcceptItem(item)) {
                         sourceSlot.item = null;
                         this.reportEjected(sourceEntity, targetEntity);
+                    } else {
+                        stalledTargets.push(destPath);
                     }
-
                     // Always stop here, since there can *either* be a belt path *or*
                     // a slot
                     continue;
@@ -291,6 +293,7 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
                 if (destSlot) {
                     const targetAcceptorComp = targetEntity.components.ItemAcceptor;
                     if (!targetAcceptorComp.canAcceptItem(destSlot.index, item)) {
+                        stalledTargets.push(targetEntity);
                         continue;
                     }
 
@@ -429,6 +432,15 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
                     parameters,
                     globalConfig.defaultItemDiameter
                 );
+
+                // parameters.context.save();
+                // parameters.context.fillStyle = this.reporter.entityComponentContainers
+                //     .get(ItemEjectorComponent.getId())
+                //     .activeEntitySet.has(entity)
+                //     ? "green"
+                //     : "red";
+                // parameters.context.fillRect(worldX, worldY, 5, 5);
+                // parameters.context.restore();
             }
         }
     }

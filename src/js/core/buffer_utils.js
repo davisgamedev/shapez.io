@@ -52,17 +52,8 @@ export function getBufferStats() {
 
 export function clearBufferBacklog() {
     while (freeCanvasList.length > 50) {
-        let canvasEl = freeCanvasList.pop();
-        if(canvasEl) {
-            try{
-                document.body.removeChild(canvasEl.canvas);
-            }
-            catch(e){
-                console.warn("Could not remove debug canvas buffer, likely already deleted");
-            };
-        }
+        freeCanvasList.pop();
     }
-    console.dir(freeCanvasList);
 }
 
 /**
@@ -146,8 +137,6 @@ export function makeOffscreenBuffer(w, h, { smooth = true, reusable = true, labe
     if (!canvas) {
         canvas = document.createElement("canvas");
         context = canvas.getContext("2d" /*, { alpha } */);
-
-        document.body.appendChild(canvas);
 
         canvas.width = w;
         canvas.height = h;

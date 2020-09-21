@@ -4,9 +4,8 @@ exports.SystemUpdateReporter = void 0;
 const utils_1 = require("../../core/utils");
 const item_acceptor_1 = require("../components/item_acceptor");
 const item_ejector_1 = require("../components/item_ejector");
-const item_processor_1 = require("../components/item_processor");
+const miner_1 = require("../components/miner");
 const storage_1 = require("../components/storage");
-const underground_belt_1 = require("../components/underground_belt");
 const game_system_with_filter_1 = require("../game_system_with_filter");
 // TODO object docs
 // TODO CHECK LOGIC WIRES ISSUES
@@ -15,15 +14,15 @@ const game_system_with_filter_1 = require("../game_system_with_filter");
  * => frame based to scale by target performance, lower targeted simulation tick
  *      should probably take a bit slower to perform the idle process
  */
-const ENTITY_IDLE_AFTER_FRAMES = 150;
+const ENTITY_IDLE_AFTER_FRAMES = 60;
 // /**
 //  * @typedef {Object} Dep
-//  * @property {EntityUid} effectedUid
+//  * @property {Entity} effected
 //  * @property {number} idleTime
 //  * @property {boolean} idled
 //  */
 // interface Dep {
-//     effectedUidEntity: Entity | BeltPathFwd;
+//     effectedEntity: Entity | BeltPathFwd;
 //     idleTime: number;
 //     idled: boolean;
 // }
@@ -35,10 +34,10 @@ const ENTITY_IDLE_AFTER_FRAMES = 150;
 //      COMPONENT BASED CHANGES                                          //
 //  2. IDLE ENTITIES WITH ITEM ACCEPTORS ARE RESOLVED BY ITEM ACCEPTOR   //
 //      BASED CHANGES                                                    //
-//  3. IDLE ENTITIES WITH ITEM EJECTORS ARE RESOLVED BY A effectedUid      //
+//  3. IDLE ENTITIES WITH ITEM EJECTORS ARE RESOLVED BY A effected      //
 //          ENTITY'S ITEM ACCEPTOR CHANGES                               //
 //                                                                       //
-// IN OTHER WORDS, THIS IS ALL effectedUid ON AUTONOMOUS CHANGES TO ITEM   //
+// IN OTHER WORDS, THIS IS ALL effected ON AUTONOMOUS CHANGES TO ITEM   //
 //      ACCEPTOR COMPONENTS                                              //
 //                                                                       //
 ///////////////////////////////////////////////////////////////////////////
@@ -50,20 +49,19 @@ class SystemUpdateReporter extends game_system_with_filter_1.GameSystemWithFilte
         super(root, [
             item_acceptor_1.ItemAcceptorComponent,
             item_ejector_1.ItemEjectorComponent,
-            item_processor_1.ItemProcessorComponent,
             storage_1.StorageComponent,
-            underground_belt_1.UndergroundBeltComponent,
+            miner_1.MinerComponent,
         ]);
         //  /**
-        //   * @type {Map<ComponentId, EntityUid>}
+        //   * @type {Map<ComponentId, Entity>}
         //   */
         this.entityComponentContainers = new Map();
-        // entDependencyUid: [effectedUidEntities]
-        // contains all entities (idled or not) that are effectedUid on another entity's update
-        this.entDependencyMap = new Map();
+        // entDependentOn: [effectedEntities]
+        // contains all entities (idled or not) that are effected on another entity's update
+        this.entDependentOnMap = new Map();
         // queue to determine who is added to map (some entities are removed during updates)
-        this.entDependencyQueueMap = new Map();
-        // all entDependencyedencies queued to be resolved
+        this.entDependentOnQueueMap = new Map();
+        // all entDependentOnedencies queued to be resolved
         this.entResolveQueue = new Set();
         // all entities that have been idled (removed from updates);
         this.entIdleSet = new Set();
@@ -104,10 +102,7 @@ class SystemUpdateReporter extends game_system_with_filter_1.GameSystemWithFilte
         }
     }
     checkEntityExists(entity) {
-        if (!entity.comonents)
-            return this.beltPaths.allBeltPaths.has(entity);
-        else
-            return this.allEntitiesSet.has(entity);
+        return this.allEntitiesSet.has(entity) || this.beltPaths.allBeltPaths.has(entity);
     }
     // TODO
     //we need to delete it from any and all component records
@@ -134,13 +129,14 @@ class SystemUpdateReporter extends game_system_with_filter_1.GameSystemWithFilte
         }
     }
     createComponents(entity) {
-        if (this.entDependencyMap.has(entity) || this.entDependencyQueueMap.has(entity)) {
+        if (this.entDependentOnMap.has(entity) || this.entDependentOnQueueMap.has(entity)) {
             this.resolveDependency(entity);
         }
         this.entIdleWaitSet.delete(entity);
         this.entIdleSet.delete(entity);
         if (!entity.components) {
             this.beltPaths.allBeltPaths.add(entity);
+            this.beltPaths.container.activeEntitySet.add(entity);
         }
         else {
             this.allEntitiesSet.add(entity);
@@ -166,32 +162,31 @@ class SystemUpdateReporter extends game_system_with_filter_1.GameSystemWithFilte
      * @returns {Array<Entity>}
      */
     getActiveEntitiesByComponent(componentId) {
-        utils_1.dirInterval("componentContainers", 500, this.entityComponentContainers);
         return [
             ...this.entityComponentContainers.get(componentId).activeEntitySet,
         ];
     }
-    queueNewDependency(entity, entDependency) {
-        if (this.entDependencyMap.has(entDependency) &&
-            this.entDependencyMap.get(entDependency).has(entDependency)) {
+    queueNewDependency(entDependentOn, dependentEnt) {
+        if (this.entDependentOnMap.has(entDependentOn) &&
+            this.entDependentOnMap.get(entDependentOn).has(dependentEnt)) {
             return;
         }
-        const set = this.entDependencyQueueMap.get(entDependency);
+        const set = this.entDependentOnQueueMap.get(entDependentOn);
         if (set) {
-            set.add(entity);
+            set.add(dependentEnt);
         }
         else {
-            this.entDependencyQueueMap.set(entDependency, new Set([entity]));
+            this.entDependentOnQueueMap.set(entDependentOn, new Set([dependentEnt]));
         }
     }
     // TODO: this could be faster
-    resolveDependency(entDependency) {
-        this.entDependencyQueueMap.delete(entDependency);
-        const set = this.entDependencyMap.get(entDependency);
+    resolveDependency(entDependentOn) {
+        this.entDependentOnQueueMap.delete(entDependentOn);
+        const set = this.entDependentOnMap.get(entDependentOn);
         if (set) {
             utils_1.fastSetAppend(this.entResolveQueue, set);
         }
-        this.reactivateRequiredComponents(entDependency);
+        this.reactivateRequiredComponents(entDependentOn);
     }
     /**
      * @param {EntityComponentContainer} container
@@ -202,7 +197,7 @@ class SystemUpdateReporter extends game_system_with_filter_1.GameSystemWithFilte
          *  activation supercedes deactivation
          * then remove anyting left in the deactivate queue
          */
-        for (let it = container.reactivateEntityQueue.values(), entity = null; (entity = it.next().value);) {
+        for (let arr = [...container.reactivateEntityQueue.values()], i = arr.length - 1, entity; (entity = arr[i]) && i >= 0; --i) {
             container.deactivateEntityQueue.delete(entity);
             if (this.checkEntityExists(entity)) {
                 if (!container.activeEntitySet.has(entity)) {
@@ -214,43 +209,44 @@ class SystemUpdateReporter extends game_system_with_filter_1.GameSystemWithFilte
             }
         }
         // prevents activeEntitySet from passing in a deactivated component
-        for (let it = container.deactivateEntityQueue.values(), entity = null; (entity = it.next().value);) {
+        for (let arr = [...container.deactivateEntityQueue.values()], i = arr.length - 1, entity; (entity = arr[i]) && i >= 0; --i) {
             container.activeEntitySet.delete(entity);
         }
         container.reactivateEntityQueue.clear();
         container.deactivateEntityQueue.clear();
     }
     updateDepContainers() {
-        if (this.entDependencyQueueMap.size > 0) {
+        if (this.entDependentOnQueueMap.size > 0) {
+            utils_1.logInterval("dependencyQueue: ", 60, this.entDependentOnQueueMap.size);
             // append dependencies to dependency maps
-            for (let keys = [...this.entDependencyQueueMap.keys()], vals = [...this.entDependencyQueueMap.values()], i = keys.length - 1, entDependency = keys[i], entitiesSet = vals[i]; i >= 0; --i, entDependency = keys[i], entitiesSet = vals[i]) {
-                const set = this.entDependencyMap.get(entDependency) || new Set();
-                this.entDependencyMap.set(entDependency, utils_1.fastSetAppend(set, entitiesSet));
-                utils_1.fastSetAppend(this.entIdleWaitSet, entitiesSet);
+            for (let keys = [...this.entDependentOnQueueMap.keys()], vals = [...this.entDependentOnQueueMap.values()], i = keys.length - 1, entDependentOn = keys[i], dependentEntSet = vals[i]; i >= 0; --i, entDependentOn = keys[i], dependentEntSet = vals[i]) {
+                const set = this.entDependentOnMap.get(entDependentOn) || new Set();
+                this.entDependentOnMap.set(entDependentOn, utils_1.fastSetAppend(set, dependentEntSet));
+                utils_1.fastSetAppend(this.entIdleWaitSet, dependentEntSet);
             }
-            this.entDependencyQueueMap.clear();
         }
         if (this.entResolveQueue.size > 0) {
             // collect all of the entities being resolved
             const resolveEntities = new Set();
-            for (let it = this.entResolveQueue.values(), entDependency = null; (entDependency = it.next().value);) {
-                utils_1.fastSetAppend(resolveEntities, this.entDependencyMap.get(entDependency) || new Set());
-                this.entDependencyMap.delete(entDependency);
+            utils_1.logInterval("entResolveQueue: ", 60, this.entResolveQueue.size);
+            for (let arr = [...this.entResolveQueue.values()], i = arr.length - 1, entDependentOn; (entDependentOn = arr[i]) && i >= 0; --i) {
+                utils_1.fastSetAppend(resolveEntities, this.entDependentOnMap.get(entDependentOn) || new Set());
+                this.entDependentOnMap.delete(entDependentOn);
             }
             // reactivate all of their components
-            for (let it = resolveEntities.values(), entity = null; (entity = it.next().value);) {
+            for (let arr = [...resolveEntities.values()], i = arr.length - 1, entity; (entity = arr[i]) && i >= 0; --i) {
                 this.entIdleWaitSet.delete(entity);
                 this.entIdleSet.delete(entity);
                 this.reactivateRequiredComponents(entity);
             }
-            this.entResolveQueue.clear();
         }
         // if we have waited long enough we can start to idle components
         // THIS ISN't ALWAYS WORKING
         if (++this.entIdleWaitFrames > ENTITY_IDLE_AFTER_FRAMES) {
+            console.log("Trying to idle....");
             if (this.entIdleWaitSet.size > 0) {
-                console.log("%cTime to idle some systems! Total: " + this.entIdleWaitSet.size, "color: white, background-color: purple");
-                for (let it = this.entIdleWaitSet.values(), entity = null; (entity = it.next().value);) {
+                console.log("Idling " + this.entIdleWaitSet.size + " entities.");
+                for (let arr = [...this.entIdleWaitSet.values()], i = arr.length - 1, entity; (entity = arr[i]) && i >= 0; --i) {
                     if (!this.entIdleSet.has(entity)) {
                         this.deactivateRequiredComponents(entity);
                         this.entIdleSet.add(entity);
@@ -260,23 +256,19 @@ class SystemUpdateReporter extends game_system_with_filter_1.GameSystemWithFilte
             this.entIdleWaitSet.clear();
             this.entIdleWaitFrames = 0;
         }
+        this.entDependentOnQueueMap.clear();
+        this.entResolveQueue.clear();
     }
     update() {
         this.updateDepContainers();
-        let message = "Reporter stats: ";
         for (let i = 0; i < this.requiredComponentIds.length; ++i) {
             const container = this.entityComponentContainers.get(this.requiredComponentIds[i]);
             this.updateEntityComponentContainer(container);
-            message += `\n${this.requiredComponentIds[i]}: active: ${container.activeEntitySet.size}`;
         }
         this.updateEntityComponentContainer(this.beltPaths.container);
-        message += `\nbeltPaths: active: ${this.beltPaths.container.activeEntitySet.size}, totalBeltPaths: ${this.beltPaths.allBeltPaths.size}, idled: ${((this.beltPaths.container.activeEntitySet.size / this.beltPaths.allBeltPaths.size) *
-            100).toFixed(2)}%`;
-        utils_1.logInterval("SystemUpdateReporter update summary: ", 100, message);
     }
     /////////////// BeltPaths-Specific Logic /////////////////
     getActiveBeltPaths() {
-        utils_1.dirInterval("beltPaths", 500, this.beltPaths.container.activeEntitySet);
         return [...this.beltPaths.container.activeEntitySet];
     }
     addBeltPath(beltPath) {
@@ -285,18 +277,21 @@ class SystemUpdateReporter extends game_system_with_filter_1.GameSystemWithFilte
     removeBeltPath(beltPath) {
         this.deleteComponents(beltPath);
     }
-    giveItemAcceptorListener(targetAcceptor) {
-        targetAcceptor.components.ItemAcceptor.reportOnItemAccepted(this, targetAcceptor.uid);
+    giveItemAcceptorListener(entityWithAcceptor) {
+        entityWithAcceptor.components.ItemAcceptor.reportOnItemAccepted(this, entityWithAcceptor);
+    }
+    giveItemEjectorListener(entityWithEjector) {
+        //entityWithEjector.components.ItemEjector.reportOnItemEjected(this, entityWithEjector);
     }
     /**
-     * Report and create entDependencyendencies
+     * Report and create entDependentOnendencies
      * On items with a
      */
     reportBeltPathFull(beltPath, targetAcceptor) {
         //console.log("belt full");
         this.queueNewDependency(beltPath, beltPath);
         if (targetAcceptor) {
-            this.queueNewDependency(beltPath, targetAcceptor);
+            this.queueNewDependency(targetAcceptor, beltPath);
             this.giveItemAcceptorListener(targetAcceptor);
         }
     }
@@ -305,20 +300,19 @@ class SystemUpdateReporter extends game_system_with_filter_1.GameSystemWithFilte
     }
     reportEjectorFull(entityWithEjector, targetAcceptor) {
         this.queueNewDependency(entityWithEjector, entityWithEjector);
-        this.queueNewDependency(entityWithEjector, targetAcceptor);
+        this.queueNewDependency(targetAcceptor, entityWithEjector);
         this.giveItemAcceptorListener(targetAcceptor);
+        this.giveItemEjectorListener(entityWithEjector);
     }
     reportEjectorEmpty(entityWithEjector) {
-        //console.log("ejector empty");
         this.queueNewDependency(entityWithEjector, entityWithEjector);
+        this.giveItemEjectorListener(entityWithEjector);
     }
     reportAcceptorFull(entityWithAcceptor) {
-        //console.log("acceptor full");
         this.queueNewDependency(entityWithAcceptor, entityWithAcceptor);
         this.giveItemAcceptorListener(entityWithAcceptor);
     }
     reportAcceptorEmpty(entityWithAcceptor) {
-        //console.log("acceptor empty");
         this.queueNewDependency(entityWithAcceptor, entityWithAcceptor);
         this.giveItemAcceptorListener(entityWithAcceptor);
     }

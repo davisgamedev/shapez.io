@@ -1299,6 +1299,13 @@ export class BeltPath extends BasicSerializableObject {
                 currentItemPos += distanceAndItem[_nextDistance];
                 ++currentItemIndex;
 
+                // parameters.context.save();
+                // parameters.context.fillStyle = this.reporter.beltPaths.container.activeEntitySet.has(this)
+                //     ? "blue"
+                //     : "orange";
+                // parameters.context.fillRect(worldPos.x, worldPos.y, 5, 5);
+                // parameters.context.restore();
+
                 if (currentItemIndex >= this.items.length) {
                     // We rendered all items
                     return;

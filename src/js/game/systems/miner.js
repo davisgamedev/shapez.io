@@ -37,7 +37,7 @@ export class MinerSystem extends GameSystemWithFilter {
             miningSpeed *= 100;
         }
 
-        const entitiesArray = this.getUpdatedEntitiesArray();
+        const entitiesArray = this.reporter.getActiveEntitiesByComponent(MinerComponent.getId());
         for (
             let i = entitiesArray.length - 1, entity = entitiesArray[i];
             i >= 0;

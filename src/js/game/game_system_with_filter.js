@@ -108,7 +108,11 @@ export class GameSystemWithFilter extends GameSystem {
 
     refreshCaches() {
         // Remove all entities which are queued for destroy
-        for (let it = this.allEntitiesSet.values(), entity = null; (entity = it.next().value); ) {
+        for (
+            let arr = [...this.allEntitiesSet.values()], i = arr.length - 1, entity;
+            (entity = arr[i]) && i >= 0;
+            --i
+        ) {
             if (entity.queuedForDestroy || entity.destroyed) {
                 this.allEntitiesSet.delete(entity);
                 this.allEntitiesOutdated = true;
@@ -134,7 +138,8 @@ export class GameSystemWithFilter extends GameSystem {
 
         if (this.root.gameInitialized && !this.root.bulkOperationRunning) {
             // Sort entities by uid so behaviour is predictable
-            this.allEntitiesSet = new Set([...this.allEntitiesSet].sort((a, b) => a - b));
+            // do we need this? could probs push this into the refresh process
+            // this.allEntitiesSet = new Set([...this.allEntitiesSet].sort((a, b) => a - b));
             this.getUpdatedEntitiesArray();
         }
     }

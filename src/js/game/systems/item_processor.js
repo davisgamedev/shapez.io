@@ -24,7 +24,7 @@ export class ItemProcessorSystem extends GameSystemWithFilter {
     update() {
         // TODO mark entities active
 
-        const entitiesArray = this.reporter.getActiveEntitiesByComponent(ItemProcessorComponent.getId());
+        const entitiesArray = this.getUpdatedEntitiesArray();
         for (
             let i = entitiesArray.length - 1, entity = entitiesArray[i];
             i >= 0;
