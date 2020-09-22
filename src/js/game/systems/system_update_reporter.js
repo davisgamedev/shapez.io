@@ -152,6 +152,16 @@ class SystemUpdateReporter extends game_system_with_filter_1.GameSystemWithFilte
     }
     deactivateRequiredComponents(entity) {
         this.addToRelevantQueues(entity, "deactivateEntityQueue");
+        // if (!entity.components) {
+        //     this.beltPaths.container.deactivateEntityQueue.add(entity);
+        //     return;
+        // }
+        // for (let i = 0; i < this.requiredComponentIds.length; ++i) {
+        //     if (entity.components[this.requiredComponentIds[i]] != null) {
+        //         const container = this.entityComponentContainers.get(this.requiredComponentIds[i]);
+        //         container.deactivateEntityQueue.add(entity);
+        //     }
+        // }
     }
     reactivateRequiredComponents(entity) {
         this.addToRelevantQueues(entity, "reactivateEntityQueue");
@@ -167,24 +177,23 @@ class SystemUpdateReporter extends game_system_with_filter_1.GameSystemWithFilte
         ];
     }
     queueNewDependency(entDependentOn, dependentEnt) {
-        if (this.entDependentOnMap.has(entDependentOn) &&
-            this.entDependentOnMap.get(entDependentOn).has(dependentEnt)) {
-            return;
-        }
-        const set = this.entDependentOnQueueMap.get(entDependentOn);
-        if (set) {
-            set.add(dependentEnt);
-        }
-        else {
-            this.entDependentOnQueueMap.set(entDependentOn, new Set([dependentEnt]));
-        }
+        // if (
+        //     this.entDependentOnMap.has(entDependentOn) &&
+        //     this.entDependentOnMap.get(entDependentOn).has(dependentEnt)
+        // ) {
+        //     return;
+        // }
+        const set = this.entDependentOnQueueMap.get(entDependentOn) || new Set();
+        set.add(dependentEnt);
+        this.entDependentOnQueueMap.set(entDependentOn, set);
     }
     // TODO: this could be faster
     resolveDependency(entDependentOn) {
+        return;
         this.entDependentOnQueueMap.delete(entDependentOn);
         const set = this.entDependentOnMap.get(entDependentOn);
         if (set) {
-            utils_1.fastSetAppend(this.entResolveQueue, set);
+            this.entResolveQueue = new Set([...set, ...this.entResolveQueue]);
         }
         this.reactivateRequiredComponents(entDependentOn);
     }
@@ -219,18 +228,24 @@ class SystemUpdateReporter extends game_system_with_filter_1.GameSystemWithFilte
         if (this.entDependentOnQueueMap.size > 0) {
             utils_1.logInterval("dependencyQueue: ", 60, this.entDependentOnQueueMap.size);
             // append dependencies to dependency maps
-            for (let keys = [...this.entDependentOnQueueMap.keys()], vals = [...this.entDependentOnQueueMap.values()], i = keys.length - 1, entDependentOn = keys[i], dependentEntSet = vals[i]; i >= 0; --i, entDependentOn = keys[i], dependentEntSet = vals[i]) {
-                const set = this.entDependentOnMap.get(entDependentOn) || new Set();
-                this.entDependentOnMap.set(entDependentOn, utils_1.fastSetAppend(set, dependentEntSet));
-                utils_1.fastSetAppend(this.entIdleWaitSet, dependentEntSet);
+            for (let keys = [...this.entDependentOnQueueMap.keys()], vals = [...this.entDependentOnQueueMap.values()], i = keys.length - 1; i >= 0; --i) {
+                const entDependentOn = keys[i];
+                const dependentEntSet = vals[i];
+                const set = this.entDependentOnMap.get(entDependentOn) || [];
+                this.entDependentOnMap.set(entDependentOn, new Set([...dependentEntSet, ...set]));
+                this.entIdleWaitSet = new Set([...dependentEntSet, ...this.entIdleWaitSet]);
+                //this.entDependentOnMap.set(entDependentOn, fastSetAppend(set, dependentEntSet));
+                //fastSetAppend(this.entIdleWaitSet, dependentEntSet);
             }
         }
         if (this.entResolveQueue.size > 0) {
             // collect all of the entities being resolved
-            const resolveEntities = new Set();
+            let resolveEntities = new Set();
             utils_1.logInterval("entResolveQueue: ", 60, this.entResolveQueue.size);
             for (let arr = [...this.entResolveQueue.values()], i = arr.length - 1, entDependentOn; (entDependentOn = arr[i]) && i >= 0; --i) {
-                utils_1.fastSetAppend(resolveEntities, this.entDependentOnMap.get(entDependentOn) || new Set());
+                //fastSetAppend(resolveEntities, this.entDependentOnMap.get(entDependentOn) || new Set());
+                const set = this.entDependentOnMap.get(entDependentOn) || [];
+                resolveEntities = new Set([...set, ...resolveEntities]);
                 this.entDependentOnMap.delete(entDependentOn);
             }
             // reactivate all of their components
@@ -260,6 +275,31 @@ class SystemUpdateReporter extends game_system_with_filter_1.GameSystemWithFilte
         this.entResolveQueue.clear();
     }
     update() {
+        const container = this.entityComponentContainers[item_ejector_1.ItemEjectorComponent.getId()];
+        try {
+            const message = `
+        Interval container:
+            active: ${container.activeEntitySet.size},
+            toDeactivate: ${container.deactivateEntityQueue.size},
+            toActivate: ${container.reactivateEntityQueue.size},
+        Globals:
+            entDependentMap: ${this.entDependentOnMap.size},
+            entDependentQueue: ${this.entDependentOnQueueMap.size},
+            entResolveQueue: ${this.entResolveQueue.size},
+            idleSet: ${this.entIdleSet.size},
+            idleQueue: ${this.entIdleWaitSet.size},
+        `;
+            utils_1.logInterval("ejectorUpdates", 60, message);
+            utils_1.dirInterval("ejectorActive", 60, container.activeEntitySet);
+            utils_1.dirInterval("ejectorDeactivate:", 60, container.deactivateEntityQueue);
+            utils_1.dirInterval("ejectorActivate:", 60, container.reactivateEntityQueue);
+            utils_1.dirInterval("GLobentDependentMap:", 60, this.entDependentOnMap);
+            utils_1.dirInterval("GLobentDependentQueue:", 60, this.entDependentOnQueueMap);
+            utils_1.dirInterval("GLobentResolveQueue:", 60, this.entResolveQueue);
+            utils_1.dirInterval("GLobidleSet:", 60, this.entIdleSet);
+            utils_1.dirInterval("GLobidleQueue:", 60, this.entIdleWaitSet);
+        }
+        catch (e) { }
         this.updateDepContainers();
         for (let i = 0; i < this.requiredComponentIds.length; ++i) {
             const container = this.entityComponentContainers.get(this.requiredComponentIds[i]);
@@ -281,7 +321,7 @@ class SystemUpdateReporter extends game_system_with_filter_1.GameSystemWithFilte
         entityWithAcceptor.components.ItemAcceptor.reportOnItemAccepted(this, entityWithAcceptor);
     }
     giveItemEjectorListener(entityWithEjector) {
-        //entityWithEjector.components.ItemEjector.reportOnItemEjected(this, entityWithEjector);
+        entityWithEjector.components.ItemEjector.reportOnItemEjected(this, entityWithEjector);
     }
     /**
      * Report and create entDependentOnendencies

@@ -207,14 +207,10 @@ export function fastSetAppend(set, set2) {
         return set;
     }
 
-    dirInterval("set1before: ", 1, set);
-    dirInterval("set2before: ", 1, set2);
-
     for (let arr = [...set2.values()], i = arr.length - 1, val; (val = arr[i]) && i >= 0; --i) {
         set.add(val);
     }
 
-    dirInterval("set1after: ", 1, set);
     return set;
 }
 
@@ -697,13 +693,21 @@ export function smoothPulse(time) {
 }
 
 let logIntervals = {};
-const intervalStyle = "color: lightgrey; font-style: italic";
+const intervalStyle = "color: grey; font-style: inherit";
+const keyStyle = "color: purple; font-style: italic";
 const revertStyle = "color: inherit; font-style: inherit";
 
 export function logInterval(key, frames, message, ...args) {
     let interval = logIntervals[key] || 0;
     if (++interval > frames) {
-        console.log(`%clogInterval [${key}]: \t%c` + message, intervalStyle, revertStyle, ...args);
+        console.log(
+            `%clogInterval [%c${key}%c]: \t%c` + message,
+            intervalStyle,
+            keyStyle,
+            intervalStyle,
+            revertStyle,
+            ...args
+        );
         interval = 0;
     }
     logIntervals[key] = interval;
@@ -712,7 +716,14 @@ export function logInterval(key, frames, message, ...args) {
 export function dirInterval(key, frames, object, premessage, ...args) {
     let interval = logIntervals[key] || 0;
     if (++interval > frames) {
-        console.log(`%cdirInterval [${key}]: \t%c` + (premessage || ""), intervalStyle, revertStyle, ...args);
+        console.log(
+            `%cdirInterval [%c${key}%c]: \t%c` + (premessage || ""),
+            intervalStyle,
+            keyStyle,
+            intervalStyle,
+            revertStyle,
+            ...args
+        );
         console.dir(object);
         interval = 0;
     }

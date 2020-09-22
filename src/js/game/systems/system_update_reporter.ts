@@ -32,6 +32,11 @@ interface BeltPathContainer {
     allBeltPaths: Set<Entity>;
 }
 
+interface DependentPair {
+    entDependentOn: Entity;
+    dependentEntity: Entity;
+}
+
 // /**
 //  * @typedef {Object} Dep
 //  * @property {Entity} effected
@@ -161,6 +166,16 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
 
     deactivateRequiredComponents(entity: Entity) {
         this.addToRelevantQueues(entity, "deactivateEntityQueue");
+        // if (!entity.components) {
+        //     this.beltPaths.container.deactivateEntityQueue.add(entity);
+        //     return;
+        // }
+        // for (let i = 0; i < this.requiredComponentIds.length; ++i) {
+        //     if (entity.components[this.requiredComponentIds[i]] != null) {
+        //         const container = this.entityComponentContainers.get(this.requiredComponentIds[i]);
+        //         container.deactivateEntityQueue.add(entity);
+        //     }
+        // }
     }
 
     reactivateRequiredComponents(entity: Entity) {
@@ -172,10 +187,10 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
     entDependentOnMap: Map<Entity, Set<Entity>> = new Map();
 
     // queue to determine who is added to map (some entities are removed during updates)
-    entDependentOnQueueMap: Map<Entity, Set<Entity>> = new Map();
+    entDependentOnQueueMap: Map<Entity, Array<Entity>> = new Map();
 
     // all entDependentOnedencies queued to be resolved
-    entResolveQueue: Set<Entity> = new Set();
+    entResolveQueue: Array<Entity> = [];
 
     // all entities that have been idled (removed from updates);
     entIdleSet: Set<Entity> = new Set();
@@ -206,19 +221,16 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
     }
 
     queueNewDependency(entDependentOn: Entity, dependentEnt: Entity) {
-        if (
-            this.entDependentOnMap.has(entDependentOn) &&
-            this.entDependentOnMap.get(entDependentOn).has(dependentEnt)
-        ) {
-            return;
-        }
+        // if (
+        //     this.entDependentOnMap.has(entDependentOn) &&
+        //     this.entDependentOnMap.get(entDependentOn).has(dependentEnt)
+        // ) {
+        //     return;
+        // }
 
-        const set = this.entDependentOnQueueMap.get(entDependentOn);
-        if (set) {
-            set.add(dependentEnt);
-        } else {
-            this.entDependentOnQueueMap.set(entDependentOn, new Set([dependentEnt]));
-        }
+        const set = this.entDependentOnQueueMap.get(entDependentOn) || [];
+        set.push(dependentEnt);
+        this.entDependentOnQueueMap.set(entDependentOn, set);
     }
 
     // TODO: this could be faster
@@ -226,7 +238,7 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
         this.entDependentOnQueueMap.delete(entDependentOn);
         const set = this.entDependentOnMap.get(entDependentOn);
         if (set) {
-            fastSetAppend(this.entResolveQueue, set);
+            for (let i in set.values()) this.entResolveQueue.push([...set]);
         }
         this.reactivateRequiredComponents(entDependentOn);
     }
@@ -277,21 +289,25 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
             for (
                 let keys = [...this.entDependentOnQueueMap.keys()],
                     vals = [...this.entDependentOnQueueMap.values()],
-                    i = keys.length - 1,
-                    entDependentOn: Entity = keys[i],
-                    dependentEntSet: Set<Entity> = vals[i];
+                    i = keys.length - 1;
                 i >= 0;
-                --i, entDependentOn = keys[i], dependentEntSet = vals[i]
+                --i
             ) {
-                const set = this.entDependentOnMap.get(entDependentOn) || new Set();
-                this.entDependentOnMap.set(entDependentOn, fastSetAppend(set, dependentEntSet));
-                fastSetAppend(this.entIdleWaitSet, dependentEntSet);
+                const entDependentOn: Entity = keys[i];
+                const dependentEntSet: Set<Entity> = vals[i];
+
+                const set = this.entDependentOnMap.get(entDependentOn) || [];
+                this.entDependentOnMap.set(entDependentOn, new Set([...dependentEntSet, ...set]));
+                this.entIdleWaitSet = new Set([...dependentEntSet, ...this.entIdleWaitSet]);
+
+                //this.entDependentOnMap.set(entDependentOn, fastSetAppend(set, dependentEntSet));
+                //fastSetAppend(this.entIdleWaitSet, dependentEntSet);
             }
         }
 
         if (this.entResolveQueue.size > 0) {
             // collect all of the entities being resolved
-            const resolveEntities = new Set();
+            let resolveEntities = new Set();
             logInterval("entResolveQueue: ", 60, this.entResolveQueue.size);
 
             for (
@@ -299,7 +315,10 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
                 (entDependentOn = arr[i]) && i >= 0;
                 --i
             ) {
-                fastSetAppend(resolveEntities, this.entDependentOnMap.get(entDependentOn) || new Set());
+                //fastSetAppend(resolveEntities, this.entDependentOnMap.get(entDependentOn) || new Set());
+
+                const set = this.entDependentOnMap.get(entDependentOn) || [];
+                resolveEntities = new Set([...set, ...resolveEntities]);
                 this.entDependentOnMap.delete(entDependentOn);
             }
             // reactivate all of their components
@@ -340,6 +359,31 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
     }
 
     update() {
+        const container = this.entityComponentContainers[ItemEjectorComponent.getId()];
+
+        try {
+            const message = `
+        Interval container:
+            active: ${container.activeEntitySet.size},
+            toDeactivate: ${container.deactivateEntityQueue.size},
+            toActivate: ${container.reactivateEntityQueue.size},
+        Globals:
+            entDependentMap: ${this.entDependentOnMap.size},
+            entDependentQueue: ${this.entDependentOnQueueMap.size},
+            entResolveQueue: ${this.entResolveQueue.size},
+            idleSet: ${this.entIdleSet.size},
+            idleQueue: ${this.entIdleWaitSet.size},
+        `;
+            logInterval("ejectorUpdates", 60, message);
+            dirInterval("ejectorActive", 60, container.activeEntitySet);
+            dirInterval("ejectorDeactivate:", 60, container.deactivateEntityQueue);
+            dirInterval("ejectorActivate:", 60, container.reactivateEntityQueue);
+            dirInterval("GLobentDependentMap:", 60, this.entDependentOnMap);
+            dirInterval("GLobentDependentQueue:", 60, this.entDependentOnQueueMap);
+            dirInterval("GLobentResolveQueue:", 60, this.entResolveQueue);
+            dirInterval("GLobidleSet:", 60, this.entIdleSet);
+            dirInterval("GLobidleQueue:", 60, this.entIdleWaitSet);
+        } catch (e) {}
         this.updateDepContainers();
 
         for (let i = 0; i < this.requiredComponentIds.length; ++i) {
@@ -368,7 +412,7 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
     }
 
     giveItemEjectorListener(entityWithEjector: Entity) {
-        //entityWithEjector.components.ItemEjector.reportOnItemEjected(this, entityWithEjector);
+        entityWithEjector.components.ItemEjector.reportOnItemEjected(this, entityWithEjector);
     }
 
     /**

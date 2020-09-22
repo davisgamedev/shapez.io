@@ -2,6 +2,7 @@ import { globalConfig } from "../../core/config";
 import { DrawParameters } from "../../core/draw_parameters";
 import { createLogger } from "../../core/logging";
 import { Rectangle } from "../../core/rectangle";
+import { logInterval } from "../../core/utils";
 import { enumDirection, enumDirectionToVector } from "../../core/vector";
 import { BaseItem } from "../base_item";
 import { ItemEjectorComponent } from "../components/item_ejector";
@@ -38,10 +39,7 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
      * @param {Entity} target
      */
     reportFull(entity, target) {
-        if (!this.reportOnEjected) {
-            this.reportOnEjected = true;
-            this.reporter.reportEjectorFull(entity, target);
-        }
+        this.reporter.reportEjectorFull(entity, target);
     }
 
     /**
@@ -49,10 +47,7 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
      * @param {?Entity} target
      */
     reportEjected(entity, target) {
-        if (this.reportOnEjected) {
-            this.reportOnEjected = false;
-            this.reporter.reportItemEjectorEjectedItem(entity, target);
-        }
+        this.reporter.reportItemEjectorEjectedItem(entity, target);
     }
 
     /**
@@ -231,6 +226,8 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
         }
 
         const entitiesArray = this.reporter.getActiveEntitiesByComponent(ItemEjectorComponent.getId());
+
+        logInterval("ejectorEntities: ", 30, entitiesArray.length);
         for (
             let i = entitiesArray.length - 1, sourceEntity = entitiesArray[i];
             i >= 0;
