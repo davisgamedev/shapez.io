@@ -54,11 +54,13 @@ export class ItemEjectorComponent extends Component {
      *
      * @param {object} param0
      * @param {Array<{pos: Vector, direction: enumDirection }>=} param0.slots The slots to eject on
+     * @param {boolean=} param0.renderFloatingItems Whether to render items even if they are not connected
      */
-    constructor({ slots = [] }) {
+    constructor({ slots = [], renderFloatingItems = true }) {
         super();
 
         this.setSlots(slots);
+        this.renderFloatingItems = renderFloatingItems;
 
         /**
          * Whether this ejector slot is enabled

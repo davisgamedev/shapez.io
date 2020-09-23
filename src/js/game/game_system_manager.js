@@ -24,6 +24,7 @@ import { ItemProcessorOverlaysSystem } from "./systems/item_processor_overlays";
 import { BeltReaderSystem } from "./systems/belt_reader";
 import { SystemUpdateReporter } from "./systems/system_update_reporter";
 import { SystemUpdateResolver } from "./systems/system_update_resolver";
+import { FilterSystem } from "./systems/filter";
 
 const logger = createLogger("game_system_manager");
 
@@ -97,6 +98,9 @@ export class GameSystemManager {
             /** @type {BeltReaderSystem} */
             beltReader: null,
 
+            /** @type {FilterSystem} */
+            filter: null,
+
             /* typehints:end */
         };
         this.systemUpdateOrder = [];
@@ -135,6 +139,8 @@ export class GameSystemManager {
         add("storage", StorageSystem);
 
         add("itemProcessor", ItemProcessorSystem);
+
+        add("filter", FilterSystem);
 
         add("itemEjector", ItemEjectorSystem);
 

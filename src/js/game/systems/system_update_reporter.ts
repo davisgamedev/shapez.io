@@ -32,11 +32,6 @@ interface BeltPathContainer {
     allBeltPaths: Set<Entity>;
 }
 
-interface DependentPair {
-    entDependentOn: Entity;
-    dependentEntity: Entity;
-}
-
 // /**
 //  * @typedef {Object} Dep
 //  * @property {Entity} effected
@@ -187,10 +182,10 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
     entDependentOnMap: Map<Entity, Set<Entity>> = new Map();
 
     // queue to determine who is added to map (some entities are removed during updates)
-    entDependentOnQueueMap: Map<Entity, Array<Entity>> = new Map();
+    entDependentOnQueueMap: Map<Entity, Set<Entity>> = new Map();
 
     // all entDependentOnedencies queued to be resolved
-    entResolveQueue: Array<Entity> = [];
+    entResolveQueue: Set<Entity> = new Set();
 
     // all entities that have been idled (removed from updates);
     entIdleSet: Set<Entity> = new Set();
@@ -221,6 +216,7 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
     }
 
     queueNewDependency(entDependentOn: Entity, dependentEnt: Entity) {
+        return;
         // if (
         //     this.entDependentOnMap.has(entDependentOn) &&
         //     this.entDependentOnMap.get(entDependentOn).has(dependentEnt)
@@ -228,8 +224,8 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
         //     return;
         // }
 
-        const set = this.entDependentOnQueueMap.get(entDependentOn) || [];
-        set.push(dependentEnt);
+        const set = this.entDependentOnQueueMap.get(entDependentOn) || new Set();
+        set.add(dependentEnt);
         this.entDependentOnQueueMap.set(entDependentOn, set);
     }
 
@@ -238,7 +234,7 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
         this.entDependentOnQueueMap.delete(entDependentOn);
         const set = this.entDependentOnMap.get(entDependentOn);
         if (set) {
-            for (let i in set.values()) this.entResolveQueue.push([...set]);
+            this.entResolveQueue = new Set([...set, ...this.entResolveQueue]);
         }
         this.reactivateRequiredComponents(entDependentOn);
     }
@@ -383,7 +379,9 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
             dirInterval("GLobentResolveQueue:", 60, this.entResolveQueue);
             dirInterval("GLobidleSet:", 60, this.entIdleSet);
             dirInterval("GLobidleQueue:", 60, this.entIdleWaitSet);
-        } catch (e) {}
+        } catch (e) {
+            console.log("error reporting containers in reporter");
+        }
         this.updateDepContainers();
 
         for (let i = 0; i < this.requiredComponentIds.length; ++i) {

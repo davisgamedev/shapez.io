@@ -6,6 +6,7 @@ import { Entity } from "./entity";
 import { GameRoot } from "./root";
 import { GameSystem } from "./game_system";
 import { arrayDelete, arrayDeleteValue, fastArrayDelete } from "../core/utils";
+import { globalConfig } from "../core/config";
 
 // TODO check indexOf and other O(n) operations in loops
 
@@ -63,11 +64,10 @@ export class GameSystemWithFilter extends GameSystem {
     internalPushEntityIfMatching(entity) {
         if (this.allEntitiesSet.has(entity)) return;
         for (let i = 0; i < this.requiredComponentIds.length; ++i) {
-            if (entity.components[this.requiredComponentIds[i]]) {
-                this.internalRegisterEntity(entity);
-                return;
-            }
+            if (!entity.components[this.requiredComponentIds[i]]) return;
         }
+
+        this.internalRegisterEntity(entity);
     }
 
     // TODO double check we are clearing both Map and Keys!!!!!!

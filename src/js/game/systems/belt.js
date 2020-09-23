@@ -7,13 +7,13 @@ import { AtlasSprite } from "../../core/sprites";
 import { dirInterval, fastArrayDeleteValue } from "../../core/utils";
 import { enumDirection, enumDirectionToVector, enumInvertedDirections, Vector } from "../../core/vector";
 import { BeltPath } from "../belt_path";
-import { arrayBeltVariantToRotation, MetaBeltBaseBuilding } from "../buildings/belt_base";
 import { BeltComponent } from "../components/belt";
 import { Entity } from "../entity";
 import { GameSystemWithFilter } from "../game_system_with_filter";
 import { MapChunkView } from "../map_chunk_view";
 import { defaultBuildingVariant } from "../meta_building";
 import { getCodeFromBuildingData } from "../building_codes";
+import { arrayBeltVariantToRotation, MetaBeltBuilding } from "../buildings/belt";
 
 export const BELT_ANIM_COUNT = 14;
 
@@ -130,7 +130,7 @@ export class BeltSystem extends GameSystemWithFilter {
             return;
         }
 
-        const metaBelt = gMetaBuildingRegistry.findByClass(MetaBeltBaseBuilding);
+        const metaBelt = gMetaBuildingRegistry.findByClass(MetaBeltBuilding);
         // Compute affected area
         const originalRect = staticComp.getTileSpaceBounds();
         const affectedArea = originalRect.expandedInAllDirections(1);
@@ -172,6 +172,8 @@ export class BeltSystem extends GameSystemWithFilter {
                     const newDirection = arrayBeltVariantToRotation[rotationVariant];
 
                     if (targetStaticComp.rotation !== rotation || newDirection !== targetBeltComp.direction) {
+                        const originalPath = targetBeltComp.assignedPath;
+
                         // Ok, first remove it from its current path
                         this.deleteEntityFromPath(targetBeltComp.assignedPath, targetEntity);
 
@@ -185,6 +187,8 @@ export class BeltSystem extends GameSystemWithFilter {
                             defaultBuildingVariant,
                             rotationVariant
                         );
+                        // Update the original path since it might have picked up the entit1y
+                        originalPath.onPathChanged();
 
                         // Now add it again
                         this.addEntityToPaths(targetEntity);
@@ -373,7 +377,7 @@ export class BeltSystem extends GameSystemWithFilter {
         const followUpTile = staticComp.origin.add(followUpVector);
         const followUpEntity = this.root.map.getLayerContentXY(followUpTile.x, followUpTile.y, entity.layer);
 
-        // Check if theres a belt at the tile we point to
+        // Check if there's a belt at the tile we point to
         if (followUpEntity) {
             const followUpBeltComp = followUpEntity.components.Belt;
             if (followUpBeltComp) {
@@ -403,7 +407,7 @@ export class BeltSystem extends GameSystemWithFilter {
         const supplyTile = staticComp.origin.add(supplyVector);
         const supplyEntity = this.root.map.getLayerContentXY(supplyTile.x, supplyTile.y, entity.layer);
 
-        // Check if theres a belt at the tile we point to
+        // Check if there's a belt at the tile we point to
         if (supplyEntity) {
             const supplyBeltComp = supplyEntity.components.Belt;
             if (supplyBeltComp) {
@@ -515,14 +519,43 @@ export class BeltSystem extends GameSystemWithFilter {
                 globalConfig.itemSpacingOnBelts
         );
         const contents = chunk.containedEntitiesByLayer.regular;
-        for (let i = 0; i < contents.length; ++i) {
-            const entity = contents[i];
-            if (entity.components.Belt) {
-                const direction = entity.components.Belt.direction;
-                const sprite = this.beltAnimations[direction][animationIndex % BELT_ANIM_COUNT];
 
-                // Culling happens within the static map entity component
-                entity.components.StaticMapEntity.drawSpriteOnBoundsClipped(parameters, sprite, 0);
+        if (this.root.app.settings.getAllSettings().simplifiedBelts) {
+            // POTATO Mode: Only show items when belt is hovered
+            let hoveredBeltPath = null;
+            const mousePos = this.root.app.mousePosition;
+            if (mousePos && this.root.currentLayer === "regular") {
+                const tile = this.root.camera.screenToWorld(mousePos).toTileSpace();
+                const contents = this.root.map.getLayerContentXY(tile.x, tile.y, "regular");
+                if (contents && contents.components.Belt) {
+                    hoveredBeltPath = contents.components.Belt.assignedPath;
+                }
+            }
+
+            for (let i = 0; i < contents.length; ++i) {
+                const entity = contents[i];
+                if (entity.components.Belt) {
+                    const direction = entity.components.Belt.direction;
+                    let sprite = this.beltAnimations[direction][0];
+
+                    if (entity.components.Belt.assignedPath === hoveredBeltPath) {
+                        sprite = this.beltAnimations[direction][animationIndex % BELT_ANIM_COUNT];
+                    }
+
+                    // Culling happens within the static map entity component
+                    entity.components.StaticMapEntity.drawSpriteOnBoundsClipped(parameters, sprite, 0);
+                }
+            }
+        } else {
+            for (let i = 0; i < contents.length; ++i) {
+                const entity = contents[i];
+                if (entity.components.Belt) {
+                    const direction = entity.components.Belt.direction;
+                    const sprite = this.beltAnimations[direction][animationIndex % BELT_ANIM_COUNT];
+
+                    // Culling happens within the static map entity component
+                    entity.components.StaticMapEntity.drawSpriteOnBoundsClipped(parameters, sprite, 0);
+                }
             }
         }
     }

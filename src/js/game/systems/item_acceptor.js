@@ -9,21 +9,63 @@ import { MapChunkView } from "../map_chunk_view";
 export class ItemAcceptorSystem extends GameSystemWithFilter {
     constructor(root) {
         super(root, [ItemAcceptorComponent]);
+
+        // Well ... it's better to be verbose I guess?
+        this.accumulatedTicksWhileInMapOverview = 0;
     }
 
-    // ITEM ACCEPTORS SHOULD NEVER BE UPDATED IN A LOOP
-    update() {} // <= NO TOUCHY
+    update() {
+        if (this.root.app.settings.getAllSettings().simplifiedBelts) {
+            // Disabled in potato mode
+            return;
+        }
+
+        // This system doesn't render anything while in map overview,
+        // so simply accumulate ticks
+        if (this.root.camera.getIsMapOverlayActive()) {
+            ++this.accumulatedTicksWhileInMapOverview;
+            return;
+        }
+
+        // Compute how much ticks we missed
+        const numTicks = 1 + this.accumulatedTicksWhileInMapOverview;
+        const progress =
+            this.root.dynamicTickrate.deltaSeconds *
+            2 *
+            this.root.hubGoals.getBeltBaseSpeed() *
+            globalConfig.itemSpacingOnBelts * // * 2 because its only a half tile
+            numTicks;
+
+        // Reset accumulated ticks
+        this.accumulatedTicksWhileInMapOverview = 0;
+
+        const entities = this.getUpdatedEntitiesArray();
+        for (let i = 0; i < entities.length; ++i) {
+            const entity = entities[i];
+            const aceptorComp = entity.components.ItemAcceptor;
+            const animations = aceptorComp.itemConsumptionAnimations;
+
+            // Process item consumption animations to avoid items popping from the belts
+            for (let animIndex = 0; animIndex < animations.length; ++animIndex) {
+                const anim = animations[animIndex];
+                anim.animProgress += progress;
+                if (anim.animProgress > 1) {
+                    fastArrayDelete(animations, animIndex);
+                    animIndex -= 1;
+                }
+            }
+        }
+    }
 
     /**
      * @param {DrawParameters} parameters
      * @param {MapChunkView} chunk
      */
     drawChunk(parameters, chunk) {
-        const progress =
-            this.root.dynamicTickrate.deltaSeconds *
-            2 *
-            this.root.hubGoals.getBeltBaseSpeed() *
-            globalConfig.itemSpacingOnBelts; // * 2 because its only a half tile
+        if (this.root.app.settings.getAllSettings().simplifiedBelts) {
+            // Disabled in potato mode
+            return;
+        }
 
         const contents = chunk.containedEntitiesByLayer.regular;
         for (let i = 0; i < contents.length; ++i) {
@@ -32,6 +74,12 @@ export class ItemAcceptorSystem extends GameSystemWithFilter {
             if (!acceptorComp) {
                 continue;
             }
+
+            // const progress =
+            // this.root.dynamicTickrate.deltaSeconds *
+            // 2 *
+            // this.root.hubGoals.getBeltBaseSpeed() *
+            // globalConfig.itemSpacingOnBelts; // * 2 because its only a half tile
 
             const staticComp = entity.components.StaticMapEntity;
             for (
@@ -43,10 +91,10 @@ export class ItemAcceptorSystem extends GameSystemWithFilter {
                     animIndex
                 ];
 
-                if (animProgress > 1) {
-                    fastArrayDelete(acceptorComp.itemConsumptionAnimations, animIndex);
-                    continue;
-                }
+                // if (animProgress > 1) {
+                //     fastArrayDelete(acceptorComp.itemConsumptionAnimations, animIndex);
+                //     continue;
+                // }
 
                 const slotData = acceptorComp.slots[slotIndex];
                 const realSlotPos = staticComp.localTileToWorld(slotData.pos);
@@ -69,7 +117,7 @@ export class ItemAcceptorSystem extends GameSystemWithFilter {
                     globalConfig.defaultItemDiameter
                 );
 
-                acceptorComp.itemConsumptionAnimations[animIndex].animProgress += progress;
+                //acceptorComp.itemConsumptionAnimations[animIndex].animProgress += progress;
             }
         }
     }

@@ -2,7 +2,7 @@ import { globalConfig, THIRDPARTY_URLS } from "../core/config";
 import { DrawParameters } from "../core/draw_parameters";
 import { createLogger } from "../core/logging";
 import { Rectangle } from "../core/rectangle";
-import { epsilonCompare, round4Digits, clamp } from "../core/utils";
+import { clamp, epsilonCompare, round4Digits } from "../core/utils";
 import { enumDirection, enumDirectionToVector, enumInvertedDirections, Vector } from "../core/vector";
 import { BasicSerializableObject, types } from "../savegame/serialization";
 import { BaseItem } from "./base_item";
@@ -236,7 +236,15 @@ export class BeltPath extends BasicSerializableObject {
      */
     onPathChanged() {
         this.acceptorTarget = this.computeAcceptingEntityAndSlot();
+<<<<<<< HEAD
         if (this.reporter) this.tryReportResolved(true);
+=======
+
+        /**
+         * How many items past the first item are compressed
+         */
+        this.numCompressedItemsAfterFirstItem = 0;
+>>>>>>> c6eb1dad0496d45caaeb5dafad6d5799c72cace8
     }
 
     /**
@@ -248,9 +256,12 @@ export class BeltPath extends BasicSerializableObject {
 
     /**
      * Finds the entity which accepts our items
+     * @param {boolean=} debug_Silent Whether debug output should be silent
      * @return {{ entity: Entity, slot: number, direction?: enumDirection }}
      */
-    computeAcceptingEntityAndSlot() {
+    computeAcceptingEntityAndSlot(debug_Silent = false) {
+        DEBUG && !debug_Silent && logger.log("Recomputing acceptor target");
+
         const lastEntity = this.entityPath[this.entityPath.length - 1];
         const lastStatic = lastEntity.components.StaticMapEntity;
         const lastBeltComp = lastEntity.components.Belt;
@@ -269,12 +280,23 @@ export class BeltPath extends BasicSerializableObject {
         );
 
         if (targetEntity) {
+            DEBUG && !debug_Silent && logger.log("  Found target entity", targetEntity.uid);
             const targetStaticComp = targetEntity.components.StaticMapEntity;
             const targetBeltComp = targetEntity.components.Belt;
 
             // Check for belts (special case)
             if (targetBeltComp) {
                 const beltAcceptingDirection = targetStaticComp.localDirectionToWorld(enumDirection.top);
+                DEBUG &&
+                    !debug_Silent &&
+                    logger.log(
+                        "  Entity is accepting items from",
+                        ejectSlotWsDirection,
+                        "vs",
+                        beltAcceptingDirection,
+                        "Rotation:",
+                        targetStaticComp.rotation
+                    );
                 if (ejectSlotWsDirection === beltAcceptingDirection) {
                     return {
                         entity: targetEntity,
@@ -439,6 +461,61 @@ export class BeltPath extends BasicSerializableObject {
         if (!actualBounds.equalsEpsilon(this.worldBounds, 0.01)) {
             return fail("Bounds are stale");
         }
+
+        // Check acceptor
+        const acceptor = this.computeAcceptingEntityAndSlot(true);
+        if (!!acceptor !== !!this.acceptorTarget) {
+            return fail("Acceptor target mismatch, acceptor", !!acceptor, "vs stored", !!this.acceptorTarget);
+        }
+
+        if (acceptor) {
+            if (this.acceptorTarget.entity !== acceptor.entity) {
+                return fail(
+                    "Mismatching entity on acceptor target:",
+                    acceptor.entity.uid,
+                    "vs",
+                    this.acceptorTarget.entity.uid
+                );
+            }
+
+            if (this.acceptorTarget.slot !== acceptor.slot) {
+                return fail(
+                    "Mismatching entity on acceptor target:",
+                    acceptor.slot,
+                    "vs stored",
+                    this.acceptorTarget.slot
+                );
+            }
+
+            if (this.acceptorTarget.direction !== acceptor.direction) {
+                return fail(
+                    "Mismatching direction on acceptor target:",
+                    acceptor.direction,
+                    "vs stored",
+                    this.acceptorTarget.direction
+                );
+            }
+        }
+
+        // Check first nonzero offset
+        let firstNonzero = 0;
+        for (let i = this.items.length - 2; i >= 0; --i) {
+            if (this.items[i][_nextDistance] < globalConfig.itemSpacingOnBelts + 1e-5) {
+                ++firstNonzero;
+            } else {
+                break;
+            }
+        }
+
+        // Should warn, but this check isn't actually accurate
+        // if (firstNonzero !== this.numCompressedItemsAfterFirstItem) {
+        //     console.warn(
+        //         "First nonzero index is " +
+        //             firstNonzero +
+        //             " but stored is " +
+        //             this.numCompressedItemsAfterFirstItem
+        //     );
+        // }
     }
 
     /* dev:end */
@@ -1056,11 +1133,15 @@ export class BeltPath extends BasicSerializableObject {
         // Store how much velocity (strictly its distance, not velocity) we have to distribute over all items
         let remainingVelocity = beltSpeed;
 
-        for (let i = this.items.length - 1; i >= 0; --i) {
-            const nextDistanceAndItem = this.items[i];
+        // Store the last item we processed, so we can skip clashed ones
+        let lastItemProcessed;
+
+        for (lastItemProcessed = this.items.length - 1; lastItemProcessed >= 0; --lastItemProcessed) {
+            const nextDistanceAndItem = this.items[lastItemProcessed];
 
             // Compute how much spacing we need at least
-            const minimumSpacing = i === this.items.length - 1 ? 0 : globalConfig.itemSpacingOnBelts;
+            const minimumSpacing =
+                lastItemProcessed === this.items.length - 1 ? 0 : globalConfig.itemSpacingOnBelts;
 
             // Compute how much we can advance
             const clampedProgress = Math.max(
@@ -1086,7 +1167,17 @@ export class BeltPath extends BasicSerializableObject {
                 if (this.tryHandOverItem(nextDistanceAndItem[_item], excessVelocity)) {
                     if (!this.canAcceptItem) this.tryReportFull();
                     this.items.pop();
+
+                    this.numCompressedItemsAfterFirstItem = Math.max(
+                        0,
+                        this.numCompressedItemsAfterFirstItem - 1
+                    );
                 }
+            }
+
+            if (isFirstItemProcessed) {
+                // Skip N null items after first items
+                lastItemProcessed -= this.numCompressedItemsAfterFirstItem;
             }
 
             isFirstItemProcessed = false;
@@ -1096,12 +1187,23 @@ export class BeltPath extends BasicSerializableObject {
             }
         }
 
+        // Compute compressed item count
+        this.numCompressedItemsAfterFirstItem = Math.max(
+            0,
+            this.numCompressedItemsAfterFirstItem,
+            this.items.length - 2 - lastItemProcessed
+        );
+
         // Check if we have an item which is ready to be emitted
         const lastItem = this.items[this.items.length - 1];
         if (lastItem && lastItem[_nextDistance] === 0 && this.acceptorTarget) {
             if (this.tryHandOverItem(lastItem[_item])) {
                 if (!this.canAcceptItem) this.tryReportFull();
                 this.items.pop();
+                this.numCompressedItemsAfterFirstItem = Math.max(
+                    0,
+                    this.numCompressedItemsAfterFirstItem - 1
+                );
             }
         }
 
@@ -1138,12 +1240,14 @@ export class BeltPath extends BasicSerializableObject {
             // Trigger animation on the acceptor comp
             const targetAcceptorComp = this.acceptorTarget.entity.components.ItemAcceptor;
             if (targetAcceptorComp) {
-                targetAcceptorComp.onItemAccepted(
-                    this.acceptorTarget.slot,
-                    this.acceptorTarget.direction,
-                    item,
-                    remainingProgress
-                );
+                if (!this.root.app.settings.getAllSettings().simplifiedBelts) {
+                    targetAcceptorComp.onItemAccepted(
+                        this.acceptorTarget.slot,
+                        this.acceptorTarget.direction,
+                        item,
+                        remainingProgress
+                    );
+                }
             }
 
             this.tryReportResolved();
@@ -1161,7 +1265,7 @@ export class BeltPath extends BasicSerializableObject {
     computePositionFromProgress(progress) {
         let currentLength = 0;
 
-        // floating point issuses ..
+        // floating point issues ..
         assert(progress <= this.totalLength + 0.02, "Progress too big: " + progress);
 
         for (let i = 0; i < this.entityPath.length; ++i) {
@@ -1224,6 +1328,11 @@ export class BeltPath extends BasicSerializableObject {
                 worldPos.y + 2
             );
             progress += nextDistanceAndItem[_nextDistance];
+
+            if (this.items.length - 1 - this.numCompressedItemsAfterFirstItem === i) {
+                parameters.context.fillStyle = "red";
+                parameters.context.fillRect(worldPos.x + 5, worldPos.y, 20, 3);
+            }
         }
 
         for (let i = 0; i < this.entityPath.length; ++i) {
@@ -1250,6 +1359,40 @@ export class BeltPath extends BasicSerializableObject {
     }
 
     /**
+     * Checks if this belt path should render simplified
+     */
+    checkIsPotatoMode() {
+        // POTATO Mode: Only show items when belt is hovered
+        if (!this.root.app.settings.getAllSettings().simplifiedBelts) {
+            return false;
+        }
+
+        if (this.root.currentLayer !== "regular") {
+            // Not in regular layer
+            return true;
+        }
+
+        const mousePos = this.root.app.mousePosition;
+        if (!mousePos) {
+            // Mouse not registered
+            return true;
+        }
+
+        const tile = this.root.camera.screenToWorld(mousePos).toTileSpace();
+        const contents = this.root.map.getLayerContentXY(tile.x, tile.y, "regular");
+        if (!contents || !contents.components.Belt) {
+            // Nothing below
+            return true;
+        }
+
+        if (contents.components.Belt.assignedPath !== this) {
+            // Not this path
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Draws the path
      * @param {DrawParameters} parameters
      */
@@ -1260,6 +1403,30 @@ export class BeltPath extends BasicSerializableObject {
 
         if (this.items.length === 0) {
             // Early out
+            return;
+        }
+
+        if (this.checkIsPotatoMode()) {
+            const firstItem = this.items[0];
+            if (this.entityPath.length > 1 && firstItem) {
+                const medianBeltIndex = clamp(
+                    Math.round(this.entityPath.length / 2 - 1),
+                    0,
+                    this.entityPath.length - 1
+                );
+                const medianBelt = this.entityPath[medianBeltIndex];
+                const beltComp = medianBelt.components.Belt;
+                const staticComp = medianBelt.components.StaticMapEntity;
+                const centerPosLocal = beltComp.transformBeltToLocalSpace(
+                    this.entityPath.length % 2 === 0 ? beltComp.getEffectiveLengthTiles() : 0.5
+                );
+                const centerPos = staticComp.localTileToWorld(centerPosLocal).toWorldSpaceCenterOfTile();
+
+                parameters.context.globalAlpha = 0.5;
+                firstItem[_item].drawItemCenteredClipped(centerPos.x, centerPos.y, parameters);
+                parameters.context.globalAlpha = 1;
+            }
+
             return;
         }
 
@@ -1276,7 +1443,7 @@ export class BeltPath extends BasicSerializableObject {
 
             // Check if the current items are on the belt
             while (trackPos + beltLength >= currentItemPos - 1e-5) {
-                // Its on the belt, render it now
+                // It's on the belt, render it now
                 const staticComp = entity.components.StaticMapEntity;
                 assert(
                     currentItemPos - trackPos >= 0,
