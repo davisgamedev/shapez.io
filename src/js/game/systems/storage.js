@@ -1,7 +1,7 @@
 import { GameSystemWithFilter } from "../game_system_with_filter";
 import { StorageComponent } from "../components/storage";
 import { DrawParameters } from "../../core/draw_parameters";
-import { formatBigNumber, lerp } from "../../core/utils";
+import { formatBigNumber, lerp, logInterval } from "../../core/utils";
 import { Loader } from "../../core/loader";
 import { BOOL_TRUE_SINGLETON, BOOL_FALSE_SINGLETON } from "../items/boolean_item";
 import { MapChunkView } from "../map_chunk_view";
@@ -27,6 +27,7 @@ export class StorageSystem extends GameSystemWithFilter {
 
     update() {
         const entitiesArray = this.getUpdatedEntitiesArray();
+        logInterval("storageHello", 120, "%chey look at me!", "color:pink");
         for (
             let i = entitiesArray.length - 1, entity = entitiesArray[i];
             i >= 0;

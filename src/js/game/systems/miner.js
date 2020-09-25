@@ -39,6 +39,7 @@ export class MinerSystem extends GameSystemWithFilter {
         }
 
         const entitiesArray = this.reporter.getActiveEntitiesByComponent(MinerComponent.getId());
+        logInterval("minerHello", 120, "%chey look at me instead", "color: blue");
         for (
             let i = entitiesArray.length - 1, entity = entitiesArray[i];
             i >= 0;

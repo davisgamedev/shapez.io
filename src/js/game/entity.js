@@ -230,4 +230,10 @@ export class Entity extends BasicSerializableObject {
     drawImpl(parameters) {
         abstract;
     }
+
+    deserialize(data, root = null) {
+        this.active = true;
+        this.idleFrames = 0;
+        return super.deserialize(data, root);
+    }
 }

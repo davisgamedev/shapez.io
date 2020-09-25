@@ -34,7 +34,6 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
          * @type {Rectangle}
          */
         this.areaToRecompute = null;
-        this.reportOnEjected = false;
     }
 
     /**
@@ -372,7 +371,7 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
 
         const contents = chunk.containedEntitiesByLayer.regular;
 
-        for (let i = 0; i < contents.length; ++i) {
+        for (let i = contents.length - 1; i >= 0; --i) {
             const entity = contents[i];
             const ejectorComp = entity.components.ItemEjector;
             if (!ejectorComp) {

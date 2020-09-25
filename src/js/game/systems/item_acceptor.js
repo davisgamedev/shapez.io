@@ -1,6 +1,6 @@
 import { globalConfig } from "../../core/config";
 import { DrawParameters } from "../../core/draw_parameters";
-import { fastArrayDelete } from "../../core/utils";
+import { dirInterval, fastArrayDelete } from "../../core/utils";
 import { enumDirectionToVector } from "../../core/vector";
 import { ItemAcceptorComponent } from "../components/item_acceptor";
 import { GameSystemWithFilter } from "../game_system_with_filter";
@@ -39,9 +39,14 @@ export class ItemAcceptorSystem extends GameSystemWithFilter {
         // Reset accumulated ticks
         this.accumulatedTicksWhileInMapOverview = 0;
 
-        const entities = this.getUpdatedEntitiesArray();
-        for (let i = 0; i < entities.length; ++i) {
-            const entity = entities[i];
+        dirInterval("itemAcceptor", 60, this);
+
+        const entitiesArray = this.getUpdatedEntitiesArray();
+        for (
+            let i = entitiesArray.length - 1, entity = entitiesArray[i];
+            i >= 0;
+            --i, entity = entitiesArray[i]
+        ) {
             const aceptorComp = entity.components.ItemAcceptor;
             const animations = aceptorComp.itemConsumptionAnimations;
 

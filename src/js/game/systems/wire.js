@@ -516,7 +516,7 @@ export class WireSystem extends GameSystemWithFilter {
         }
 
         // Re-compute values of all networks
-        for (let i = 0; i < this.networks.length; ++i) {
+        for (let i = this.networks.length - 1; i >= 0; --i) {
             const network = this.networks[i];
 
             // Reset conflicts

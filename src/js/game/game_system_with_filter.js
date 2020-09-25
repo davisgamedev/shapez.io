@@ -126,6 +126,8 @@ export class GameSystemWithFilter extends GameSystem {
      */
     internalPostLoadHook() {
         this.refreshCaches();
+        this.resolver.tryProvideEntities(this);
+        console.dir(this);
     }
 
     /**

@@ -236,15 +236,11 @@ export class BeltPath extends BasicSerializableObject {
      */
     onPathChanged() {
         this.acceptorTarget = this.computeAcceptingEntityAndSlot();
-<<<<<<< HEAD
         if (this.reporter) this.tryReportResolved(true);
-=======
-
         /**
          * How many items past the first item are compressed
          */
         this.numCompressedItemsAfterFirstItem = 0;
->>>>>>> c6eb1dad0496d45caaeb5dafad6d5799c72cace8
     }
 
     /**
