@@ -13,7 +13,7 @@ import {
 import { enumUndergroundBeltMode, UndergroundBeltComponent } from "../components/underground_belt";
 import { Entity } from "../entity";
 import { GameSystemWithFilter } from "../game_system_with_filter";
-import { fastArrayDelete } from "../../core/utils";
+import { dirInterval, fastArrayDelete } from "../../core/utils";
 
 const logger = createLogger("tunnels");
 
@@ -254,11 +254,8 @@ export class UndergroundBeltSystem extends GameSystemWithFilter {
         this.staleAreaWatcher.update();
 
         const entitiesArray = this.getUpdatedEntitiesArray();
-        for (
-            let i = entitiesArray.length - 1, entity = entitiesArray[i];
-            i >= 0;
-            --i, entity = entitiesArray[i]
-        ) {
+        for (let i = entitiesArray.length - 1; i >= 0; --i) {
+            const entity = entitiesArray[i];
             const undergroundComp = entity.components.UndergroundBelt;
             if (undergroundComp.mode === enumUndergroundBeltMode.sender) {
                 this.handleSender(entity);

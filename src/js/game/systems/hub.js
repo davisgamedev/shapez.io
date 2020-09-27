@@ -26,22 +26,18 @@ export class HubSystem extends GameSystemWithFilter {
      */
     draw(parameters) {
         const entitiesArray = this.getUpdatedEntitiesArray();
-        for (
-            let i = entitiesArray.length - 1, entity = entitiesArray[i];
-            i >= 0;
-            --i, entity = entitiesArray[i]
-        ) {
+
+        for (let i = entitiesArray.length - 1; i >= 0; --i) {
+            const entity = entitiesArray[i];
             this.drawEntity(parameters, entity);
         }
     }
 
     update() {
         const entitiesArray = this.getUpdatedEntitiesArray();
-        for (
-            let i = entitiesArray.length - 1, entity = entitiesArray[i];
-            i >= 0;
-            --i, entity = entitiesArray[i]
-        ) {
+
+        for (let i = entitiesArray.length - 1; i >= 0; --i) {
+            const entity = entitiesArray[i];
             const pinsComp = entity.components.WiredPins;
             pinsComp.slots[0].value = this.root.shapeDefinitionMgr.getShapeItemFromDefinition(
                 this.root.hubGoals.currentGoal.definition

@@ -50,8 +50,8 @@ export class GameSystemWithFilter extends GameSystem {
         this.reporter = reporter;
     }
 
-    getUpdatedEntitiesArray(outdated = false) {
-        if (this.allEntitiesOutdated || outdated) {
+    getUpdatedEntitiesArray() {
+        if (this.allEntitiesOutdated || !this.allEntitiesAsArray) {
             this.allEntitiesAsArray = [...this.allEntitiesSet];
             this.allEntitiesOutdated = false;
         }

@@ -42,11 +42,9 @@ export class ItemAcceptorSystem extends GameSystemWithFilter {
         dirInterval("itemAcceptor", 60, this);
 
         const entitiesArray = this.getUpdatedEntitiesArray();
-        for (
-            let i = entitiesArray.length - 1, entity = entitiesArray[i];
-            i >= 0;
-            --i, entity = entitiesArray[i]
-        ) {
+
+        for (let i = entitiesArray.length - 1; i >= 0; --i) {
+            const entity = entitiesArray[i];
             const aceptorComp = entity.components.ItemAcceptor;
             const animations = aceptorComp.itemConsumptionAnimations;
 

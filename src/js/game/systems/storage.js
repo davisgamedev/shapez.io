@@ -28,11 +28,9 @@ export class StorageSystem extends GameSystemWithFilter {
     update() {
         const entitiesArray = this.getUpdatedEntitiesArray();
         logInterval("storageHello", 120, "%chey look at me!", "color:pink");
-        for (
-            let i = entitiesArray.length - 1, entity = entitiesArray[i];
-            i >= 0;
-            --i, entity = entitiesArray[i]
-        ) {
+
+        for (let i = entitiesArray.length - 1; i >= 0; --i) {
+            const entity = entitiesArray[i];
             const storageComp = entity.components.Storage;
             const pinsComp = entity.components.WiredPins;
 

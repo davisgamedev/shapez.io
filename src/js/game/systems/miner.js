@@ -38,13 +38,10 @@ export class MinerSystem extends GameSystemWithFilter {
             miningSpeed *= 100;
         }
 
-        const entitiesArray = this.reporter.getActiveEntitiesByComponent(MinerComponent.getId());
-        logInterval("minerHello", 120, "%chey look at me instead", "color: blue");
-        for (
-            let i = entitiesArray.length - 1, entity = entitiesArray[i];
-            i >= 0;
-            --i, entity = entitiesArray[i]
-        ) {
+        const entitiesArray = this.getUpdatedEntitiesArray(); //this.reporter.getActiveEntitiesByComponent(MinerComponent.getId());
+
+        for (let i = entitiesArray.length - 1; i >= 0; --i) {
+            const entity = entitiesArray[i];
             const minerComp = entity.components.Miner;
 
             // Reset everything on recompute

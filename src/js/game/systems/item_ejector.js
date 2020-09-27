@@ -190,14 +190,11 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
             progressGrowth = 1;
         }
 
-        const entitiesArray = this.reporter.getActiveEntitiesByComponent(ItemEjectorComponent.getId());
+        const entitiesArray = this.getUpdatedEntitiesArray(); //this.reporter.getActiveEntitiesByComponent(ItemEjectorComponent.getId());
 
         logInterval("ejectorEntities: ", 30, entitiesArray.length);
-        for (
-            let i = entitiesArray.length - 1, sourceEntity = entitiesArray[i];
-            i >= 0;
-            --i, sourceEntity = entitiesArray[i]
-        ) {
+        for (let i = entitiesArray.length - 1; i >= 0; --i) {
+            const sourceEntity = entitiesArray[i];
             const sourceEjectorComp = sourceEntity.components.ItemEjector;
 
             const slots = sourceEjectorComp.slots;

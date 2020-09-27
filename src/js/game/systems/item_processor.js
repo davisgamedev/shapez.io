@@ -1,3 +1,4 @@
+import { dirInterval } from "../../core/utils";
 import { BaseItem } from "../base_item";
 import { enumColorMixingResults, enumColors } from "../colors";
 import {
@@ -71,11 +72,10 @@ export class ItemProcessorSystem extends GameSystemWithFilter {
         // TODO mark entities active
 
         const entitiesArray = this.getUpdatedEntitiesArray();
-        for (
-            let i = entitiesArray.length - 1, entity = entitiesArray[i];
-            i >= 0;
-            --i, entity = entitiesArray[i]
-        ) {
+        dirInterval("Processor", 30, entitiesArray);
+
+        for (let i = entitiesArray.length - 1; i >= 0; --i) {
+            const entity = entitiesArray[i];
             const processorComp = entity.components.ItemProcessor;
             const ejectorComp = entity.components.ItemEjector;
 

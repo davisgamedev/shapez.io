@@ -85,7 +85,7 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
     }
 
     acceptEntities(entities: Array<Entity>) {
-        console.log("%cACCEPTING ENTITIES", "color: white; background-color: orange");
+        console.log("%cACCEPTING ENTITIES", "color: white; background-color: magenta");
         console.dir(this);
         for (let i = entities.length - 1; i >= 0; --i) this.internalRegisterEntity(entities[i]);
         console.dir(this);
@@ -151,7 +151,10 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
         ];
     }
 
+    //test
+
     queueNewDependency(entityDependentOn: Entity, dependentEntity: Entity) {
+        return;
         const set = this.entityDependencyQueue.get(entityDependentOn) || new Set();
         set.add(dependentEntity);
         this.entityDependencyQueue.set(entityDependentOn, set);
@@ -247,7 +250,7 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
 
     updateDepContainers() {
         if (this.entityDependencyQueue.size > 0) {
-            logInterval("dependencyQueue: ", 60, this.entityDependencyQueue.size);
+            logInterval("dependencyQueue: ", 600, this.entityDependencyQueue.size);
             // append dependencies to dependency maps
             for (
                 let keys = [...this.entityDependencyQueue.keys()],
@@ -275,7 +278,7 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
         if (this.resolveDependencyQueue.size > 0) {
             // collect all of the entities being resolved
             const resolveEntities: Set<Entity> = new Set();
-            logInterval("entResolveQueue: ", 60, this.resolveDependencyQueue.size);
+            logInterval("entResolveQueue: ", 600, this.resolveDependencyQueue.size);
 
             for (let arr = [...this.resolveDependencyQueue.values()], i = arr.length - 1; i >= 0; --i) {
                 const entityResolveDependents = arr[i];
@@ -306,12 +309,14 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
     }
 
     update() {
+        dirInterval("disbaled", 30, "we have disabled reporter");
+        return;
         const container: EntityComponentContainer = this.entityComponentContainers.get(
             ItemEjectorComponent.getId()
         );
 
         try {
-            dirInterval("container", 60, container);
+            dirInterval("container", 600, container);
             const message = `
         Interval container:
             active: ${container.activeEntitySet.size},
@@ -325,11 +330,11 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
             entResolveQueue: ${this.resolveDependencyQueue.size},
             idleQueue: ${this.idleWaitSet.size},
         `;
-            logInterval("ejectorUpdates", 60, message);
-            dirInterval("ejectorActive", 60, container.activeEntitySet);
-            dirInterval("ejectorDeactivate:", 60, container.deactivateEntityQueue);
-            dirInterval("ejectorActivate:", 60, container.reactivateEntityQueue);
-            dirInterval("reporterFull", 60, this);
+            logInterval("ejectorUpdates", 600, message);
+            dirInterval("ejectorActive", 600, container.activeEntitySet);
+            dirInterval("ejectorDeactivate:", 600, container.deactivateEntityQueue);
+            dirInterval("ejectorActivate:", 600, container.reactivateEntityQueue);
+            dirInterval("reporterFull", 600, this);
         } catch (e) {
             console.dir(e);
         }
@@ -443,6 +448,7 @@ export class SystemUpdateReporter extends GameSystemWithFilter {
         this.giveItemAcceptorListener(entityWithAcceptor);
     }
     reportAcceptorEmpty(entityWithAcceptor: Entity) {
+        return;
         this.queueNewDependency(entityWithAcceptor, entityWithAcceptor);
         this.giveItemAcceptorListener(entityWithAcceptor);
     }

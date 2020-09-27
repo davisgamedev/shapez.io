@@ -435,11 +435,8 @@ export class BeltSystem extends GameSystemWithFilter {
         const result = [];
 
         const entitiesArray = this.getUpdatedEntitiesArray();
-        for (
-            let i = entitiesArray.length - 1, entity = entitiesArray[i];
-            i >= 0;
-            --i, entity = entitiesArray[i]
-        ) {
+        for (let i = entitiesArray.length - 1; i >= 0; --i) {
+            const entity = entitiesArray[i];
             if (visitedUids.has(entity.uid)) {
                 continue;
             }
@@ -492,7 +489,8 @@ export class BeltSystem extends GameSystemWithFilter {
             this.debug_verifyBeltPaths();
         }
 
-        const belts = this.reporter.getActiveBeltPaths();
+        const belts = this.beltPaths;
+        dirInterval("bletPaths", 30, belts);
         for (let i = belts.length - 1; i >= 0; --i) {
             const belt = belts[i];
             if (belt) belt.update();

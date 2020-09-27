@@ -79,7 +79,7 @@ class SystemUpdateReporter extends game_system_with_filter_1.GameSystemWithFilte
         window.refreshReporter = this.forceRefreshReporter.bind(this);
     }
     acceptEntities(entities) {
-        console.log("%cACCEPTING ENTITIES", "color: white; background-color: orange");
+        console.log("%cACCEPTING ENTITIES", "color: white; background-color: magenta");
         console.dir(this);
         for (let i = entities.length - 1; i >= 0; --i)
             this.internalRegisterEntity(entities[i]);
@@ -114,7 +114,9 @@ class SystemUpdateReporter extends game_system_with_filter_1.GameSystemWithFilte
             ...this.entityComponentContainers.get(componentId).activeEntitySet,
         ];
     }
+    //test
     queueNewDependency(entityDependentOn, dependentEntity) {
+        return;
         const set = this.entityDependencyQueue.get(entityDependentOn) || new Set();
         set.add(dependentEntity);
         this.entityDependencyQueue.set(entityDependentOn, set);
@@ -202,7 +204,7 @@ class SystemUpdateReporter extends game_system_with_filter_1.GameSystemWithFilte
     }
     updateDepContainers() {
         if (this.entityDependencyQueue.size > 0) {
-            utils_1.logInterval("dependencyQueue: ", 60, this.entityDependencyQueue.size);
+            utils_1.logInterval("dependencyQueue: ", 600, this.entityDependencyQueue.size);
             // append dependencies to dependency maps
             for (let keys = [...this.entityDependencyQueue.keys()], vals = [...this.entityDependencyQueue.values()], i = keys.length - 1; i >= 0; --i) {
                 const entDependentOn = keys[i];
@@ -221,7 +223,7 @@ class SystemUpdateReporter extends game_system_with_filter_1.GameSystemWithFilte
         if (this.resolveDependencyQueue.size > 0) {
             // collect all of the entities being resolved
             const resolveEntities = new Set();
-            utils_1.logInterval("entResolveQueue: ", 60, this.resolveDependencyQueue.size);
+            utils_1.logInterval("entResolveQueue: ", 600, this.resolveDependencyQueue.size);
             for (let arr = [...this.resolveDependencyQueue.values()], i = arr.length - 1; i >= 0; --i) {
                 const entityResolveDependents = arr[i];
                 const set = this.entityDependencyMap.get(entityResolveDependents);
@@ -248,9 +250,11 @@ class SystemUpdateReporter extends game_system_with_filter_1.GameSystemWithFilte
         this.resolveDependencyQueue.clear();
     }
     update() {
+        utils_1.dirInterval("disbaled", 30, "we have disabled reporter");
+        return;
         const container = this.entityComponentContainers.get(item_ejector_1.ItemEjectorComponent.getId());
         try {
-            utils_1.dirInterval("container", 60, container);
+            utils_1.dirInterval("container", 600, container);
             const message = `
         Interval container:
             active: ${container.activeEntitySet.size},
@@ -264,11 +268,11 @@ class SystemUpdateReporter extends game_system_with_filter_1.GameSystemWithFilte
             entResolveQueue: ${this.resolveDependencyQueue.size},
             idleQueue: ${this.idleWaitSet.size},
         `;
-            utils_1.logInterval("ejectorUpdates", 60, message);
-            utils_1.dirInterval("ejectorActive", 60, container.activeEntitySet);
-            utils_1.dirInterval("ejectorDeactivate:", 60, container.deactivateEntityQueue);
-            utils_1.dirInterval("ejectorActivate:", 60, container.reactivateEntityQueue);
-            utils_1.dirInterval("reporterFull", 60, this);
+            utils_1.logInterval("ejectorUpdates", 600, message);
+            utils_1.dirInterval("ejectorActive", 600, container.activeEntitySet);
+            utils_1.dirInterval("ejectorDeactivate:", 600, container.deactivateEntityQueue);
+            utils_1.dirInterval("ejectorActivate:", 600, container.reactivateEntityQueue);
+            utils_1.dirInterval("reporterFull", 600, this);
         }
         catch (e) {
             console.dir(e);
@@ -361,6 +365,7 @@ class SystemUpdateReporter extends game_system_with_filter_1.GameSystemWithFilte
         this.giveItemAcceptorListener(entityWithAcceptor);
     }
     reportAcceptorEmpty(entityWithAcceptor) {
+        return;
         this.queueNewDependency(entityWithAcceptor, entityWithAcceptor);
         this.giveItemAcceptorListener(entityWithAcceptor);
     }
