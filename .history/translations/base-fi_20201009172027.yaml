@@ -1,29 +1,29 @@
 steamPage:
-    shortText: Shapez.io handler om at bygge fabrikker på en grænseløs spilleflade
-        for automatisk at skabe og kombinere figurer, der i stigende grad bliver
-        mere komplicerede.
+    shortText: shapez.io on peli tehtaiden rakentamisesta, joiden avulla
+        automatisoidaan yhä monimutkaisempien muotojen luonti and yhdisteleminen
+        loputtomassa maailmassa.
     discordLinkShort: Official Discord
     intro: >-
-        Shapez.io er et afslapet spil hvor du skal bygge fabrikker for at
-        automatisere productionen af geometriske figurer.
+        Shapez.io is a relaxed game in which you have to build factories for the
+        automated production of geometric shapes.
 
-        Jo længer du når, jo mere kompliseret bliver figurene, og du bliver nød til at spræde dig ud på den grænseløse spilleflade.
+        As the level increases, the shapes become more and more complex, and you have to spread out on the infinite map.
 
-        og hvis det ikke var nok, så skal du også producere eksponentielt flere figurer for at måde behovene spillet giver dig - det eneste der virker er skalering!
+        And as if that wasn't enough, you also have to produce exponentially more to satisfy the demands - the only thing that helps is scaling!
 
-        Mens du i starten kun laver former, skal du senere farve lægge dem - for at gøre dette skal du udvinde og blande farver!
+        While you only process shapes at the beginning, you have to color them later - for this you have to extract and mix colors!
 
-        At købe spllet på Steam, giver dig adgang til det fulde spil, men du kan også spille en demo version på shapez.io og vælge senere!
-    title_advantages: Steam version Fordele
+        Buying the game on Steam gives you access to the full version, but you can also play a demo on shapez.io first and decide later!
+    title_advantages: Standalone Advantages
     advantages:
-        - <b>12 Nye Niveauer</b> for i alt 26 niveauer
-        - <b>18 Nye Byginger</b> for en fuldt autmaticeret fabrik!
-        - <b>20 Upgraderings Niveauer</b> for mange timers sjov!
+        - <b>12 New Level</b> for a total of 26 levels
+        - <b>18 New Buildings</b> for a fully automated factory!
+        - <b>20 Upgrade Tiers</b> for many hours of fun!
         - <b>Wires Update</b> for an entirely new dimension!
         - <b>Dark Mode</b>!
         - Unlimited Savegames
-        - Uendelige Markører
-        - Hjælp med at støtte mig! ❤️
+        - Unlimited Markers
+        - Support me! ❤️
     title_future: Planned Content
     planned:
         - Blueprint Library (Standalone Exclusive)
@@ -48,151 +48,151 @@ steamPage:
 
         Be sure to check out my trello board for the full roadmap!
 global:
-    loading: Indlæser
-    error: Fejl
-    thousandsDivider: .
-    decimalSeparator: ","
+    loading: Ladataan
+    error: Virhe
+    thousandsDivider: ","
+    decimalSeparator: .
     suffix:
         thousands: k
-        millions: mio
-        billions: mia
-        trillions: bio
-    infinite: uendelig
+        millions: M
+        billions: B
+        trillions: T
+    infinite: ∞
     time:
-        oneSecondAgo: et sekund siden
-        xSecondsAgo: <x> sekunder siden
-        oneMinuteAgo: et minut siden
-        xMinutesAgo: <x> minutter siden
-        oneHourAgo: en time siden
-        xHoursAgo: <x> timer siden
-        oneDayAgo: en dag siden
-        xDaysAgo: <x> dage siden
+        oneSecondAgo: yksi sekunti sitten
+        xSecondsAgo: <x> sekunttia sitten
+        oneMinuteAgo: yksi minuutti sitten
+        xMinutesAgo: <x> minuuttia sitten
+        oneHourAgo: yksi tunti sitten
+        xHoursAgo: <x> tuntia sitten
+        oneDayAgo: yksi päivä sitten
+        xDaysAgo: <x> päivää sitten
         secondsShort: <seconds>s
         minutesAndSecondsShort: <minutes>m <seconds>s
-        hoursAndMinutesShort: <hours>t <minutes>m
-        xMinutes: <x> minutter
+        hoursAndMinutesShort: <hours>h <minutes>m
+        xMinutes: <x> minuuttia
     keys:
-        tab: TAB
+        tab: SARKAIN
         control: CTRL
         alt: ALT
         escape: ESC
-        shift: SKIFT/SHIFT
-        space: MELLEMRUM
+        shift: VAIHTO
+        space: VÄLILYÖNTI
 demoBanners:
-    title: Demo Version
-    intro: Køb spillet for at få den fulde oplevelse!
+    title: Demoversio
+    intro: Hanki itsenäinen peli avataksesi kaikki omunaisuudet!
 mainMenu:
-    play: Spil
-    continue: Fortsæt
-    newGame: Nyt Spil
-    changelog: Changelog
+    play: Pelaa
+    continue: Jatka
+    newGame: Uusi Peli
+    changelog: Muutosloki
     subreddit: Reddit
-    importSavegame: Importér
-    openSourceHint: Dette spil er open source!
-    discordLink: Officiel Discord Server
-    helpTranslate: Hjælp med at oversætte!
-    madeBy: Lavet af <author-link>
-    browserWarning: Undskyld, men spillet er kendt for at køre langsomt på denne
-        browser! Køb spillet eller download chrome for den fulde oplevelse.
-    savegameLevel: Niveau <x>
-    savegameLevelUnknown: Ukendt Niveau
+    importSavegame: Tuo peli
+    openSourceHint: Tämä on avoimen lähdekoodin peli!
+    discordLink: Virallinen Discord Palvelin
+    helpTranslate: Auta kääntämään!
+    madeBy: Pelin on tehnyt <author-link>
+    browserWarning: Anteeksi, mutta pelin tiedetään toimivan huonosti selaimellasi!
+        Hanki itsenäinen versio tai lataa Chrome täyttä tukea varten.
+    savegameLevel: Taso <x>
+    savegameLevelUnknown: Tuntematon Taso
     savegameUnnamed: Unnamed
 dialogs:
     buttons:
         ok: OK
-        delete: Slet
-        cancel: Fortryd
-        later: Senere
-        restart: Genstart
-        reset: Nulstil
-        getStandalone: Køb spillet
-        deleteGame: Jeg ved hvad jeg laver
-        viewUpdate: Se Opdatering
-        showUpgrades: Vis Opgraderinger
-        showKeybindings: Vis Keybindings
+        delete: Poista
+        cancel: Peruuta
+        later: Myöhemmin
+        restart: Käynnistä uudelleen
+        reset: Nollaa
+        getStandalone: Hanki itsenäinen peli
+        deleteGame: Tiedän mitä olen tekemässä
+        viewUpdate: Näytä päivitys
+        showUpgrades: Näytä Päivitykset
+        showKeybindings: Näytä pikanäppäimet
     importSavegameError:
-        title: Import Fejl
-        text: "Importering af gemt spil fejlede:"
+        title: Tuonti Virhe
+        text: "Tallennuksen tuonti epäonnistui:"
     importSavegameSuccess:
-        title: Gemt spil Importeret
-        text: Dit gemte spil blev importet.
+        title: Tallennus tuotiin
+        text: Tallennuksesi tuotiin onnistuneesti.
     gameLoadFailure:
-        title: Spillet er i stykker
-        text: "Det lykkedes ikke at åbne dit gemte spil:"
+        title: Peli on rikki
+        text: "Tallennuksen lataus epäonnistui:"
     confirmSavegameDelete:
-        title: Bekræft sletning
+        title: Varmista poisto
         text: Are you sure you want to delete the following game?<br><br>
             '<savegameName>' at level <savegameLevel><br><br> This can not be
             undone!
     savegameDeletionError:
-        title: Sletning fejlede
-        text: "Det lykkedes ikke at slette dit gemte spil:"
+        title: Poisto epäonnistui
+        text: "Tallennuksen poisto epäonnistui:"
     restartRequired:
-        title: Genstart er nødvendig
-        text: Du er nødt til at genstarte spillet for at anvende indstillingerne.
+        title: Uudelleenkäynnistys vaaditaan
+        text: Käynnistä peli uudelleen ottaaksesi asetukset käyttöön.
     editKeybinding:
-        title: Ændr Keybinding
-        desc: Tryk på knappen du vil bruge, eller escape for at fortryde.
+        title: Vaihda pikanäppäin
+        desc: Paina näppäintä tai hiiren nappia jonka haluat asettaa tai paina escape
+            peruuttaaksesi.
     resetKeybindingsConfirmation:
-        title: Nulstil keybindings
-        desc: Dette vil nulstille alle keybindings til deres standarder. Bekræft
-            venligst.
+        title: Nollaa pikanäppäimet
+        desc: Tämä nollaa kaikki pikanäppäimet oletusarvoihin. Vahvista.
     keybindingsResetOk:
-        title: Keybindings nulstillet
-        desc: Keybindings er nulstillet til deres standarder!
+        title: Pikanäppäimet nollattiin
+        desc: Pikanäppäimet nollattiin oletusarvoihin!
     featureRestriction:
-        title: Demoversion
-        desc: Du prøvede at bruge en funktion (<feature>) der ikke er tilgængelig i
-            demoen. Overvej at købe spillet for den fulde oplevelse!
+        title: Demoversio
+        desc: Yritit käyttää ominaisuutta (<feature>) joka ei ole saatavilla
+            demoversiossa. Harkitse itsenäisen version hankkimista avataksesi
+            kaikki ominaisuudet!
     oneSavegameLimit:
-        title: Begrænset mængde gemte spil
-        desc: Du kan kun have et gemt spil ad gangen in demoversionen. Vær sød at slette
-            det nuværende gemte spil eller at købe spillet!
+        title: Rajoitetut tallennukset
+        desc: Sinulla voi olla vain yksi tallennus kerrallaan demoversiossa. Poista
+            vanha tallennus tai hanki itsenäinen versio!
     updateSummary:
-        title: Ny opdatering!
-        desc: "Dette har ændret sig siden sidst du spillede:"
+        title: Uusi päivitys!
+        desc: "Tässä on tulleet muutokset sen jälkeen kun viimeksi pelasit:"
     upgradesIntroduction:
-        title: Få Opgraderinger
-        desc: Alle figurer du producerer kan blive brugt til at få opgraderinger -
-            <strong>Ødelæg ikke dine gamle fabrikker!</strong>
-            Opgraderingeringsvinduet kan findes i det øverste højre hjørne af
-            skærmen.
+        title: Avaa Päivitykset
+        desc: Kaikkia muodoja joita tuotat voi käyttää päivitysten avaamiseen -
+            <strong>Älä tuhoa vanhoja tehtaitasi!</strong> Löydät
+            päivitysikkunan näytön oikeasta yläkulmasta.
     massDeleteConfirm:
-        title: Bekræft sletning
-        desc: Du er ved at slette mange bygninger (<count> helt præcist)! Er du sikker
-            på at det er det du vil gøre?
+        title: Vahvista poisto
+        desc: Olet poistamassa paljon rakennuksia (tasan <count>)! Oletko varma että
+            haluat jatkaa?
     massCutConfirm:
-        title: Bekræft klip
-        desc: Du er ved at klippe mange bygninger (<count> helt præcist)! Er du sikker
-            på at det er det du vil gøre?
+        title: Vahtista leikkaus
+        desc: Olet leikkaamassa paljon rakennuksia (tasan <count>)! Oletko varma että
+            haluat jatkaa?
     blueprintsNotUnlocked:
-        title: Ikke tilgængeligt endnu
-        desc: Gennemfør Niveau 12 for at bruge arbejdstegninger!
+        title: Ei vielä avattu
+        desc: Suorita taso 12 avataksesi Piirustukset!
     keybindingsIntroduction:
-        title: Brugbare keybindings
-        desc: "Dette spil har mange keybindings, som gør det lettere at bygge store
-            fabrikker. Her er et par, men husk at <strong>tjekke
-            keybindings</strong>!<br><br> <code class='keybinding'>CTRL</code> +
-            Træk: Vælg et område.<br> <code class='keybinding'>SHIFT</code>:
-            Hold for at placere flere af en bygning.<br> <code
-            class='keybinding'>ALT</code>: Vend retningen af placerede
-            transportbånd.<br>"
+        title: Hyödyllisiä pikanäppäimiä
+        desc: "Tässä pelissä on paljon pikanäppäimiä, jotka tekevät isojen tehtaiden
+            rakentamisesta helpompaa. Tässä on muutama, mutta <strong>katso
+            kaikki pikanäppäimet</strong>!<br><br> <code
+            class='keybinding'>CTRL</code> + Raahaus: Valitse alue.<br> <code
+            class='keybinding'>VAIHTO</code>: Pidä pohjassa sijoittaaksesi
+            useita samoja rakennuksia.<br> <code class='keybinding'>ALT</code>:
+            Käännä sijoitettavien hihnojen suunta.<br>"
     createMarker:
-        title: Ny Markør
+        title: Uusi Merkki
         desc: Give it a meaningful name, you can also include a <strong>short
             key</strong> of a shape (Which you can generate <link>here</link>)
-        titleEdit: Rediger Markør
+        titleEdit: Muokkaa merkkiä
     markerDemoLimit:
-        desc: Du kan kun lave to markører i demoen. Køb spillet for uendelige markører!
+        desc: Voit tehdä vain kaksi mukautettua merkkiä demoversiossa. Hanki itsenäinen
+            versio saadaksesi loputtoman määrän merkkejä!
     exportScreenshotWarning:
-        title: Eksporter skærmbillede
-        desc: Du bad om at eksportere din fabrik som et skærmbillede. Bemærk at dette
-            kan være rimelig langsomt for en stor base og kan endda lukke dit
-            spil!
+        title: Vie kuvakaappaus
+        desc: Pyysit tukikohtasi viemistä kuvakaappauksena. Huomaa, että tämä voi olla
+            melko hidasta isolla tukikohdalla ja voi jopa kaataa pelisi!
     massCutInsufficientConfirm:
-        title: Bekræft klip
-        desc: Du har ikke råd til at sætte dette område ind igen! Er du sikker på at du
-            vil klippe det?
+        title: Vahvista leikkaus
+        desc: Sinulla ei ole varaa leikata tätä aluetta! Oletko varma että haluat
+            leikata sen?
     editSignal:
         title: Set Signal
         descItems: "Choose a pre-defined item:"
@@ -211,112 +211,113 @@ dialogs:
             available in English. Would you like to watch it?
 ingame:
     keybindingsOverlay:
-        moveMap: Bevæg dig
-        selectBuildings: Marker område
-        stopPlacement: Stop placering
-        rotateBuilding: Roter bygning
-        placeMultiple: Placer flere
-        reverseOrientation: Omvend retning
-        disableAutoOrientation: Slå automatisk retning fra
-        toggleHud: Slå HUD til/fra
-        placeBuilding: Placer bygning
-        createMarker: Lav Markør
-        delete: Slet
-        pasteLastBlueprint: Sæt sidste arbejdstegning ind
-        lockBeltDirection: Aktiver bælteplanlægger
-        plannerSwitchSide: Vend planlægsningsside
-        cutSelection: Klip
-        copySelection: Kopier
-        clearSelection: Ryd Selektion
-        pipette: Pipette
-        switchLayers: Skift Lag
+        moveMap: Liiku
+        selectBuildings: Valitse alue
+        stopPlacement: Lopeta sijoittaminen
+        rotateBuilding: Käännä rakennusta
+        placeMultiple: Sijoita useita
+        reverseOrientation: Käänteinen suunta
+        disableAutoOrientation: Poista automaattinen suunta käytöstä
+        toggleHud: Vaihda valikon näkyvyys
+        placeBuilding: Sijoita rakennus
+        createMarker: Luo merkki
+        delete: Poista
+        pasteLastBlueprint: Liitä viimeisin piirustus
+        lockBeltDirection: Ota hihnojen suunnittelija käyttöön
+        plannerSwitchSide: Käännä suunnittelijan puoli
+        cutSelection: Leikkaa
+        copySelection: Kopioi
+        clearSelection: Tyhjennä Valinta
+        pipette: Pipetti
+        switchLayers: Vaihda Tasoa
     colors:
-        red: Rød
-        green: Grøn
-        blue: Blå
-        yellow: Gul
-        purple: Lilla
-        cyan: Cyan
-        white: Hvid
-        uncolored: Ingen farve
-        black: Sort
+        red: Punainen
+        green: Vihreä
+        blue: Sininen
+        yellow: Keltainen
+        purple: Violetti
+        cyan: Syaani
+        white: Valkoinen
+        uncolored: Väritön
+        black: Musta
     buildingPlacement:
-        cycleBuildingVariants: Tryk <key> for at vælge type.
-        hotkeyLabel: "Hotkey: <key>"
+        cycleBuildingVariants: Paina <key> kiertääksesi muunnoksia.
+        hotkeyLabel: "Pikanäppäin: <key>"
         infoTexts:
-            speed: Fart
-            range: Rækkevidde
-            storage: Opbevaring
-            oneItemPerSecond: 1 genstand / sekund
-            itemsPerSecond: <x> genstande / s
+            speed: Nopeus
+            range: Matka
+            storage: Varasto
+            oneItemPerSecond: 1 kappale / sekunti
+            itemsPerSecond: <x> kappaleita / s
             itemsPerSecondDouble: (x2)
-            tiles: <x> flader
+            tiles: <x> laattaa
     levelCompleteNotification:
-        levelTitle: Niveau <level>
-        completed: Klaret
-        unlockText: <reward> er nu tilgængelig!
-        buttonNextLevel: Næste Niveau
+        levelTitle: Taso <level>
+        completed: Suoritettu
+        unlockText: Avattu <reward>!
+        buttonNextLevel: Seuraava taso
     notifications:
-        newUpgrade: En ny opgradering er tilgængelig!
-        gameSaved: Dit spil er gemt.
+        newUpgrade: Uusi päivitys on saatavilla!
+        gameSaved: Peli on tallennettu.
         freeplayLevelComplete: Level <level> has been completed!
     shop:
-        title: Opgraderinger
-        buttonUnlock: Opgrader
-        tier: Trin <x>
-        maximumLevel: HØJESTE NIVEAU (Speed x<currentMult>)
+        title: Päivitykset
+        buttonUnlock: Päivitä
+        tier: Taso <x>
+        maximumLevel: SUURIN TASO (Nopeus x<currentMult>)
     statistics:
-        title: Statistikker
+        title: Tilastot
         dataSources:
             stored:
-                title: Opbevaret
-                description: Viser mængden af opbevarede figurer i din centrale bygning.
+                title: Varastoitu
+                description: Näyttää keskusrakennuksessa varastoitujen muotojen määrän.
             produced:
-                title: Produceret
-                description: Viser alle de figurer hele din fabrik producerer, inklusiv
-                    produkter brugt til videre produktion.
+                title: Tuotettu
+                description: Näyttää kaikki muodot mitä tehtaasi tuottaa ja lisäksi myös
+                    välituotteet.
             delivered:
-                title: Afleveret
-                description: Viser figurer som er afleveret til din centrale bygning.
-        noShapesProduced: Ingen figurer er blevet produceret indtil videre.
+                title: Toimitettu
+                description: Näyttää muodot jotka on toimitettu keskusrakennukseen.
+        noShapesProduced: Toistaiseksi ei muotoja tuotettu.
         shapesDisplayUnits:
             second: <shapes> / s
             minute: <shapes> / m
             hour: <shapes> / h
     settingsMenu:
-        playtime: Spilletid
-        buildingsPlaced: Bygninger
-        beltsPlaced: Bælter
+        playtime: Peliaika
+        buildingsPlaced: Rakennukset
+        beltsPlaced: Liukuhihnat
     tutorialHints:
-        title: Har du brug for hjælp?
-        showHint: Vis hint
-        hideHint: Luk
+        title: Tarvitsetko apua?
+        showHint: Näytä vihje
+        hideHint: Sulje
     blueprintPlacer:
-        cost: Pris
+        cost: Hinta
     waypoints:
-        waypoints: Markører
-        hub: HUB
-        description: Venstreklik en markør for at hoppe til den, højreklik for at slette
-            den.<br><br>Tryk <keybinding> for at lave en markør på det nuværende
-            sted, eller <strong>højreklik</strong> for at lave en markør på det
-            valgte sted.
-        creationSuccessNotification: Markør er sat.
+        waypoints: Merkit
+        hub: Keskusrakennus
+        description: Paina merkkia hiiren vasemmalla mennäksesi siihen, paina oikeaa
+            nappia poistaaksesi sen.<br><br>Paina <keybinding> luodaksesi merkin
+            nykyisestä näkymästä tai <strong>varen nappi</strong> luodaksesi
+            merkin valittuun paikkaan.
+        creationSuccessNotification: Merkki luotiin onnistuneesti.
     shapeViewer:
-        title: Lag
-        empty: Tom
-        copyKey: Kopier Kode
+        title: Tasot
+        empty: Tyhjä
+        copyKey: Kopioi avain
     interactiveTutorial:
-        title: Tutorial
+        title: Tutoriaali
         hints:
-            1_1_extractor: Sæt en <strong>udvinder</strong> på toppen af
-                en<strong>cirkelfigur</strong> for at begynde produktion af den!
-            1_2_conveyor: "Forbind udvinderen til din hub med et
-                <strong>transportbælte</strong>!<br><br>Tip: <strong>Tryk og
-                træk</strong> bæltet med din mus!"
-            1_3_expand: "Dette er <strong>IKKE</strong> et idle game! Byg flere udvindere og
-                bælter for at færdiggøre målet hurtigere.<br><br>Tip: Hold
-                <strong>SKIFT</strong> for at sætte flere udvindere, og tryk
-                <strong>R</strong> for at rotere dem."
+            1_1_extractor: Laita <strong>Kaivaja</strong> <strong>ympyrämuodon</strong>
+                päälle kaivaaksesi sen!
+            1_2_conveyor: "Yhdistä kaivaja <strong>liukuhihnalla</strong>
+                keskusrakennukseen!<br><br>Vihje: <strong>Paina ja
+                raahaa</strong> liukuhihnaa hiirellä!"
+            1_3_expand: "Tämä <strong>EI OLE</strong> tyhjäkäyntipeli! Rakenna lisää
+                kaivajia ja hihnoja saadaksesi tavoitteen nopeammin
+                valmiiksi.<br><br>Vihje: Pidä pohjassa <strong>VAIHTO</strong>
+                laittaaksesi useampia kaivajia ja käytä <strong>R</strong>
+                kääntääksesi niitä."
             2_1_place_cutter: "Now place a <strong>Cutter</strong> to cut the circles in two
                 halves!<br><br> PS: The cutter always cuts from <strong>top to
                 bottom</strong> regardless of its orientation."
@@ -379,98 +380,103 @@ ingame:
                 desc: I develop it in my spare time!
 shopUpgrades:
     belt:
-        name: Bælter, Fordelere & Tuneller
-        description: Fart x<currentMult> → x<newMult>
+        name: Hihnat, Jakelija & Tunneli
+        description: Nopeus x<currentMult> → x<newMult>
     miner:
-        name: Udvinding
-        description: Fart x<currentMult> → x<newMult>
+        name: Kaivuu
+        description: Nopeus x<currentMult> → x<newMult>
     processors:
-        name: Klipning, Rotering & Stabling
-        description: Fart x<currentMult> → x<newMult>
+        name: Leikkaus, Kääntö & Pinoaminen
+        description: Nopeus x<currentMult> → x<newMult>
     painting:
-        name: Blanding & Maling
-        description: Fart x<currentMult> → x<newMult>
+        name: Sekoitus & Värjäys
+        description: Nopeus x<currentMult> → x<newMult>
 buildings:
     hub:
-        deliver: Aflever
-        toUnlock: for at få adgang til
-        levelShortcut: NIV
+        deliver: Toimita
+        toUnlock: avataksesi
+        levelShortcut: LVL
         endOfDemo: End of Demo
     belt:
         default:
-            name: Transportbælte
-            description: Transporterer figurer, hold og træk for at sætte flere.
+            name: Liukuhihna
+            description: Kuljettaa esineitä, pidä pohjassa ja raahaa laittaaksesi useampia.
+    wire:
+        default:
+            name: Johto
+            description: Sallii sähkön kuljetuksen
+        second:
+            name: Wire
+            description: Transfers signals, which can be items, colors or booleans (1 / 0).
+                Different colored wires do not connect.
     miner:
         default:
-            name: Udvinder
-            description: Placer over en figur eller farve for at udvinde den.
+            name: Kaivaja
+            description: Laita muodon tai värin päälle kaivaaksesi sen.
         chainable:
-            name: Udvinder (Kæde)
-            description: Placer over en figur eller farve for at udvinde den. Kan kædes.
+            name: Kaivaja (Sarja)
+            description: Laita muodon tai värin päälle kaivaaksesi sen. Voidaan kytkeä
+                sarjaan.
     underground_belt:
         default:
-            name: Tunnel
-            description: Laver tunneller under bygninger og bælter.
+            name: Tunneli
+            description: Sallii resurssien kuljetuksen rakennuksien ja hihnojen alta.
         tier2:
-            name: Tunnel Trin II
-            description: Laver tunneller under bygninger og bælter.
+            name: Tunneli Taso II
+            description: Sallii resurssien kuljetuksen rakennuksien ja hihnojen alta
+                pidemmältä kantamalta.
     cutter:
         default:
-            name: Klipper
-            description: Klipper figurer fra top til bund og udsender begge halvdele.
-                <strong>Hvis du kun bruger den ene halvdel så husk at ødelægge
-                den anden del, ellers går maskinen i stå!</strong>
+            name: Leikkuri
+            description: Leikkaa muotoja ylhäältä alaspäin ja tuottaa muodon molemmat
+                puoliskot. <strong>Jos käytät vain yhden puoliskon, tuhoa toinen
+                puolisko tai se jumittaa leikkurin!</strong>
         quad:
-            name: Klipper (firdeler)
-            description: Klipper figurer om til fire dele. <strong>Hvis du kun bruger nogle
-                af dem så husk at ødelægge de andre dele, ellers går maskinen i
-                stå!</strong>
+            name: Leikkuri (Neliö)
+            description: Leikkaa muotoja ylhäältä alaspäin ja tuottaa muodon molemmat
+                puoliskot. <strong>Jos käytät vain yhden puoliskon, tuhoa toinen
+                puolisko tai se jumittaa leikkurin!</strong>
     rotater:
         default:
-            name: Drejer
-            description: Drejer figurer 90 grader med uret.
+            name: Kääntäjä
+            description: Kääntää muotoja 90 astetta myötäpäivään.
         ccw:
-            name: Drejer (mod uret)
-            description: Drejer figurer 90 grader mod uret.
+            name: Kääntäjä (Vastapäivään)
+            description: Kääntää muotoja 90 astetta vastapäivään.
         rotate180:
             name: Rotate (180)
             description: Rotates shapes by 180 degrees.
     stacker:
         default:
-            name: Stabler
-            description: Stabler begge figurer. Hvis de ikke kan sammensmeltes, så sættes
-                den højre figur oven på den venstre.
+            name: Pinoaja
+            description: Pinoaa molemmat tavarat. Jos niitä ei pysty yhdistämään,
+                oikeanpuoleinen tavara laitetaan vasemmanpuoleisen päälle.
     mixer:
         default:
-            name: Farveblander
-            description: Blander to farver med additiv blanding.
+            name: Värinsekoittaja
+            description: Sekoittaa kaksi väriä lisäaineiden avulla.
     painter:
         default:
-            name: Maler
-            description: Farver hele figuren fra venstre side med farven fra toppen.
+            name: Värjääjä
+            description: Värjää vasemmasta sisääntulosta tulevan muodon ylemmästä
+                sisääntulosta tulevalla värillä.
         mirrored:
-            name: Maler
-            description: Farver hele figuren fra venstre side med farven fra toppen.
+            name: Värjääjä
+            description: Värjää vasemmasta sisääntulosta tulevan muodon ylemmästä
+                sisääntulosta tulevalla värillä.
         double:
-            name: Maler (Dobbelt)
-            description: Farver figurerne fra venstre side med farven fra toppen.
+            name: Värjääjä (Kaksinkertainen)
+            description: Värjää vasemmasta sisääntulosta tulevan muodon ylemmästä
+                sisääntulosta tulevalla värillä.
         quad:
-            name: Maler (Quad)
+            name: Painter (Neljännes)
             description: Allows you to color each quadrant of the shape individually. Only
                 slots with a <strong>truthy signal</strong> on the wires layer
                 will be painted!
     trash:
         default:
-            name: Skraldespand
-            description: Tillader input fra alle sider og ødelægger dem. For evigt.
-    wire:
-        default:
-            name: Energiledning
-            description: Lader dig transportere energi.
-        second:
-            name: Wire
-            description: Transfers signals, which can be items, colors or booleans (1 / 0).
-                Different colored wires do not connect.
+            name: Roskakori
+            description: Sallii sisääntulot kaikilta sivuilta ja tuhoaa ne. Lopullisesti.
     balancer:
         default:
             name: Balancer
@@ -583,7 +589,7 @@ buildings:
                 wires layer on the regular layer.
 storyRewards:
     reward_cutter_and_trash:
-        title: Klippe Figurer
+        title: Muotojen Leikkaus
         desc: You just unlocked the <strong>cutter</strong>, which cuts shapes in half
             from top to bottom <strong>regardless of its
             orientation</strong>!<br><br>Be sure to get rid of the waste, or
@@ -591,68 +597,66 @@ storyRewards:
             I have given you the <strong>trash</strong>, which destroys
             everything you put into it!
     reward_rotater:
-        title: Rotation
-        desc: <strong>Drejeren</strong> er nu tilgængelig! Den drejer figurer 90 grader
-            med uret.
+        title: Kääntö
+        desc: Avasit <strong>Kääntäjän</strong>! Se kääntää muotoja myötäpäivään 90
+            astetta.
     reward_painter:
-        title: Maling
-        desc: "<strong>Maleren</strong> er nu tilgængelig - Få noget farve med
-            udvinderen (som du også gør med figurer) og kombiner det med en
-            farve i maleren for at farve dem!<br><br>PS: Hvis du er farveblind,
-            så er der en <strong>farveblindstilstand</strong> i
-            indstillingerne!"
+        title: Värjäys
+        desc: "Avasit <strong>Värjääjän</strong> - Kaiva joitain värialueita
+            (Samanlailla kuin muotoja) ja yhdistä se muotoon värjääjän
+            avulla!<br><br>PS: Jos olet värisokea, asetuksissa on <strong> tila
+            värisokeille</strong>!"
     reward_mixer:
-        title: Farveblanding
-        desc: The <strong>mixer</strong> has been unlocked - It mixes two colors using
-            <strong>additive blending</strong>!
+        title: Värin Sekoitus
+        desc: Avasit <strong>Värinsekoittajan</strong> - Yhdistä kaksi väriä
+            <strong>lisäaineiden avulla</strong> tällä rakennuksella!
     reward_stacker:
-        title: Stabler
-        desc: Du kan du stable figurer med <strong>stableren</strong>! Begge inputs
-            stables. Hvis de kan sættes ved siden af hinanden,
-            <strong>sammensmeltes de</strong>. Hvis ikke, bliver det højre input
-            <strong>stablet ovenpå</strong> det venstre!
+        title: Yhdistäjä
+        desc: Nyt voit yhdistää muotoja <strong>Yhdistäjällä</strong>! Molemman
+            sisääntulot yhdistetään, jos ne laitetaan vierekkäin, niistä tulee
+            <strong>sulatettu</strong>. Jos ne eivät ole vierekkäin,
+            oikeanpuoleinen sisääntulo <strong>kasataan</strong> vasemman
+            päälle!
     reward_splitter:
-        title: Fordeler/Sammenlægger
+        title: Tasaaja
         desc: You have unlocked a <strong>splitter</strong> variant of the
             <strong>balancer</strong> - It accepts one input and splits them
             into two!
     reward_tunnel:
-        title: Tunnel
-        desc: <strong>Tunnellen</strong> er nu tilgængelig - Du kan nu lave tuneller
-            under bælter og bygninger!
+        title: Tunneli
+        desc: Avasit <strong>Tunnelin</strong> - Nyt voit kuljettaa tavaroita
+            liukuhihnoilla rakennusten ja liukuhihnojen alta!
     reward_rotater_ccw:
-        title: Rotation mod uret
-        desc: Du har fået adgang til en variant af <strong>drejeren</strong> - Den lader
-            dig dreje ting mod uret! For at bygge den skal du vælge drejeren og
-            <strong>trykke 'T'</strong>!
+        title: Vastapäivään Kääntö
+        desc: Avasit uuden muodon <strong>Kääntäjästä</strong> - Se sallii kääntämisen
+            vastapäivään! Sen voi rakentaa valitsemalla kääntäjän ja
+            <strong>painamalla 'T' vaihtaaksesi sen muotoja</strong>!
     reward_miner_chainable:
-        title: Kædeudvinder
+        title: Sarja Kaivaja
         desc: "You have unlocked the <strong>chained extractor</strong>! It can
             <strong>forward its resources</strong> to other extractors so you
             can more efficiently extract resources!<br><br> PS: The old
             extractor has been replaced in your toolbar now!"
     reward_underground_belt_tier_2:
-        title: Tunnel Trin II
-        desc: Du har fået adgang til en variant af <strong>tunnellen</strong> - Den har
-            en <strong>større rækkevidde</strong>, og du kan også bruge begge
-            typer tunneller på den samme strækning!
+        title: Tunneli Taso II
+        desc: Avasit uuden muodon <strong>Tunnelista</strong> - Siinä on <strong>pidempi
+            matka</strong>, ja voit myös yhdistellä ja sovitella tunneleita!
     reward_cutter_quad:
-        title: Quad Klipining
-        desc: Du har fået adgang til en variant af <strong>klipperen</strong> - Den
-            lader dig klippe figurer i <strong>fire dele</strong> i stedet for
-            kun to!
+        title: Neljäsosa Leikkaus
+        desc: Avasit muodon <strong>Leikkurista</strong> - Se sallii muotojen
+            leikkaamisen <strong>neljään osaan</strong> kahden sijaan!
     reward_painter_double:
-        title: Dobbelt Maling
-        desc: Du har fået adgang til en variant af <strong>maleren</strong> - Den virker
-            som en normal maler, men maler <strong>to figurer samtidig</strong>
-            og bruger kun en farve i stedet for to.
+        title: Kaksinkertainen Värjäys
+        desc: Avasit muodon <strong>Värjääjästä</strong> - Se toimii samanlailla kuin
+            normaali värjääjä, mutta käsittelee <strong>kaksi muotoa
+            kerrallaan</strong> käyttäen vain yhden värin kahden sijaan!
     reward_storage:
-        title: Opbevaringsbuffer
+        title: Varasto Puskuri
         desc: You have unlocked the <strong>storage</strong> building - It allows you to
             store items up to a given capacity!<br><br> It priorities the left
             output, so you can also use it as an <strong>overflow gate</strong>!
     reward_freeplay:
-        title: Frit spil
+        title: Vapaapeli
         desc: You did it! You unlocked the <strong>free-play mode</strong>! This means
             that shapes are now <strong>randomly</strong> generated!<br><br>
             Since the hub will require a <strong>throughput</strong> from now
@@ -661,21 +665,21 @@ storyRewards:
             shape on the wires layer, so all you have to do is to analyze it and
             automatically configure your factory based on that.
     reward_blueprints:
-        title: Arbejdstegninger
-        desc: Du kan nu <strong>kopiere og indsætte</strong> dele af din fabrik! Vælg et
-            område (Hold CTRL, og træk med musen), og tryk 'C' for at kopiere
-            det.<br><br>At sætte det ind er <strong>ikke gratis</strong>. Du
-            skal producere <strong>arbejdstegning figurer</strong> for at have
-            råd til det! (Dem du lige har leveret).
+        title: Piirustukset
+        desc: Nyt voit <strong>Kopioida ja Liittää</strong> paloja tehtaastasi! Valitse
+            alue (pidä pohjassa CTRL ja raahaa hiirellä), ja paina 'C'
+            kopioidaksesi.<br><br>Sen liittäminen ei ole
+            <strong>ilmaista</strong>, sinun täytyy tuottaa <strong>piirustus
+            muotoja</strong> jotta sinulla on varaa siihen! (Ne mitkä juuri
+            toimitit).
     no_reward:
-        title: Næste niveau
-        desc: "Dette niveau gav dig ingen belønninger, men det vil det næste! <br><br>
-            PS: Du må hellere lade være med at ødelægge din fabrik - Du får brug
-            for <strong>alle</strong> de figurer senere igen for at <strong>få
-            opgraderinger</strong>!"
+        title: Seuraava taso
+        desc: "This level gave you no reward, but the next one will! <br><br> PS: Better
+            don't destroy your existing factory - You need <strong>all</strong>
+            those shapes later again to <strong>unlock upgrades</strong>!"
     no_reward_freeplay:
-        title: Næste niveau
-        desc: Tillykke! Forresten er mere indhold planlagt for den betalte version!
+        title: Seuraava taso
+        desc: Onnittelut! Muuten, lisää sisältöä on suunniteltu itsenäiseen versioon!
     reward_balancer:
         title: Balancer
         desc: The multifunctional <strong>balancer</strong> has been unlocked - It can
@@ -743,122 +747,120 @@ storyRewards:
         title: End of Demo
         desc: You have reached the end of the demo version!
 settings:
-    title: Indstillinger
+    title: Asetukset
     categories:
-        general: Generelt
-        userInterface: Brugerflade
-        advanced: Avanceret
+        general: Yleinen
+        userInterface: Käyttöliittyma
+        advanced: Kehittynyt
         performance: Performance
     versionBadges:
-        dev: Udvikling
-        staging: Iscenesættelse
-        prod: Produktion
-    buildDate: Bygget <at-date>
+        dev: Kehitys
+        staging: Näyttämö
+        prod: Tuotanto
+    buildDate: Rakennettu <at-date>
     labels:
         uiScale:
-            title: Grænseflade størrelse
-            description: Ændrer størrelsen på brugerfladen. Den vil stadig skalere baseret
-                på opløsningen af din skærm, men denne indstilling bestemmer
-                hvor meget den skalerer.
+            title: Käyttöliittymän Koko
+            description: Muuttaa käyttöliittymän kokoa. Käyttöliittymä skaalataan silti
+                laitteen resoluution perusteella based on your device
+                resolution, mutta tämä asetus määrittää skaalauksen määrän.
             scales:
-                super_small: Meget lille
-                small: Lille
-                regular: Normal
-                large: Store
-                huge: Kæmpe
+                super_small: Erittäin pieni
+                small: Pieni
+                regular: Normaali
+                large: Iso
+                huge: Valtava
         autosaveInterval:
-            title: Autogem Interval
-            description: Ændrer hvor ofte spillet gemmer automatisk. Du kan også slå det
-                helt fra her.
+            title: Automaattitallennuksen Aikaväli
+            description: Määrittää kuinka usein peli tallentaa automaattisesti. Voit myös
+                poistaa automaattisen tallennuksen kokonaan käytöstä täällä.
             intervals:
-                one_minute: 1 Minut
-                two_minutes: 2 Minutter
-                five_minutes: 5 Minutter
-                ten_minutes: 10 Minutter
-                twenty_minutes: 20 Minutter
-                disabled: Slået fra
+                one_minute: 1 Minuutin välein
+                two_minutes: 2 Minuutin välein
+                five_minutes: 5 Minuutin välein
+                ten_minutes: 10 Minuutin välein
+                twenty_minutes: 20 Minuutin välein
+                disabled: Pois käytöstä
         scrollWheelSensitivity:
-            title: Zoom følsomhed
-            description: Ændrer hvor følsomt zoomet er (Enten musehjulet eller trackpad).
+            title: Zoomausherkkyys
+            description: Vaihtaa kuinka herkkä zoomi on (Joko hiiren rulla tai ohjauslevy).
             sensitivity:
-                super_slow: Meget langsom
-                slow: Langsom
-                regular: Normal
-                fast: Hurtig
-                super_fast: Meget hurtig
+                super_slow: Erittäin hidas
+                slow: Hidas
+                regular: Normaali
+                fast: Nopea
+                super_fast: Erittäin nopea
         movementSpeed:
-            title: Bevægelseshastighed
-            description: Ændrer hvor hurtigt du kan bevæge dit overblik når du bruger
-                tastaturet.
+            title: Liikkumis nopeus
+            description: Muuttaa kuinka nopeasti näkymä liikkuu kun käytetään näppäimistöä.
             speeds:
-                super_slow: Meget langsom
-                slow: Langsom
-                regular: Normal
-                fast: Hurtig
-                super_fast: Meget hurtig
-                extremely_fast: Ekstremt hurtig
+                super_slow: Erittäin hidas
+                slow: Hidas
+                regular: Normaali
+                fast: Nopea
+                super_fast: Erittäin nopea
+                extremely_fast: Hyper nopea
         language:
-            title: Sprog
-            description: Ændrer sproget. All oversættelser er lavet af fælleskabet og kan
-                være ufuldstændige!
+            title: Kieli
+            description: Vaihda kieltä. Kaikki käännökset ovat käyttäjien tekemiä ja
+                saattavat olla puutteellisia!
         enableColorBlindHelper:
-            title: Farveblindstilstand
-            description: Aktiverer forskellige redskaber der lader dig spille, selv hvis du
-                er farveblind.
+            title: Värisokeatila
+            description: Ottaa käyttöön useita työkaluja, jotka sallivat pelin pelaamisen
+                jos olet värisokea.
         fullscreen:
-            title: Fuld skærm
-            description: Det er foreslået at spille i fuld skærm for den bedste oplevelse.
-                Kun tilgængelig i den betalte version.
+            title: Kokonäyttö
+            description: On suositeltava pelata tätä peliä kokonäytön tilassa saadaksesi
+                parhaan kokemuksen. Saatavilla vain itsenäisessä versiossa.
         soundsMuted:
-            title: Slå lydeffekterne fra
-            description: Aktiver for at slå alle lydeffekter fra.
+            title: Mykistä Äänet
+            description: Jos käytössä, mykistää kaikki ääniefektit.
         musicMuted:
-            title: Slå musik fra
-            description: Aktiver for at slå al musik fra.
+            title: Mykistä Musiikki
+            description: Jos käytössä, mykistää musiikin.
         theme:
-            title: Tema
-            description: Vælg tema (lys / mørk).
+            title: Pelin Teema
+            description: Valitse pelin teema (vaalea / tumma).
             themes:
-                dark: Mørk
-                light: Lys
+                dark: Tumma
+                light: Kirkas
         refreshRate:
-            title: Simulationsmål
-            description: Hvis du har en 144hz skærm, så ændr opdateringshastigheden her så
-                spillet vil simulere den højere opdateringshastighed korrekt.
-                Dette kan faktisk sænke din FPS hvis din computer er for
-                langsom.
+            title: Simulaatiotavoite
+            description: Jos sinulla on 144hz näyttö, muuta virkistystaajuus täällä jotta
+                pelin simulaatio toimii oikein isommilla virkistystaajuuksilla.
+                Tämä voi laskea FPS nopeutta, jos tietokoneesi on liian hidas.
         alwaysMultiplace:
-            title: Multiplacér
-            description: Aktiver for at alle bygninger fortsætter med at være valgt efter
-                placering, indtil du vælger dem fra. Dette svarer til altid at
-                holde SKIFT nede.
+            title: Monisijoitus
+            description: Jos käytössä, kaikki rakennukset pysyvät valittuina sijoittamisen
+                jälkeen kunnes peruutat sen. Tämä vastaa SHIFT:in pitämistä
+                pohjassa ikuisesti.
         offerHints:
-            title: Hints & Vejledning
-            description: Om spillet skal tilbyde hints og vejledning imens du spiller.
-                Skjuler også visse dele af brugerfladen indtil et givent niveau
-                for at gøre det nemmere at lære spillet at kende.
+            title: Vihjeet & Oppaat
+            description: Tarjoaa pelaamisen aikana vihjeitä ja oppaita. Myös piilottaa
+                tietyt käyttöliittymäelementit tietyn tason mukaan, jotta
+                alkuunpääseminen olisi helpompaa.
         enableTunnelSmartplace:
-            title: Smarte Tunneller
-            description: Aktiver for at placering af tunneller automatisk fjerner unødige
-                bælter. Dette gør igså at du kan trække tunneller så
-                overskydende tunneller fjernes.
+            title: Älykkäät Tunnelit
+            description: Kun käytössä, tunnelin sijoittaminen automaattisesti poistaa
+                tarpeettomat liukuhihnat. Tämä myös ottaa käyttöön tunnelien
+                raahaamisen ja ylimääräiset tunnelit poistetaan.
         vignette:
-            title: Vignette
-            description: Aktiverer vignette hvilket mørkner kanterne af skærmen og gør
-                teksten nemmere at læse.
+            title: Vignetti
+            description: Ottaa käyttöön vignetin, joka tummentaa näytön kulmia ja tekee
+                tekstin lukemisesta helpompaa.
         rotationByBuilding:
-            title: Rotation baseret på bygningstype
-            description: Hver bygningstype husker den rotation du sidst satte den til. Dette
-                kan være komfortabelt hvis du ofte skifter mellem at placere
-                forskellige bygninger.
+            title: Kiertäminen rakennustyypin mukaan
+            description: Jokainen rakennustyyppi muistaa kierron, jonka viimeksi asetit
+                yksilöllisesti. Tämä voi olla mukavampi vaihtoehto jos usein
+                sijoitat eri rakennustyyppejä.
         compactBuildingInfo:
-            title: Kompakt Bygningsinfo
-            description: Forkorter infobokse til bygninger ved kun at vise deres forhold.
-                Ellers er en beskrivelse og et billede også vist.
+            title: Kompaktit Rakennusten Tiedot
+            description: Lyhentää rakennusten tietolaatikoita näyttämällä vain niiden
+                suhteet. Muuten rakennuksen kuvaus ja kuva näytetään.
         disableCutDeleteWarnings:
-            title: Slå klip/slet advarsler fra
-            description: Slå advarselsboksene, der dukker op når mere end 100 ting slettes,
-                fra.
+            title: Poista Leikkaus/Poisto Varoitukset
+            description: Poista varoitusikkunat jotka ilmestyy kun leikkaat/poistat enemmän
+                kuin 100 entiteettiä
         soundVolume:
             title: Sound Volume
             description: Set the volume for sound effects
@@ -911,63 +913,63 @@ settings:
                 out).
     rangeSliderPercentage: <amount> %
 keybindings:
-    title: Keybindings
-    hint: "Tip: Husk at bruge CTRL, SKIFT og ALT! De byder på forskellige
-        placeringsmuligheder."
-    resetKeybindings: Nulstil Keybindings
+    title: Pikanäppäimet
+    hint: "Tip: Muista käyttää CTRL, VAIHTO ja ALT! Ne ottavat käyttöön erilaisia
+        sijoitteluvaihtoehtoja."
+    resetKeybindings: Nollaa Pikanäppäimet
     categoryLabels:
-        general: Applikation
-        ingame: Spil
-        navigation: Navigation
-        placement: Placering
-        massSelect: Massemarkering
-        buildings: Bygningsgenveje
-        placementModifiers: Placeringsmodifikationer
+        general: Sovellus
+        ingame: Peli
+        navigation: Navigointi
+        placement: Sijoitus
+        massSelect: Massa Valinta
+        buildings: Rakennus Pikanäppäimet
+        placementModifiers: Sijoittelu Muokkaajat
     mappings:
-        confirm: Bekræft
-        back: Tilbage
-        mapMoveUp: Bevæg dig op
-        mapMoveRight: Bevæg dig til højre
-        mapMoveDown: Bevæg dig ned
-        mapMoveLeft: Bevæg dig til venstre
-        mapMoveFaster: Bevæg dig hurtigere
-        centerMap: Centrer kortet
-        mapZoomIn: Zoom ind
-        mapZoomOut: Zoom ud
-        createMarker: Lav Markør
-        menuOpenShop: Opgraderinger
-        menuOpenStats: Statistikker
-        toggleHud: Slå HUD til/fra
-        toggleFPSInfo: Slå FPS og Debug Info til/fra
-        switchLayers: Skift lag
-        exportScreenshot: Eksporter hele basen som et billede
-        belt: Transportbælte
-        underground_belt: Tunnel
-        miner: Udvinder
-        cutter: Klipper
-        rotater: Drejer
-        stacker: Stabler
-        mixer: Farveblander
-        painter: Maler
-        trash: Skraldespand
-        pipette: Pipette
-        rotateWhilePlacing: Roter
-        rotateInverseModifier: "Modifier: Roter mod uret i stedet"
-        cycleBuildingVariants: Gennemgå Varianter
-        confirmMassDelete: Slet område
-        pasteLastBlueprint: Sæt sidste arbejdstegning ind
-        cycleBuildings: Gennemgå bygninger
-        lockBeltDirection: Slå bælteplanlægger til
-        switchDirectionLockSide: "Planner: Skift side"
-        massSelectStart: Hold og træk for at starte
-        massSelectSelectMultiple: Vælg flere områder
-        massSelectCopy: Kopier område
-        massSelectCut: Klip område
-        placementDisableAutoOrientation: Slå automatisk rotation fra
-        placeMultiple: Bliv i placeringstilstand
-        placeInverse: Spejlvend automatisk bælteorientering
-        menuClose: Luk Menu
-        wire: Energiledning
+        confirm: Vahvista
+        back: Takaisin
+        mapMoveUp: Liiku Ylös
+        mapMoveRight: Liiku Oikealle
+        mapMoveDown: Liiku Alas
+        mapMoveLeft: Liiku Vasemmalle
+        mapMoveFaster: Liiku Nopeammin
+        centerMap: Keskitä Kartta
+        mapZoomIn: Lähennä
+        mapZoomOut: Loitonna
+        createMarker: Luo merkki
+        menuOpenShop: Päivitykset
+        menuOpenStats: Tilastot
+        toggleHud: Vaihda valikon näkyvyys
+        toggleFPSInfo: Vaihda FPS and Virheenkorjaus tiedot
+        switchLayers: Vaihda tasoa
+        exportScreenshot: Vie koko tukikohta kuvana
+        belt: Liukuhihna
+        underground_belt: Tunneli
+        miner: Kaivaja
+        cutter: Leikkuri
+        rotater: Kääntäjä
+        stacker: Pinoaja
+        mixer: Värinsekoittaja
+        painter: Värjääjä
+        trash: Roskakori
+        wire: Johto
+        pipette: Pipetti
+        rotateWhilePlacing: Käännä
+        rotateInverseModifier: "Modifier: Käännä sen sijaan vastapäivään"
+        cycleBuildingVariants: Valitse muotoja
+        confirmMassDelete: Poista alue
+        pasteLastBlueprint: Liitä viimeisin piirustus
+        cycleBuildings: Valitse Rakennuksia
+        lockBeltDirection: Ota liukuhihnasuunnittelija käyttöön
+        switchDirectionLockSide: "Planner: Muuta sivua"
+        massSelectStart: Pidä pohjassa ja raahaa aloittaaksesi
+        massSelectSelectMultiple: Valitse useita alueita
+        massSelectCopy: Kopioi alue
+        massSelectCut: Leikkaa alue
+        placementDisableAutoOrientation: Poista automaattinen suunta käytöstä
+        placeMultiple: Pysy sijoittamistilassa
+        placeInverse: Käännä automaattinen hihnan suunta päinvastoin
+        menuClose: Sulje valikko
         balancer: Balancer
         storage: Storage
         constant_signal: Constant Signal
@@ -984,31 +986,29 @@ keybindings:
         item_producer: Item Producer (Sandbox)
         copyWireValue: "Wires: Copy value below cursor"
 about:
-    title: Om dette spil
+    title: Tietoja tästä pelistä
     body: >-
-        Dette spil er open source og er udviklet af <a
+        Tämä peli on avointa lähdekoodia ja kehittäjä on <a
         href="https://github.com/tobspr" target="_blank">Tobias Springer</a>
-        (det er mig).<br><br>
+        (tämä on minä).<br><br>
 
-        Hvis du vil kontribuere, tjek <a href="<githublink>" target="_blank">shapez.io på github</a>.<br><br>
+        Jos haluat osallistua, tarkista <a href="<githublink>" target="_blank">shapez.io githubissa</a>.<br><br>
 
-        Dette spil ville ikke have været muligt uden det fremragende
-        Discord-fælleskab omkring mine spil - Du burde virkelig deltage på <a
-        href="<discordlink>" target="_blank">Discordserveren</a>!<br><br>
+        Tämä peli ei olisi ollut mahdollinen ilman suurta Discord yhteisöä pelini ympärillä - Sinun kannattaisi liittyä <a href="<discordlink>" target="_blank">Discord palvelimelleni</a>!<br><br>
 
-        Lydsporet er lavet af <a href="https://soundcloud.com/pettersumelius" target="_blank">Peppsen</a> - Han er fantastisk.<br><br>
+        Ääniraidan on tehnyt <a href="https://soundcloud.com/pettersumelius" target="_blank">Peppsen</a> - Hän on mahtava.<br><br>
 
-        Endelig, tusind tak til min bedste ven <a href="https://github.com/niklas-dahl" target="_blank">Niklas</a> - Uden vi havde spillet factorio sammen ville dette spil aldrig have eksisteret.
+        Lopuksi, isot kiitokset minun parhaalle kaverilleni <a href="https://github.com/niklas-dahl" target="_blank">Niklas</a> - Ilman meidän factorio istuntoja tätä peliä ei olisi koskaan ollut olemassa.
 changelog:
-    title: Changelog
+    title: Muutosloki
 demo:
     features:
-        restoringGames: Genopretter gem
-        importingGames: Importerer gem
-        oneGameLimit: Afgrænset til et gem
-        customizeKeybindings: Tilpasser Keybindings
-        exportingBase: Eksportere hele basen som et billede
-    settingNotAvailable: Ikke tilgængelig i demoen.
+        restoringGames: Tallennusten palautus
+        importingGames: Tallennettujen pelien tuonti
+        oneGameLimit: Rajoitettu yhteen tallennukseen
+        customizeKeybindings: Pikanäppäinten mukautus
+        exportingBase: Viedään koko tukikohta kuvana
+    settingNotAvailable: Ei saatavilla demoversiossa.
 tips:
     - The hub accepts input of any kind, not just the current shape!
     - Make sure your factories are modular - it will pay out!

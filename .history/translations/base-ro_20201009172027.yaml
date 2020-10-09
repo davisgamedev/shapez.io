@@ -1,29 +1,29 @@
 steamPage:
-    shortText: Shapez.io handler om at bygge fabrikker på en grænseløs spilleflade
-        for automatisk at skabe og kombinere figurer, der i stigende grad bliver
-        mere komplicerede.
+    shortText: shapez.io este un joc despre construirea fabricilor pentru a
+        automatiza crearea și combinarea a din ce in ce mai complexe forme
+        într-o hartă infinită.
     discordLinkShort: Official Discord
     intro: >-
-        Shapez.io er et afslapet spil hvor du skal bygge fabrikker for at
-        automatisere productionen af geometriske figurer.
+        Shapez.io is a relaxed game in which you have to build factories for the
+        automated production of geometric shapes.
 
-        Jo længer du når, jo mere kompliseret bliver figurene, og du bliver nød til at spræde dig ud på den grænseløse spilleflade.
+        As the level increases, the shapes become more and more complex, and you have to spread out on the infinite map.
 
-        og hvis det ikke var nok, så skal du også producere eksponentielt flere figurer for at måde behovene spillet giver dig - det eneste der virker er skalering!
+        And as if that wasn't enough, you also have to produce exponentially more to satisfy the demands - the only thing that helps is scaling!
 
-        Mens du i starten kun laver former, skal du senere farve lægge dem - for at gøre dette skal du udvinde og blande farver!
+        While you only process shapes at the beginning, you have to color them later - for this you have to extract and mix colors!
 
-        At købe spllet på Steam, giver dig adgang til det fulde spil, men du kan også spille en demo version på shapez.io og vælge senere!
-    title_advantages: Steam version Fordele
+        Buying the game on Steam gives you access to the full version, but you can also play a demo on shapez.io first and decide later!
+    title_advantages: Standalone Advantages
     advantages:
-        - <b>12 Nye Niveauer</b> for i alt 26 niveauer
-        - <b>18 Nye Byginger</b> for en fuldt autmaticeret fabrik!
-        - <b>20 Upgraderings Niveauer</b> for mange timers sjov!
+        - <b>12 New Level</b> for a total of 26 levels
+        - <b>18 New Buildings</b> for a fully automated factory!
+        - <b>20 Upgrade Tiers</b> for many hours of fun!
         - <b>Wires Update</b> for an entirely new dimension!
         - <b>Dark Mode</b>!
         - Unlimited Savegames
-        - Uendelige Markører
-        - Hjælp med at støtte mig! ❤️
+        - Unlimited Markers
+        - Support me! ❤️
     title_future: Planned Content
     planned:
         - Blueprint Library (Standalone Exclusive)
@@ -48,151 +48,154 @@ steamPage:
 
         Be sure to check out my trello board for the full roadmap!
 global:
-    loading: Indlæser
-    error: Fejl
-    thousandsDivider: .
-    decimalSeparator: ","
+    loading: Se Încarcă
+    error: Eroare
+    thousandsDivider: ","
+    decimalSeparator: .
     suffix:
         thousands: k
-        millions: mio
-        billions: mia
-        trillions: bio
-    infinite: uendelig
+        millions: M
+        billions: B
+        trillions: T
+    infinite: inf
     time:
-        oneSecondAgo: et sekund siden
-        xSecondsAgo: <x> sekunder siden
-        oneMinuteAgo: et minut siden
-        xMinutesAgo: <x> minutter siden
-        oneHourAgo: en time siden
-        xHoursAgo: <x> timer siden
-        oneDayAgo: en dag siden
-        xDaysAgo: <x> dage siden
+        oneSecondAgo: acum o secundă
+        xSecondsAgo: acum <x> secunde
+        oneMinuteAgo: acum un minut
+        xMinutesAgo: acum <x> minute
+        oneHourAgo: acum o oră
+        xHoursAgo: acum <x> ore
+        oneDayAgo: acum o zi
+        xDaysAgo: acum <x> zile
         secondsShort: <seconds>s
         minutesAndSecondsShort: <minutes>m <seconds>s
-        hoursAndMinutesShort: <hours>t <minutes>m
-        xMinutes: <x> minutter
+        hoursAndMinutesShort: <hours>h <minutes>m
+        xMinutes: <x> minute
     keys:
         tab: TAB
         control: CTRL
         alt: ALT
         escape: ESC
-        shift: SKIFT/SHIFT
-        space: MELLEMRUM
+        shift: SHIFT
+        space: SPACE
 demoBanners:
-    title: Demo Version
-    intro: Køb spillet for at få den fulde oplevelse!
+    title: Versiunea Demo
+    intro: Ia versiunea Standalone pentru a debloca toate funcțiile!
 mainMenu:
-    play: Spil
-    continue: Fortsæt
-    newGame: Nyt Spil
+    play: Joacă
     changelog: Changelog
+    importSavegame: Import
+    openSourceHint: Acest joc este open source!
+    discordLink: Serverul oficial de Discord
+    helpTranslate: Ajută să traducem!
+    browserWarning: Scuze dar, jocul este știut să ruleze încet pe browser-ul tău!
+        Ia versiunea standalone sau descarcă chrome pentru experiența completă.
+    savegameLevel: Nivelul <x>
+    savegameLevelUnknown: Nivel necunoscut
+    continue: Continuă
+    newGame: Joc nou
+    madeBy: Făcut de <author-link>
     subreddit: Reddit
-    importSavegame: Importér
-    openSourceHint: Dette spil er open source!
-    discordLink: Officiel Discord Server
-    helpTranslate: Hjælp med at oversætte!
-    madeBy: Lavet af <author-link>
-    browserWarning: Undskyld, men spillet er kendt for at køre langsomt på denne
-        browser! Køb spillet eller download chrome for den fulde oplevelse.
-    savegameLevel: Niveau <x>
-    savegameLevelUnknown: Ukendt Niveau
     savegameUnnamed: Unnamed
 dialogs:
     buttons:
         ok: OK
-        delete: Slet
-        cancel: Fortryd
-        later: Senere
-        restart: Genstart
-        reset: Nulstil
-        getStandalone: Køb spillet
-        deleteGame: Jeg ved hvad jeg laver
-        viewUpdate: Se Opdatering
-        showUpgrades: Vis Opgraderinger
-        showKeybindings: Vis Keybindings
+        delete: Șterge
+        cancel: Anulează
+        later: Mai târziu
+        restart: Restartează
+        reset: Resetează
+        getStandalone: Ia Standalone-ul
+        deleteGame: Știu ce fac
+        viewUpdate: Vezi Update-ul
+        showUpgrades: Vezi Upgrade-urile
+        showKeybindings: Arată tastele configurate
     importSavegameError:
-        title: Import Fejl
-        text: "Importering af gemt spil fejlede:"
+        title: Eroare la Import
+        text: "Încercarea de import a eșuat:"
     importSavegameSuccess:
-        title: Gemt spil Importeret
-        text: Dit gemte spil blev importet.
+        title: Savegame importat
+        text: Savegame-ul tău a fost importat cu succes.
     gameLoadFailure:
-        title: Spillet er i stykker
-        text: "Det lykkedes ikke at åbne dit gemte spil:"
+        title: Jocul este stricat
+        text: "Încercarea de încărcat savegame-ul a eșuat:"
     confirmSavegameDelete:
-        title: Bekræft sletning
+        title: Confirmă ștergerea
         text: Are you sure you want to delete the following game?<br><br>
             '<savegameName>' at level <savegameLevel><br><br> This can not be
             undone!
     savegameDeletionError:
-        title: Sletning fejlede
-        text: "Det lykkedes ikke at slette dit gemte spil:"
+        title: Eroare la ștergere
+        text: "Nu a reușit să se ștearga savegame-ul:"
     restartRequired:
-        title: Genstart er nødvendig
-        text: Du er nødt til at genstarte spillet for at anvende indstillingerne.
+        title: Restartare necesară
+        text: Trebuie să restartezi jocul pentru a aplica setările.
     editKeybinding:
-        title: Ændr Keybinding
-        desc: Tryk på knappen du vil bruge, eller escape for at fortryde.
+        title: Schimbă Tastele configurate
+        desc: Apasă tasta sau butonul mouse-ului pe care vrei să îl atribui, sau escape
+            pentru a anula.
     resetKeybindingsConfirmation:
-        title: Nulstil keybindings
-        desc: Dette vil nulstille alle keybindings til deres standarder. Bekræft
-            venligst.
+        title: Resetează Tastele configurate
+        desc: Acesta va reseta toate tastele configurate la valorile obișnuite. Vă rog
+            să confirmați.
     keybindingsResetOk:
-        title: Keybindings nulstillet
-        desc: Keybindings er nulstillet til deres standarder!
+        title: Tastele configurate se resetează
+        desc: Tastele configurate au fost resetate la valorile lor obișnuite!
     featureRestriction:
-        title: Demoversion
-        desc: Du prøvede at bruge en funktion (<feature>) der ikke er tilgængelig i
-            demoen. Overvej at købe spillet for den fulde oplevelse!
+        title: Demo Version
+        desc: Ai încercat să accesezi o funcție (<feature>) care nu este disponibilă în
+            demo. Consideră să iei standalone-ul pentru experiența completă!
     oneSavegameLimit:
-        title: Begrænset mængde gemte spil
-        desc: Du kan kun have et gemt spil ad gangen in demoversionen. Vær sød at slette
-            det nuværende gemte spil eller at købe spillet!
+        title: Savegame-uri limitate
+        desc: Poți avea doar un savegame în același timp în versiunea demo. Te rugăm
+            șterge-o pe cea existentă sau ia standalone-ul!
     updateSummary:
-        title: Ny opdatering!
-        desc: "Dette har ændret sig siden sidst du spillede:"
+        title: Update nou!
+        desc: "Aici sunt schimbările de când ai jucat ultima oară:"
     upgradesIntroduction:
-        title: Få Opgraderinger
-        desc: Alle figurer du producerer kan blive brugt til at få opgraderinger -
-            <strong>Ødelæg ikke dine gamle fabrikker!</strong>
-            Opgraderingeringsvinduet kan findes i det øverste højre hjørne af
-            skærmen.
+        title: Deblochează Upgrade-uri
+        desc: Toate formele pe care le produci pot fi folosite să deblochezi upgrade-uri
+            - <strong>Nu îți distruge vechile fabrici!</strong> Fila
+            upgrade-urilor poate fi găsită în colțul din dreapta sus al
+            ecranului.
     massDeleteConfirm:
-        title: Bekræft sletning
-        desc: Du er ved at slette mange bygninger (<count> helt præcist)! Er du sikker
-            på at det er det du vil gøre?
-    massCutConfirm:
-        title: Bekræft klip
-        desc: Du er ved at klippe mange bygninger (<count> helt præcist)! Er du sikker
-            på at det er det du vil gøre?
+        title: Confirmă ștergerea
+        desc: Stergeți multe construcții (<count> pentru a fi exact)! Sunteți sigur că
+            vreți să faceți asta?
     blueprintsNotUnlocked:
-        title: Ikke tilgængeligt endnu
-        desc: Gennemfør Niveau 12 for at bruge arbejdstegninger!
+        title: Nu este deblocat încă
+        desc: Planurile nu au fost deblocate încă! Completează mai multe nivele să le
+            deblochezi.
     keybindingsIntroduction:
-        title: Brugbare keybindings
-        desc: "Dette spil har mange keybindings, som gør det lettere at bygge store
-            fabrikker. Her er et par, men husk at <strong>tjekke
-            keybindings</strong>!<br><br> <code class='keybinding'>CTRL</code> +
-            Træk: Vælg et område.<br> <code class='keybinding'>SHIFT</code>:
-            Hold for at placere flere af en bygning.<br> <code
-            class='keybinding'>ALT</code>: Vend retningen af placerede
-            transportbånd.<br>"
+        title: Taste configurate folositoare
+        desc: "Acest joc are multe taste configurate care fac construitul fabricilor
+            mari mai ușor. Aici sunt câteva dar, fii sigur să <strong>verifici
+            tastele configurate</strong>!<br><br> <code
+            class='keybinding'>CTRL</code> + Drag: Selectează o zonă pentreu a
+            copia  / delete.<br> <code class='keybinding'>SHIFT</code>: Ține
+            apăsat pentru a plasa mai multe dintr-o clădire.<br> <code
+            class='keybinding'>ALT</code>: Inversează orientația a benzilor
+            rulante.<br>"
     createMarker:
-        title: Ny Markør
+        title: Nou waypoint
         desc: Give it a meaningful name, you can also include a <strong>short
             key</strong> of a shape (Which you can generate <link>here</link>)
-        titleEdit: Rediger Markør
+        titleEdit: Edit Marker
     markerDemoLimit:
-        desc: Du kan kun lave to markører i demoen. Køb spillet for uendelige markører!
+        desc: Poți crea decât două waypoint-uri personalizate în demo. Ia standalone-ul
+            pentru Waypoint-uri nelimitate!
+    massCutConfirm:
+        title: Confirmă tăierea
+        desc: Tu tai multe construcții (<count> pentru a fi precis)! Sunteți sigur că
+            vreți să faceți asta?
     exportScreenshotWarning:
-        title: Eksporter skærmbillede
-        desc: Du bad om at eksportere din fabrik som et skærmbillede. Bemærk at dette
-            kan være rimelig langsomt for en stor base og kan endda lukke dit
-            spil!
+        title: Exportează captură de ecran
+        desc: Ai solicitat să exportezi baza ta ca o captură de ecran. Vă rugăm să
+            rețineți că asta poate fi destul de lent pentru o bază mare și poate
+            chiar să blocheze jocul!
     massCutInsufficientConfirm:
-        title: Bekræft klip
-        desc: Du har ikke råd til at sætte dette område ind igen! Er du sikker på at du
-            vil klippe det?
+        title: Confirm cut
+        desc: You can not afford to paste this area! Are you sure you want to cut it?
     editSignal:
         title: Set Signal
         descItems: "Choose a pre-defined item:"
@@ -211,112 +214,99 @@ dialogs:
             available in English. Would you like to watch it?
 ingame:
     keybindingsOverlay:
-        moveMap: Bevæg dig
-        selectBuildings: Marker område
-        stopPlacement: Stop placering
-        rotateBuilding: Roter bygning
-        placeMultiple: Placer flere
-        reverseOrientation: Omvend retning
-        disableAutoOrientation: Slå automatisk retning fra
-        toggleHud: Slå HUD til/fra
-        placeBuilding: Placer bygning
-        createMarker: Lav Markør
-        delete: Slet
-        pasteLastBlueprint: Sæt sidste arbejdstegning ind
-        lockBeltDirection: Aktiver bælteplanlægger
-        plannerSwitchSide: Vend planlægsningsside
-        cutSelection: Klip
-        copySelection: Kopier
-        clearSelection: Ryd Selektion
+        moveMap: Move
+        selectBuildings: Selectează zona
+        stopPlacement: Oprește plasarea
+        rotateBuilding: Rotește construcția
+        placeMultiple: Plasează mai multe
+        reverseOrientation: Întoarce orientarea
+        disableAutoOrientation: Dezactivați auto orientarea
+        toggleHud: Comută Interfața
+        placeBuilding: Plasează construcția
+        createMarker: Crează Waypoint
+        delete: Distruge
+        pasteLastBlueprint: Lipește ultimul plan
+        lockBeltDirection: Activează planificator de benzi
+        plannerSwitchSide: Întoarce partea planificatorului
+        cutSelection: Taie
+        copySelection: Copiază
+        clearSelection: Golește Secțiunea
         pipette: Pipette
-        switchLayers: Skift Lag
-    colors:
-        red: Rød
-        green: Grøn
-        blue: Blå
-        yellow: Gul
-        purple: Lilla
-        cyan: Cyan
-        white: Hvid
-        uncolored: Ingen farve
-        black: Sort
+        switchLayers: Switch layers
     buildingPlacement:
-        cycleBuildingVariants: Tryk <key> for at vælge type.
-        hotkeyLabel: "Hotkey: <key>"
+        cycleBuildingVariants: Apasă <key> pentru a cicla variantele.
+        hotkeyLabel: "Tasta: <key>"
         infoTexts:
-            speed: Fart
-            range: Rækkevidde
-            storage: Opbevaring
-            oneItemPerSecond: 1 genstand / sekund
-            itemsPerSecond: <x> genstande / s
+            speed: Viteză
+            range: Distanță
+            storage: Capacitate
+            oneItemPerSecond: 1 obiect / second
+            itemsPerSecond: <x> obiecte / s
             itemsPerSecondDouble: (x2)
-            tiles: <x> flader
+            tiles: <x> Câmpuri
     levelCompleteNotification:
-        levelTitle: Niveau <level>
-        completed: Klaret
-        unlockText: <reward> er nu tilgængelig!
-        buttonNextLevel: Næste Niveau
+        levelTitle: Nivelul <level>
+        completed: Completat
+        unlockText: Ai deblocat <reward>!
+        buttonNextLevel: Nivelul următor
     notifications:
-        newUpgrade: En ny opgradering er tilgængelig!
-        gameSaved: Dit spil er gemt.
+        newUpgrade: Un upgrade nou este disponibil!
+        gameSaved: Jocul tău a fost salvat.
         freeplayLevelComplete: Level <level> has been completed!
     shop:
-        title: Opgraderinger
-        buttonUnlock: Opgrader
-        tier: Trin <x>
-        maximumLevel: HØJESTE NIVEAU (Speed x<currentMult>)
+        title: Upgrade-uri
+        buttonUnlock: Upgrade
+        tier: Tier <x>
+        maximumLevel: NIVELUL MAXIM (Speed x<currentMult>)
     statistics:
-        title: Statistikker
+        title: Statistici
         dataSources:
             stored:
-                title: Opbevaret
-                description: Viser mængden af opbevarede figurer i din centrale bygning.
+                title: Stocate
+                description: Afișează numărul de forme stocate în construcția centrală .
             produced:
-                title: Produceret
-                description: Viser alle de figurer hele din fabrik producerer, inklusiv
-                    produkter brugt til videre produktion.
+                title: Produse
+                description: Afișează toate formele pe care fabrica ta le produce, incluzând
+                    produsele intermediate.
             delivered:
-                title: Afleveret
-                description: Viser figurer som er afleveret til din centrale bygning.
-        noShapesProduced: Ingen figurer er blevet produceret indtil videre.
+                title: Livrate
+                description: Afișează formele care sunt livrate la construcția centrală.
+        noShapesProduced: Nicio formă nu a fost produsă până acum.
         shapesDisplayUnits:
             second: <shapes> / s
             minute: <shapes> / m
             hour: <shapes> / h
     settingsMenu:
-        playtime: Spilletid
-        buildingsPlaced: Bygninger
-        beltsPlaced: Bælter
+        playtime: Timp jucat
+        buildingsPlaced: Construcții
+        beltsPlaced: Benzi
     tutorialHints:
-        title: Har du brug for hjælp?
-        showHint: Vis hint
-        hideHint: Luk
+        title: Ai nevoie de ajutor?
+        showHint: Arată o idee
+        hideHint: Închide
     blueprintPlacer:
-        cost: Pris
+        cost: Preț
     waypoints:
-        waypoints: Markører
-        hub: HUB
-        description: Venstreklik en markør for at hoppe til den, højreklik for at slette
-            den.<br><br>Tryk <keybinding> for at lave en markør på det nuværende
-            sted, eller <strong>højreklik</strong> for at lave en markør på det
-            valgte sted.
-        creationSuccessNotification: Markør er sat.
-    shapeViewer:
-        title: Lag
-        empty: Tom
-        copyKey: Kopier Kode
+        waypoints: Waypointuri
+        hub: Interfață
+        description: Click-stânga pe un waypoint pentru a merge la el, click-dreapta
+            pentru a îl șterge.<br><br>Apasă <keybinding> pentru a crea un
+            waypoint din perspectiva actuală, sau <strong>click-dreapta</strong>
+            pentru a crea un waypoint.
+        creationSuccessNotification: Waypointul a fost creat.
     interactiveTutorial:
         title: Tutorial
         hints:
-            1_1_extractor: Sæt en <strong>udvinder</strong> på toppen af
-                en<strong>cirkelfigur</strong> for at begynde produktion af den!
-            1_2_conveyor: "Forbind udvinderen til din hub med et
-                <strong>transportbælte</strong>!<br><br>Tip: <strong>Tryk og
-                træk</strong> bæltet med din mus!"
-            1_3_expand: "Dette er <strong>IKKE</strong> et idle game! Byg flere udvindere og
-                bælter for at færdiggøre målet hurtigere.<br><br>Tip: Hold
-                <strong>SKIFT</strong> for at sætte flere udvindere, og tryk
-                <strong>R</strong> for at rotere dem."
+            1_1_extractor: Plasează un <strong>extractor</strong> pe o <strong>formă de
+                cerc</strong> pentru a o extrage!
+            1_2_conveyor: "Conectează extractorul cu o<strong>bandă rulantă</strong> până la
+                centru!<br><br>Sfat: <strong>Click și trage</strong> banda cu
+                mouse-ul tău!"
+            1_3_expand: "Acesta <strong>NU</strong> este un joc idle! Construiește mai multe
+                extractoare și benzi pentru a finaliza scopul mai
+                rapid.<br><br>Sfat: Ține apăsat <strong>SHIFT</strong> pentru a
+                plasa mai multe extractoare, și flosește <strong>R</strong>
+                pentru a le roti."
             2_1_place_cutter: "Now place a <strong>Cutter</strong> to cut the circles in two
                 halves!<br><br> PS: The cutter always cuts from <strong>top to
                 bottom</strong> regardless of its orientation."
@@ -341,6 +331,20 @@ ingame:
             21_4_press_button: "Press the switch to make it <strong>emit a truthy
                 signal</strong> and thus activate the painter.<br><br> PS: You
                 don't have to connect all inputs! Try wiring only two."
+    colors:
+        red: Roșu
+        green: Verde
+        blue: Albastru
+        yellow: Galben
+        purple: Mov
+        cyan: Cyan
+        white: Alb
+        uncolored: Necolorat
+        black: Black
+    shapeViewer:
+        title: Start
+        empty: Gol
+        copyKey: Copy Key
     connectedMiners:
         one_miner: 1 Miner
         n_miners: <amount> Miners
@@ -379,94 +383,100 @@ ingame:
                 desc: I develop it in my spare time!
 shopUpgrades:
     belt:
-        name: Bælter, Fordelere & Tuneller
-        description: Fart x<currentMult> → x<newMult>
+        name: Benzi, Distribuitor & Tunele
+        description: Viteza x<currentMult> → x<newMult>
     miner:
-        name: Udvinding
-        description: Fart x<currentMult> → x<newMult>
+        name: Extractoare
+        description: Viteza x<currentMult> → x<newMult>
     processors:
-        name: Klipning, Rotering & Stabling
-        description: Fart x<currentMult> → x<newMult>
+        name: Tăiere, Rotație & Presare
+        description: Viteza x<currentMult> → x<newMult>
     painting:
-        name: Blanding & Maling
-        description: Fart x<currentMult> → x<newMult>
+        name: Amestecare & Pictare
+        description: Viteza x<currentMult> → x<newMult>
 buildings:
-    hub:
-        deliver: Aflever
-        toUnlock: for at få adgang til
-        levelShortcut: NIV
-        endOfDemo: End of Demo
     belt:
         default:
-            name: Transportbælte
-            description: Transporterer figurer, hold og træk for at sætte flere.
+            name: Benzi Rulante
+            description: Transportă obiecte, ține apăsat și trage pentru a plasa mai multe.
     miner:
         default:
-            name: Udvinder
-            description: Placer over en figur eller farve for at udvinde den.
+            name: Extractor
+            description: Plasează peste o formă sau culoare pentru a o extrage.
         chainable:
-            name: Udvinder (Kæde)
-            description: Placer over en figur eller farve for at udvinde den. Kan kædes.
+            name: Extractor (lanț)
+            description: Plasează peste o formă sau culoare pentru a o extrage. Poate fi
+                înlănțuit.
     underground_belt:
         default:
-            name: Tunnel
-            description: Laver tunneller under bygninger og bælter.
+            name: Tunel
+            description: Permite transportarea resurselor pe sub construcții și benzi.
         tier2:
-            name: Tunnel Trin II
-            description: Laver tunneller under bygninger og bælter.
+            name: Tunnel Tier II
+            description: Permite transportarea resurselor pe sub construcții și benzi.
     cutter:
         default:
-            name: Klipper
-            description: Klipper figurer fra top til bund og udsender begge halvdele.
-                <strong>Hvis du kun bruger den ene halvdel så husk at ødelægge
-                den anden del, ellers går maskinen i stå!</strong>
+            name: Tăietor
+            description: Taie forme de sus în jos și scoate ambele jumătăți. <strong>Dacă
+                folosești doar o parte, ține minte să o distrugi pe cealaltă sau
+                producția se va opri!</strong>
         quad:
-            name: Klipper (firdeler)
-            description: Klipper figurer om til fire dele. <strong>Hvis du kun bruger nogle
-                af dem så husk at ødelægge de andre dele, ellers går maskinen i
-                stå!</strong>
+            name: Tăietor (Quad)
+            description: Taie formele în patru părți. <strong>Dacă folosești doar o parte,
+                ține minte să o distrugi pe cealaltă sau producția se va
+                opri!</strong>
     rotater:
         default:
-            name: Drejer
-            description: Drejer figurer 90 grader med uret.
+            name: Rotate
+            description: Rotește formele în sensul acelor de ceasornic la 90 de grade.
         ccw:
-            name: Drejer (mod uret)
-            description: Drejer figurer 90 grader mod uret.
+            name: Rotate (CCW)
+            description: Rotește formele în inversul sensului acelor de ceasornic la 90 de
+                grade.
         rotate180:
             name: Rotate (180)
             description: Rotates shapes by 180 degrees.
     stacker:
         default:
-            name: Stabler
-            description: Stabler begge figurer. Hvis de ikke kan sammensmeltes, så sættes
-                den højre figur oven på den venstre.
+            name: Mașină de presat
+            description: Unește ambele obiecte. Dacă ele nu poti fi unite, obiectul drept va
+                fi pus peste obiectul stâng.
     mixer:
         default:
-            name: Farveblander
-            description: Blander to farver med additiv blanding.
+            name: Mixer de culori
+            description: Amestecă două culori folosind amestecuri aditive.
     painter:
         default:
-            name: Maler
-            description: Farver hele figuren fra venstre side med farven fra toppen.
-        mirrored:
-            name: Maler
-            description: Farver hele figuren fra venstre side med farven fra toppen.
+            name: Mașină de pictat
+            description: Colorează întreaga formă din input-ul stâng folosind culoarea din
+                input-ul drept.
         double:
-            name: Maler (Dobbelt)
-            description: Farver figurerne fra venstre side med farven fra toppen.
+            name: Mașină de pictat (Dublu)
+            description: Colorează formele din input-urile din stânga folosind culoarea din
+                input-ul de sus.
         quad:
-            name: Maler (Quad)
+            name: Mașină de pictat (Quad)
             description: Allows you to color each quadrant of the shape individually. Only
                 slots with a <strong>truthy signal</strong> on the wires layer
                 will be painted!
+        mirrored:
+            name: Mașină de pictat
+            description: Colorează întreaga formă din input-ul stâng folosind culoarea din
+                input-ul drept.
     trash:
         default:
-            name: Skraldespand
-            description: Tillader input fra alle sider og ødelægger dem. For evigt.
+            name: Gunoi
+            description: Acceptă input-uri din toate părțile și le distruge. Pentru
+                totdeauna.
+    hub:
+        deliver: Deliver
+        toUnlock: pentru a debloca
+        levelShortcut: LVL
+        endOfDemo: End of Demo
     wire:
         default:
-            name: Energiledning
-            description: Lader dig transportere energi.
+            name: Energy Wire
+            description: Allows you to transport energy.
         second:
             name: Wire
             description: Transfers signals, which can be items, colors or booleans (1 / 0).
@@ -583,7 +593,7 @@ buildings:
                 wires layer on the regular layer.
 storyRewards:
     reward_cutter_and_trash:
-        title: Klippe Figurer
+        title: Tăierea formelor
         desc: You just unlocked the <strong>cutter</strong>, which cuts shapes in half
             from top to bottom <strong>regardless of its
             orientation</strong>!<br><br>Be sure to get rid of the waste, or
@@ -591,68 +601,67 @@ storyRewards:
             I have given you the <strong>trash</strong>, which destroys
             everything you put into it!
     reward_rotater:
-        title: Rotation
-        desc: <strong>Drejeren</strong> er nu tilgængelig! Den drejer figurer 90 grader
-            med uret.
+        title: Rotitul
+        desc: <strong>rotater-ul</strong> a fost deblocat! El rotește formele la 90 de
+            grade.
     reward_painter:
-        title: Maling
-        desc: "<strong>Maleren</strong> er nu tilgængelig - Få noget farve med
-            udvinderen (som du også gør med figurer) og kombiner det med en
-            farve i maleren for at farve dem!<br><br>PS: Hvis du er farveblind,
-            så er der en <strong>farveblindstilstand</strong> i
-            indstillingerne!"
+        title: Pictatul
+        desc: "The <strong>Mașina de pictat</strong> a fost deblocată - Extrage niște
+            culori (la fel cum faci și cu formele) și combină-le cu o formă în
+            mașina de pictat pentru a le colora!<br><br>PS: Dacă ești orb, acolo
+            este un <strong>mod pentru orbi</strong> în setări!"
     reward_mixer:
-        title: Farveblanding
-        desc: The <strong>mixer</strong> has been unlocked - It mixes two colors using
-            <strong>additive blending</strong>!
+        title: Amestecatul culorilor
+        desc: <strong>Mixerul</strong> a fost deblocat - Combină două culori folosind
+            <strong>amestecul de aditivi</strong> cu această clădire!
     reward_stacker:
-        title: Stabler
-        desc: Du kan du stable figurer med <strong>stableren</strong>! Begge inputs
-            stables. Hvis de kan sættes ved siden af hinanden,
-            <strong>sammensmeltes de</strong>. Hvis ikke, bliver det højre input
-            <strong>stablet ovenpå</strong> det venstre!
+        title: Mașina de presat
+        desc: Acum poți combina forme cu <strong>mașina de presat</strong>! Ambele
+            input-uri vor fi combinate, iar dacă ele pot fi puse alături, ele
+            vor fi <strong>sudate</strong>. Dacă nu, input-ul drept este
+            <strong>pus peste</strong> input-ul stâng!
     reward_splitter:
-        title: Fordeler/Sammenlægger
+        title: Distribuitor/Combinator
         desc: You have unlocked a <strong>splitter</strong> variant of the
             <strong>balancer</strong> - It accepts one input and splits them
             into two!
     reward_tunnel:
-        title: Tunnel
-        desc: <strong>Tunnellen</strong> er nu tilgængelig - Du kan nu lave tuneller
-            under bælter og bygninger!
+        title: Tunel
+        desc: <strong>Tunelul</strong> a fost deblocat - Acum poți deplasa obiecte prin
+            benzi și construcții cu el!
     reward_rotater_ccw:
-        title: Rotation mod uret
-        desc: Du har fået adgang til en variant af <strong>drejeren</strong> - Den lader
-            dig dreje ting mod uret! For at bygge den skal du vælge drejeren og
-            <strong>trykke 'T'</strong>!
+        title: Rotarea CCW
+        desc: Ai deblocat o variantă a <strong>rotater-ului</strong> - El permite
+            rotația în sensul invers al acelor de ceasornic! Pentru a îț
+            construi, selectează rotater-ul și <strong>apasă 'T' pentru a cicla
+            printre variante</strong>!
     reward_miner_chainable:
-        title: Kædeudvinder
+        title: Chaining Extractor
         desc: "You have unlocked the <strong>chained extractor</strong>! It can
             <strong>forward its resources</strong> to other extractors so you
             can more efficiently extract resources!<br><br> PS: The old
             extractor has been replaced in your toolbar now!"
     reward_underground_belt_tier_2:
-        title: Tunnel Trin II
-        desc: Du har fået adgang til en variant af <strong>tunnellen</strong> - Den har
-            en <strong>større rækkevidde</strong>, og du kan også bruge begge
-            typer tunneller på den samme strækning!
+        title: Tunnel Tier II
+        desc: Ai deblocat o variantă nouă a <strong>tunelului</strong> - El are
+            <strong>distanță mai mare</strong>, iar tu poți de asemenea să
+            alternezi acele tunele acum!
     reward_cutter_quad:
-        title: Quad Klipining
-        desc: Du har fået adgang til en variant af <strong>klipperen</strong> - Den
-            lader dig klippe figurer i <strong>fire dele</strong> i stedet for
-            kun to!
+        title: Tăiatul quadriplu
+        desc: Ai deblocat o variantă a <strong>tăietorului</strong> - El îți permite să
+            tai forme în <strong>patru părți</strong> în loc de doar două!
     reward_painter_double:
-        title: Dobbelt Maling
-        desc: Du har fået adgang til en variant af <strong>maleren</strong> - Den virker
-            som en normal maler, men maler <strong>to figurer samtidig</strong>
-            og bruger kun en farve i stedet for to.
+        title: Pictatul dublu
+        desc: Ai deblocat o variantă a <strong>Mașini de pictat</strong> - Funcționează
+            la fel ca o mașină de pictat normală dar, procesează <strong>două
+            forme odată</strong> consumând doar o culoare în loc de două!
     reward_storage:
-        title: Opbevaringsbuffer
+        title: Depozitul
         desc: You have unlocked the <strong>storage</strong> building - It allows you to
             store items up to a given capacity!<br><br> It priorities the left
             output, so you can also use it as an <strong>overflow gate</strong>!
     reward_freeplay:
-        title: Frit spil
+        title: Jocul liber
         desc: You did it! You unlocked the <strong>free-play mode</strong>! This means
             that shapes are now <strong>randomly</strong> generated!<br><br>
             Since the hub will require a <strong>throughput</strong> from now
@@ -661,21 +670,23 @@ storyRewards:
             shape on the wires layer, so all you have to do is to analyze it and
             automatically configure your factory based on that.
     reward_blueprints:
-        title: Arbejdstegninger
-        desc: Du kan nu <strong>kopiere og indsætte</strong> dele af din fabrik! Vælg et
-            område (Hold CTRL, og træk med musen), og tryk 'C' for at kopiere
-            det.<br><br>At sætte det ind er <strong>ikke gratis</strong>. Du
-            skal producere <strong>arbejdstegning figurer</strong> for at have
-            råd til det! (Dem du lige har leveret).
+        title: Planuri
+        desc: Acum poți <strong>copia și lipi</strong> părți ale fabrici tale!
+            Selectează o zonă (Ține apăsat CTRL, apoi trage cu mouse-ul tău), și
+            apasă 'C' pentru a o copia.<br><br>Lipitul nu este
+            <strong>gratis</strong>, ai nevoie să produci <strong>forme de
+            planuri</strong> pentru a ți le permite! (Acelea pe care tocmai
+            le-ai livrat).
     no_reward:
-        title: Næste niveau
-        desc: "Dette niveau gav dig ingen belønninger, men det vil det næste! <br><br>
-            PS: Du må hellere lade være med at ødelægge din fabrik - Du får brug
-            for <strong>alle</strong> de figurer senere igen for at <strong>få
-            opgraderinger</strong>!"
+        title: Nivelul următor
+        desc: "Acest nivel nu ți-a dat nimic dar, următor îți va da! <br><br> PS: Mai
+            bine nu îți distruge fabricile construite - Ai nevoie de
+            <strong>toate</strong> acele forme mai târziu din nou pentru a
+            <strong>debloca upgrade-uri</strong>!"
     no_reward_freeplay:
-        title: Næste niveau
-        desc: Tillykke! Forresten er mere indhold planlagt for den betalte version!
+        title: Nivelul următor
+        desc: Felicitări! Apropo, mai mult conținut este planificat pentru versiunea
+            standalone!
     reward_balancer:
         title: Balancer
         desc: The multifunctional <strong>balancer</strong> has been unlocked - It can
@@ -743,122 +754,123 @@ storyRewards:
         title: End of Demo
         desc: You have reached the end of the demo version!
 settings:
-    title: Indstillinger
+    title: Setări
     categories:
-        general: Generelt
-        userInterface: Brugerflade
-        advanced: Avanceret
+        general: General
+        userInterface: User Interface
+        advanced: Advanced
         performance: Performance
     versionBadges:
-        dev: Udvikling
-        staging: Iscenesættelse
-        prod: Produktion
-    buildDate: Bygget <at-date>
+        dev: Dezvoltare
+        staging: Beta
+        prod: Producere
+    buildDate: Construit <at-date>
     labels:
         uiScale:
-            title: Grænseflade størrelse
-            description: Ændrer størrelsen på brugerfladen. Den vil stadig skalere baseret
-                på opløsningen af din skærm, men denne indstilling bestemmer
-                hvor meget den skalerer.
+            title: Scala de interfață
+            description: Schimbă dimensiunea interfeței utilizatorului. Această interfață
+                tot se va scala bazată pe rezoluția dispozitivului dumneavoastră
+                dar, această setare controlează cantitatea scalări.
             scales:
-                super_small: Meget lille
-                small: Lille
+                super_small: Foarte mică
+                small: Mică
                 regular: Normal
-                large: Store
-                huge: Kæmpe
-        autosaveInterval:
-            title: Autogem Interval
-            description: Ændrer hvor ofte spillet gemmer automatisk. Du kan også slå det
-                helt fra her.
-            intervals:
-                one_minute: 1 Minut
-                two_minutes: 2 Minutter
-                five_minutes: 5 Minutter
-                ten_minutes: 10 Minutter
-                twenty_minutes: 20 Minutter
-                disabled: Slået fra
+                large: Mare
+                huge: Imens
         scrollWheelSensitivity:
-            title: Zoom følsomhed
-            description: Ændrer hvor følsomt zoomet er (Enten musehjulet eller trackpad).
+            title: Sensitivitatea Zoom-ului
+            description: Schimbă cât de sensitiv zoom-ul este (Fie roata mouse-ului ori
+                trackpadlui).
             sensitivity:
-                super_slow: Meget langsom
-                slow: Langsom
-                regular: Normal
-                fast: Hurtig
-                super_fast: Meget hurtig
-        movementSpeed:
-            title: Bevægelseshastighed
-            description: Ændrer hvor hurtigt du kan bevæge dit overblik når du bruger
-                tastaturet.
-            speeds:
-                super_slow: Meget langsom
-                slow: Langsom
-                regular: Normal
-                fast: Hurtig
-                super_fast: Meget hurtig
-                extremely_fast: Ekstremt hurtig
+                super_slow: Foarte încet
+                slow: Încet
+                regular: Regulat
+                fast: Rapid
+                super_fast: Foarte rapid
         language:
-            title: Sprog
-            description: Ændrer sproget. All oversættelser er lavet af fælleskabet og kan
-                være ufuldstændige!
-        enableColorBlindHelper:
-            title: Farveblindstilstand
-            description: Aktiverer forskellige redskaber der lader dig spille, selv hvis du
-                er farveblind.
+            title: Limba
+            description: Schimbă limba. Toate traducerile sunt contribuite de utilizatori și
+                pot fi incomplete!
         fullscreen:
-            title: Fuld skærm
-            description: Det er foreslået at spille i fuld skærm for den bedste oplevelse.
-                Kun tilgængelig i den betalte version.
+            title: Fullscreen
+            description: Este recomandat ca jocul să fie jucat în fullscreen pentru a aveam
+                cea mai bună experiență. Doar disponibil în versiunea
+                standalone.
         soundsMuted:
-            title: Slå lydeffekterne fra
-            description: Aktiver for at slå alle lydeffekter fra.
+            title: Oprește sunetele
+            description: Dacă este activat, oprește toate efectele sonore.
         musicMuted:
-            title: Slå musik fra
-            description: Aktiver for at slå al musik fra.
+            title: Oprește muzica
+            description: Dacă este activat, oprește toată muzica.
         theme:
-            title: Tema
-            description: Vælg tema (lys / mørk).
+            title: Tema jocului
+            description: Alege tema jocului (luminoasă / întunecată).
             themes:
-                dark: Mørk
-                light: Lys
+                dark: Întunecată
+                light: Luminoasă
         refreshRate:
-            title: Simulationsmål
-            description: Hvis du har en 144hz skærm, så ændr opdateringshastigheden her så
-                spillet vil simulere den højere opdateringshastighed korrekt.
-                Dette kan faktisk sænke din FPS hvis din computer er for
-                langsom.
+            title: Simulation Target
+            description: Dacă ai un monitor cu 144hz, schimbă refresh rate-ul aici și jocul
+                va simula la refresh rate-uri mai mari. Acesta poate de fapt
+                scădea FPS-urile dacă calculatorul dumneavoastră este prea lent.
         alwaysMultiplace:
-            title: Multiplacér
-            description: Aktiver for at alle bygninger fortsætter med at være valgt efter
-                placering, indtil du vælger dem fra. Dette svarer til altid at
-                holde SKIFT nede.
+            title: Plasare multiplă
+            description: Dacă este activat, toate construcțiile vor sta selectate până le
+                anulezi. Asta este echivalent cu ținutul SHIFT-ului apăsat
+                permanent.
         offerHints:
-            title: Hints & Vejledning
-            description: Om spillet skal tilbyde hints og vejledning imens du spiller.
-                Skjuler også visse dele af brugerfladen indtil et givent niveau
-                for at gøre det nemmere at lære spillet at kende.
+            title: Indicii & Tutoriale
+            description: Dacă este activat, oferă indicii și tutoriale în timpul jocului. De
+                asemenea ascunde anumite elemente ale interfeței utilizatorului
+                certain UI pâna la anumite nivele pentru a ușura înțelegerea
+                jocului.
+        movementSpeed:
+            title: Viteza de deplasare
+            description: Modifică viteza cât de rapid se mișcă vederea folosind tastatura.
+            speeds:
+                super_slow: Foarte încet
+                slow: Încet
+                regular: Normal
+                fast: Rapid
+                super_fast: Foarte Rapid
+                extremely_fast: Extrem de Rapid
         enableTunnelSmartplace:
-            title: Smarte Tunneller
-            description: Aktiver for at placering af tunneller automatisk fjerner unødige
-                bælter. Dette gør igså at du kan trække tunneller så
-                overskydende tunneller fjernes.
+            title: Tunele Inteligente
+            description: Când este activat, plasarea tunelelor va elimina automat benzile
+                nefolositoare. Aceasta permite de asemenea tragerea tunelelor și
+                tunelele în exces vor fi șterse.
         vignette:
             title: Vignette
-            description: Aktiverer vignette hvilket mørkner kanterne af skærmen og gør
-                teksten nemmere at læse.
-        rotationByBuilding:
-            title: Rotation baseret på bygningstype
-            description: Hver bygningstype husker den rotation du sidst satte den til. Dette
-                kan være komfortabelt hvis du ofte skifter mellem at placere
-                forskellige bygninger.
+            description: Dacă este activat, înnegrește colțurile ecranului și face textul
+                mai ușor de citit.
+        autosaveInterval:
+            title: Intervalul de salvare automată
+            description: Controlează cât de des jocul se salvează automat. Poți de asemenea
+                să o dezactivezi total aici.
+            intervals:
+                one_minute: 1 Minut
+                two_minutes: 2 Minute
+                five_minutes: 5 Minute
+                ten_minutes: 10 Minute
+                twenty_minutes: 20 Minute
+                disabled: Dezactivat
         compactBuildingInfo:
-            title: Kompakt Bygningsinfo
-            description: Forkorter infobokse til bygninger ved kun at vise deres forhold.
-                Ellers er en beskrivelse og et billede også vist.
+            title: Informații ale construcțiilor compacte
+            description: Shortens info boxes for buildings by only showing their ratios.
+                Otherwise adescription and image is shown.
         disableCutDeleteWarnings:
-            title: Slå klip/slet advarsler fra
-            description: Slå advarselsboksene, der dukker op når mere end 100 ting slettes,
-                fra.
+            title: Dezactivre Avertizări Tăiere/Ștergere
+            description: Dezactivează avertizările dialogului adus când sunt șterse mai mult
+                de 100 de entități.
+        enableColorBlindHelper:
+            title: Modul pentru orbi de culoare
+            description: Activează diferite unelte care îți permit să joci jocul chiar dacă
+                ești orb de culoare.
+        rotationByBuilding:
+            title: Rotație după tipul clădirii
+            description: Fiecare tip de clădire ține minte ultima rotație pe care i-ai
+                setat-o individual. Aceasta poate fi mai confortabil dacă
+                schimbi frecvent între tipurile clădirilor.
         soundVolume:
             title: Sound Volume
             description: Set the volume for sound effects
@@ -911,63 +923,63 @@ settings:
                 out).
     rangeSliderPercentage: <amount> %
 keybindings:
-    title: Keybindings
-    hint: "Tip: Husk at bruge CTRL, SKIFT og ALT! De byder på forskellige
-        placeringsmuligheder."
-    resetKeybindings: Nulstil Keybindings
+    title: Tastele setate
+    hint: "Indiciu: Asigură-te că foloseșto CTRL, SHIFT și ALT! Ele activează
+        diferite opțiuni de plasare."
+    resetKeybindings: Reset Keyinbindings
     categoryLabels:
-        general: Applikation
-        ingame: Spil
-        navigation: Navigation
-        placement: Placering
-        massSelect: Massemarkering
-        buildings: Bygningsgenveje
-        placementModifiers: Placeringsmodifikationer
+        general: Aplicație
+        ingame: Joc
+        navigation: Navigație
+        placement: Plasare
+        massSelect: Selectare în masă
+        buildings: Comenzi rapide pentru clădiri
+        placementModifiers: Modificatori de plasare
     mappings:
-        confirm: Bekræft
-        back: Tilbage
-        mapMoveUp: Bevæg dig op
-        mapMoveRight: Bevæg dig til højre
-        mapMoveDown: Bevæg dig ned
-        mapMoveLeft: Bevæg dig til venstre
-        mapMoveFaster: Bevæg dig hurtigere
-        centerMap: Centrer kortet
-        mapZoomIn: Zoom ind
-        mapZoomOut: Zoom ud
-        createMarker: Lav Markør
-        menuOpenShop: Opgraderinger
-        menuOpenStats: Statistikker
-        toggleHud: Slå HUD til/fra
-        toggleFPSInfo: Slå FPS og Debug Info til/fra
-        switchLayers: Skift lag
-        exportScreenshot: Eksporter hele basen som et billede
-        belt: Transportbælte
-        underground_belt: Tunnel
-        miner: Udvinder
-        cutter: Klipper
-        rotater: Drejer
-        stacker: Stabler
-        mixer: Farveblander
-        painter: Maler
-        trash: Skraldespand
+        confirm: Confirm
+        back: Înapoi
+        mapMoveUp: Mută în sus
+        mapMoveRight: Mută în dreapta
+        mapMoveDown: Mută în joc
+        mapMoveLeft: Mută în stânga
+        centerMap: Centrează harta
+        mapZoomIn: Mărește imaginea
+        mapZoomOut: Micșorează imaginea
+        createMarker: Creează waypoint
+        menuOpenShop: Upgrade-uri
+        menuOpenStats: Statistici
+        toggleHud: Comută interfața
+        toggleFPSInfo: Comută FPS and Debug Info
+        belt: Benzi Rulante
+        underground_belt: Tunel
+        miner: Extractor
+        cutter: Tăietor
+        rotater: Rotate
+        stacker: Mașină de presat
+        mixer: Mixer de culori
+        painter: Mașină de pictat
+        trash: Gunoi
+        rotateWhilePlacing: Rotește
+        rotateInverseModifier: "Modifier: Rotește CCW în schimb"
+        cycleBuildingVariants: Ciclează Variante
+        confirmMassDelete: Confirmă ștergere în masă
+        cycleBuildings: Ciclează clădiri
+        massSelectStart: Ține apăsat și trage pentru a începe
+        massSelectSelectMultiple: Selectează zone multiple
+        massSelectCopy: Copiază zona
+        placementDisableAutoOrientation: Dezactivați orientarea automată
+        placeMultiple: Rămâneți în modul de plasare
+        placeInverse: Inversați orientarea automată a benzii
+        pasteLastBlueprint: Lipește ultimul plan
+        massSelectCut: Taie zona
+        exportScreenshot: Exportați întreaga bază ca imagine
+        mapMoveFaster: Deplasează-te mai repede
+        lockBeltDirection: Activează planificator de benzi
+        switchDirectionLockSide: "Planificator: Schimbă direcția"
         pipette: Pipette
-        rotateWhilePlacing: Roter
-        rotateInverseModifier: "Modifier: Roter mod uret i stedet"
-        cycleBuildingVariants: Gennemgå Varianter
-        confirmMassDelete: Slet område
-        pasteLastBlueprint: Sæt sidste arbejdstegning ind
-        cycleBuildings: Gennemgå bygninger
-        lockBeltDirection: Slå bælteplanlægger til
-        switchDirectionLockSide: "Planner: Skift side"
-        massSelectStart: Hold og træk for at starte
-        massSelectSelectMultiple: Vælg flere områder
-        massSelectCopy: Kopier område
-        massSelectCut: Klip område
-        placementDisableAutoOrientation: Slå automatisk rotation fra
-        placeMultiple: Bliv i placeringstilstand
-        placeInverse: Spejlvend automatisk bælteorientering
-        menuClose: Luk Menu
-        wire: Energiledning
+        menuClose: Close Menu
+        switchLayers: Switch layers
+        wire: Energy Wire
         balancer: Balancer
         storage: Storage
         constant_signal: Constant Signal
@@ -984,31 +996,29 @@ keybindings:
         item_producer: Item Producer (Sandbox)
         copyWireValue: "Wires: Copy value below cursor"
 about:
-    title: Om dette spil
+    title: Despre acest joc
     body: >-
-        Dette spil er open source og er udviklet af <a
+        Acest joc este open source și dezvoltat de <a
         href="https://github.com/tobspr" target="_blank">Tobias Springer</a>
-        (det er mig).<br><br>
+        (acesta sunt eu).<br><br>
 
-        Hvis du vil kontribuere, tjek <a href="<githublink>" target="_blank">shapez.io på github</a>.<br><br>
+        Dacă vrei să contribui, verifică <a href="<githublink>" target="_blank">shapez.io pe github</a>.<br><br>
 
-        Dette spil ville ikke have været muligt uden det fremragende
-        Discord-fælleskab omkring mine spil - Du burde virkelig deltage på <a
-        href="<discordlink>" target="_blank">Discordserveren</a>!<br><br>
+        Acest joc nu ar fi fost posibil fără minunata comunitate de pe Discord pe lângă jocurile mele - Chiar ar trebui să te alături <a href="<discordlink>" target="_blank">server-ului de Discord</a>!<br><br>
 
-        Lydsporet er lavet af <a href="https://soundcloud.com/pettersumelius" target="_blank">Peppsen</a> - Han er fantastisk.<br><br>
+        Coloana sonoră a fost făcută de <a href="https://soundcloud.com/pettersumelius" target="_blank">Peppsen</a> - Este uimitor.<br><br>
 
-        Endelig, tusind tak til min bedste ven <a href="https://github.com/niklas-dahl" target="_blank">Niklas</a> - Uden vi havde spillet factorio sammen ville dette spil aldrig have eksisteret.
+        În final, mii de mulțumiri prietenului meu <a href="https://github.com/niklas-dahl" target="_blank">Niklas</a> - Fără sesiunile noastre de factorio acest joc nu ar fi existat niciodată.
 changelog:
-    title: Changelog
+    title: Lista de schimbări
 demo:
     features:
-        restoringGames: Genopretter gem
-        importingGames: Importerer gem
-        oneGameLimit: Afgrænset til et gem
-        customizeKeybindings: Tilpasser Keybindings
-        exportingBase: Eksportere hele basen som et billede
-    settingNotAvailable: Ikke tilgængelig i demoen.
+        restoringGames: Restabilirea savegame-urilor
+        importingGames: Importarea savegame-urilor
+        oneGameLimit: Limitat la un savegame
+        customizeKeybindings: Taste customizabile
+        exportingBase: Exportul întregii baze ca imagine
+    settingNotAvailable: Nu este valabil în demo.
 tips:
     - The hub accepts input of any kind, not just the current shape!
     - Make sure your factories are modular - it will pay out!

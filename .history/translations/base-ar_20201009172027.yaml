@@ -1,29 +1,26 @@
 steamPage:
-    shortText: Shapez.io handler om at bygge fabrikker på en grænseløs spilleflade
-        for automatisk at skabe og kombinere figurer, der i stigende grad bliver
-        mere komplicerede.
+    shortText: لعبة شيبز (أشكال) هي لعبة تدور حول بناء مصانع وتوصيلها حتى تقوم بشكل
+        .آلي بصناعة أشكال مختلفة تزداد تعقيدا في خريطة لانهائية.
     discordLinkShort: Official Discord
     intro: >-
-        Shapez.io er et afslapet spil hvor du skal bygge fabrikker for at
-        automatisere productionen af geometriske figurer.
+        لعبة شيبز (أشكال) هي لعبة مريحة تقوم فيها ببناء مصانع ووتشغيلها آليا
+        لصناعة أشكال هندسية.
 
-        Jo længer du når, jo mere kompliseret bliver figurene, og du bliver nød til at spræde dig ud på den grænseløse spilleflade.
+        مع التقدم في المستوى، تزداد الأشكال تعقيداً، فيتوجب عليك التوسع في الخريطة اللانهائية، وذلك ليس كافياً للتقدم في مستوى اللعبة حيث عليك صناعة المزيد بأضعاف مضاعفة لتلبية الطلب، الشيء الوحيد الذي يمكنه مساعدتك هو التوسع.
 
-        og hvis det ikke var nok, så skal du også producere eksponentielt flere figurer for at måde behovene spillet giver dig - det eneste der virker er skalering!
+        بينما في البداية تقوم بصناعة أشكال مختلفة، تتطلب منك المراحل المتقدمة تلوين هذه الأشكال، حيث يتوجب عليك استخراج وخلط الألوان.
 
-        Mens du i starten kun laver former, skal du senere farve lægge dem - for at gøre dette skal du udvinde og blande farver!
-
-        At købe spllet på Steam, giver dig adgang til det fulde spil, men du kan også spille en demo version på shapez.io og vælge senere!
-    title_advantages: Steam version Fordele
+        عند شراءك اللعبة على ستيم (Steam) تحصل على الإصدار الكامل للعبة، ولكن يمكن أيضاً لعبة نسخة تجريبية على موقع shapez.io  ثم يمكنك القرار لاحقا
+    title_advantages: ميزات نسخة الحاسوب
     advantages:
-        - <b>12 Nye Niveauer</b> for i alt 26 niveauer
-        - <b>18 Nye Byginger</b> for en fuldt autmaticeret fabrik!
-        - <b>20 Upgraderings Niveauer</b> for mange timers sjov!
+        - <b>12 New Level</b> for a total of 26 levels
+        - <b>18 New Buildings</b> for a fully automated factory!
+        - <b>20 Upgrade Tiers</b> for many hours of fun!
         - <b>Wires Update</b> for an entirely new dimension!
         - <b>Dark Mode</b>!
         - Unlimited Savegames
-        - Uendelige Markører
-        - Hjælp med at støtte mig! ❤️
+        - Unlimited Markers
+        - Support me! ❤️
     title_future: Planned Content
     planned:
         - Blueprint Library (Standalone Exclusive)
@@ -48,151 +45,149 @@ steamPage:
 
         Be sure to check out my trello board for the full roadmap!
 global:
-    loading: Indlæser
-    error: Fejl
-    thousandsDivider: .
-    decimalSeparator: ","
+    loading: Loading
+    error: Error
+    thousandsDivider: ","
+    decimalSeparator: .
     suffix:
         thousands: k
-        millions: mio
-        billions: mia
-        trillions: bio
-    infinite: uendelig
+        millions: M
+        billions: B
+        trillions: T
+    infinite: inf
     time:
-        oneSecondAgo: et sekund siden
-        xSecondsAgo: <x> sekunder siden
-        oneMinuteAgo: et minut siden
-        xMinutesAgo: <x> minutter siden
-        oneHourAgo: en time siden
-        xHoursAgo: <x> timer siden
-        oneDayAgo: en dag siden
-        xDaysAgo: <x> dage siden
+        oneSecondAgo: one second ago
+        xSecondsAgo: <x> seconds ago
+        oneMinuteAgo: one minute ago
+        xMinutesAgo: <x> minutes ago
+        oneHourAgo: one hour ago
+        xHoursAgo: <x> hours ago
+        oneDayAgo: one day ago
+        xDaysAgo: <x> days ago
         secondsShort: <seconds>s
         minutesAndSecondsShort: <minutes>m <seconds>s
-        hoursAndMinutesShort: <hours>t <minutes>m
-        xMinutes: <x> minutter
+        hoursAndMinutesShort: <hours>h <minutes>m
+        xMinutes: <x> minutes
     keys:
         tab: TAB
         control: CTRL
         alt: ALT
         escape: ESC
-        shift: SKIFT/SHIFT
-        space: MELLEMRUM
+        shift: SHIFT
+        space: SPACE
 demoBanners:
     title: Demo Version
-    intro: Køb spillet for at få den fulde oplevelse!
+    intro: Get the standalone to unlock all features!
 mainMenu:
-    play: Spil
-    continue: Fortsæt
-    newGame: Nyt Spil
+    play: Play
+    continue: Continue
+    newGame: New Game
     changelog: Changelog
     subreddit: Reddit
-    importSavegame: Importér
-    openSourceHint: Dette spil er open source!
-    discordLink: Officiel Discord Server
-    helpTranslate: Hjælp med at oversætte!
-    madeBy: Lavet af <author-link>
-    browserWarning: Undskyld, men spillet er kendt for at køre langsomt på denne
-        browser! Køb spillet eller download chrome for den fulde oplevelse.
-    savegameLevel: Niveau <x>
-    savegameLevelUnknown: Ukendt Niveau
+    importSavegame: Import
+    openSourceHint: This game is open source!
+    discordLink: Official Discord Server
+    helpTranslate: Help translate!
+    madeBy: Made by <author-link>
+    browserWarning: Sorry, but the game is known to run slow on your browser! Get
+        the standalone version or download chrome for the full experience.
+    savegameLevel: Level <x>
+    savegameLevelUnknown: Unknown Level
     savegameUnnamed: Unnamed
 dialogs:
     buttons:
         ok: OK
-        delete: Slet
-        cancel: Fortryd
-        later: Senere
-        restart: Genstart
-        reset: Nulstil
-        getStandalone: Køb spillet
-        deleteGame: Jeg ved hvad jeg laver
-        viewUpdate: Se Opdatering
-        showUpgrades: Vis Opgraderinger
-        showKeybindings: Vis Keybindings
+        delete: Delete
+        cancel: Cancel
+        later: Later
+        restart: Restart
+        reset: Reset
+        getStandalone: Get Standalone
+        deleteGame: I know what I am doing
+        viewUpdate: View Update
+        showUpgrades: Show Upgrades
+        showKeybindings: Show Keybindings
     importSavegameError:
-        title: Import Fejl
-        text: "Importering af gemt spil fejlede:"
+        title: Import Error
+        text: "Failed to import your savegame:"
     importSavegameSuccess:
-        title: Gemt spil Importeret
-        text: Dit gemte spil blev importet.
+        title: Savegame Imported
+        text: Your savegame has been successfully imported.
     gameLoadFailure:
-        title: Spillet er i stykker
-        text: "Det lykkedes ikke at åbne dit gemte spil:"
+        title: Game is broken
+        text: "Failed to load your savegame:"
     confirmSavegameDelete:
-        title: Bekræft sletning
+        title: Confirm deletion
         text: Are you sure you want to delete the following game?<br><br>
             '<savegameName>' at level <savegameLevel><br><br> This can not be
             undone!
     savegameDeletionError:
-        title: Sletning fejlede
-        text: "Det lykkedes ikke at slette dit gemte spil:"
+        title: Failed to delete
+        text: "Failed to delete the savegame:"
     restartRequired:
-        title: Genstart er nødvendig
-        text: Du er nødt til at genstarte spillet for at anvende indstillingerne.
+        title: Restart required
+        text: You need to restart the game to apply the settings.
     editKeybinding:
-        title: Ændr Keybinding
-        desc: Tryk på knappen du vil bruge, eller escape for at fortryde.
+        title: Change Keybinding
+        desc: Press the key or mouse button you want to assign, or escape to cancel.
     resetKeybindingsConfirmation:
-        title: Nulstil keybindings
-        desc: Dette vil nulstille alle keybindings til deres standarder. Bekræft
-            venligst.
+        title: Reset keybindings
+        desc: This will reset all keybindings to their default values. Please confirm.
     keybindingsResetOk:
-        title: Keybindings nulstillet
-        desc: Keybindings er nulstillet til deres standarder!
+        title: Keybindings reset
+        desc: The keybindings have been reset to their respective defaults!
     featureRestriction:
-        title: Demoversion
-        desc: Du prøvede at bruge en funktion (<feature>) der ikke er tilgængelig i
-            demoen. Overvej at købe spillet for den fulde oplevelse!
+        title: Demo Version
+        desc: You tried to access a feature (<feature>) which is not available in the
+            demo. Consider getting the standalone version for the full
+            experience!
     oneSavegameLimit:
-        title: Begrænset mængde gemte spil
-        desc: Du kan kun have et gemt spil ad gangen in demoversionen. Vær sød at slette
-            det nuværende gemte spil eller at købe spillet!
+        title: Limited savegames
+        desc: You can only have one savegame at a time in the demo version. Please
+            remove the existing one or get the standalone version!
     updateSummary:
-        title: Ny opdatering!
-        desc: "Dette har ændret sig siden sidst du spillede:"
+        title: New update!
+        desc: "Here are the changes since you last played:"
     upgradesIntroduction:
-        title: Få Opgraderinger
-        desc: Alle figurer du producerer kan blive brugt til at få opgraderinger -
-            <strong>Ødelæg ikke dine gamle fabrikker!</strong>
-            Opgraderingeringsvinduet kan findes i det øverste højre hjørne af
-            skærmen.
+        title: Unlock Upgrades
+        desc: All shapes you produce can be used to unlock upgrades - <strong>Don't
+            destroy your old factories!</strong> The upgrades tab can be found
+            on the top right corner of the screen.
     massDeleteConfirm:
-        title: Bekræft sletning
-        desc: Du er ved at slette mange bygninger (<count> helt præcist)! Er du sikker
-            på at det er det du vil gøre?
+        title: Confirm delete
+        desc: You are deleting a lot of buildings (<count> to be exact)! Are you sure
+            you want to do this?
     massCutConfirm:
-        title: Bekræft klip
-        desc: Du er ved at klippe mange bygninger (<count> helt præcist)! Er du sikker
-            på at det er det du vil gøre?
+        title: Confirm cut
+        desc: You are cutting a lot of buildings (<count> to be exact)! Are you sure you
+            want to do this?
+    massCutInsufficientConfirm:
+        title: Confirm cut
+        desc: You can not afford to paste this area! Are you sure you want to cut it?
     blueprintsNotUnlocked:
-        title: Ikke tilgængeligt endnu
-        desc: Gennemfør Niveau 12 for at bruge arbejdstegninger!
+        title: Not unlocked yet
+        desc: Complete level 12 to unlock Blueprints!
     keybindingsIntroduction:
-        title: Brugbare keybindings
-        desc: "Dette spil har mange keybindings, som gør det lettere at bygge store
-            fabrikker. Her er et par, men husk at <strong>tjekke
+        title: Useful keybindings
+        desc: "This game has a lot of keybindings which make it easier to build big
+            factories. Here are a few, but be sure to <strong>check out the
             keybindings</strong>!<br><br> <code class='keybinding'>CTRL</code> +
-            Træk: Vælg et område.<br> <code class='keybinding'>SHIFT</code>:
-            Hold for at placere flere af en bygning.<br> <code
-            class='keybinding'>ALT</code>: Vend retningen af placerede
-            transportbånd.<br>"
+            Drag: Select an area.<br> <code class='keybinding'>SHIFT</code>:
+            Hold to place multiple of one building.<br> <code
+            class='keybinding'>ALT</code>: Invert orientation of placed
+            belts.<br>"
     createMarker:
-        title: Ny Markør
+        title: New Marker
+        titleEdit: Edit Marker
         desc: Give it a meaningful name, you can also include a <strong>short
             key</strong> of a shape (Which you can generate <link>here</link>)
-        titleEdit: Rediger Markør
     markerDemoLimit:
-        desc: Du kan kun lave to markører i demoen. Køb spillet for uendelige markører!
+        desc: You can only create two custom markers in the demo. Get the standalone for
+            unlimited markers!
     exportScreenshotWarning:
-        title: Eksporter skærmbillede
-        desc: Du bad om at eksportere din fabrik som et skærmbillede. Bemærk at dette
-            kan være rimelig langsomt for en stor base og kan endda lukke dit
-            spil!
-    massCutInsufficientConfirm:
-        title: Bekræft klip
-        desc: Du har ikke råd til at sætte dette område ind igen! Er du sikker på at du
-            vil klippe det?
+        title: Export screenshot
+        desc: You requested to export your base as a screenshot. Please note that this
+            can be quite slow for a big base and even crash your game!
     editSignal:
         title: Set Signal
         descItems: "Choose a pre-defined item:"
@@ -211,112 +206,112 @@ dialogs:
             available in English. Would you like to watch it?
 ingame:
     keybindingsOverlay:
-        moveMap: Bevæg dig
-        selectBuildings: Marker område
-        stopPlacement: Stop placering
-        rotateBuilding: Roter bygning
-        placeMultiple: Placer flere
-        reverseOrientation: Omvend retning
-        disableAutoOrientation: Slå automatisk retning fra
-        toggleHud: Slå HUD til/fra
-        placeBuilding: Placer bygning
-        createMarker: Lav Markør
-        delete: Slet
-        pasteLastBlueprint: Sæt sidste arbejdstegning ind
-        lockBeltDirection: Aktiver bælteplanlægger
-        plannerSwitchSide: Vend planlægsningsside
-        cutSelection: Klip
-        copySelection: Kopier
-        clearSelection: Ryd Selektion
+        moveMap: Move
+        selectBuildings: Select area
+        stopPlacement: Stop placement
+        rotateBuilding: Rotate building
+        placeMultiple: Place multiple
+        reverseOrientation: Reverse orientation
+        disableAutoOrientation: Disable auto-orientation
+        toggleHud: Toggle HUD
+        placeBuilding: Place building
+        createMarker: Create marker
+        delete: Delete
+        pasteLastBlueprint: Paste last blueprint
+        lockBeltDirection: Enable belt planner
+        plannerSwitchSide: Flip planner side
+        cutSelection: Cut
+        copySelection: Copy
+        clearSelection: Clear selection
         pipette: Pipette
-        switchLayers: Skift Lag
+        switchLayers: Switch layers
     colors:
-        red: Rød
-        green: Grøn
-        blue: Blå
-        yellow: Gul
-        purple: Lilla
+        red: Red
+        green: Green
+        blue: Blue
+        yellow: Yellow
+        purple: Purple
         cyan: Cyan
-        white: Hvid
-        uncolored: Ingen farve
-        black: Sort
+        white: White
+        black: Black
+        uncolored: Gray
     buildingPlacement:
-        cycleBuildingVariants: Tryk <key> for at vælge type.
+        cycleBuildingVariants: Press <key> to cycle variants.
         hotkeyLabel: "Hotkey: <key>"
         infoTexts:
-            speed: Fart
-            range: Rækkevidde
-            storage: Opbevaring
-            oneItemPerSecond: 1 genstand / sekund
-            itemsPerSecond: <x> genstande / s
+            speed: Speed
+            range: Range
+            storage: Storage
+            oneItemPerSecond: 1 item / second
+            itemsPerSecond: <x> items / s
             itemsPerSecondDouble: (x2)
-            tiles: <x> flader
+            tiles: <x> tiles
     levelCompleteNotification:
-        levelTitle: Niveau <level>
-        completed: Klaret
-        unlockText: <reward> er nu tilgængelig!
-        buttonNextLevel: Næste Niveau
+        levelTitle: Level <level>
+        completed: Completed
+        unlockText: Unlocked <reward>!
+        buttonNextLevel: Next Level
     notifications:
-        newUpgrade: En ny opgradering er tilgængelig!
-        gameSaved: Dit spil er gemt.
+        newUpgrade: A new upgrade is available!
+        gameSaved: Your game has been saved.
         freeplayLevelComplete: Level <level> has been completed!
     shop:
-        title: Opgraderinger
-        buttonUnlock: Opgrader
-        tier: Trin <x>
-        maximumLevel: HØJESTE NIVEAU (Speed x<currentMult>)
+        title: Upgrades
+        buttonUnlock: Upgrade
+        tier: Tier <x>
+        maximumLevel: MAXIMUM LEVEL (Speed x<currentMult>)
     statistics:
-        title: Statistikker
+        title: Statistics
         dataSources:
             stored:
-                title: Opbevaret
-                description: Viser mængden af opbevarede figurer i din centrale bygning.
+                title: Stored
+                description: Displaying amount of stored shapes in your central building.
             produced:
-                title: Produceret
-                description: Viser alle de figurer hele din fabrik producerer, inklusiv
-                    produkter brugt til videre produktion.
+                title: Produced
+                description: Displaying all shapes your whole factory produces, including
+                    intermediate products.
             delivered:
-                title: Afleveret
-                description: Viser figurer som er afleveret til din centrale bygning.
-        noShapesProduced: Ingen figurer er blevet produceret indtil videre.
+                title: Delivered
+                description: Displaying shapes which are delivered to your central building.
+        noShapesProduced: No shapes have been produced so far.
         shapesDisplayUnits:
             second: <shapes> / s
             minute: <shapes> / m
             hour: <shapes> / h
     settingsMenu:
-        playtime: Spilletid
-        buildingsPlaced: Bygninger
-        beltsPlaced: Bælter
+        playtime: Playtime
+        buildingsPlaced: Buildings
+        beltsPlaced: Belts
     tutorialHints:
-        title: Har du brug for hjælp?
-        showHint: Vis hint
-        hideHint: Luk
+        title: Need help?
+        showHint: Show hint
+        hideHint: Close
     blueprintPlacer:
-        cost: Pris
+        cost: Cost
     waypoints:
-        waypoints: Markører
+        waypoints: Markers
         hub: HUB
-        description: Venstreklik en markør for at hoppe til den, højreklik for at slette
-            den.<br><br>Tryk <keybinding> for at lave en markør på det nuværende
-            sted, eller <strong>højreklik</strong> for at lave en markør på det
-            valgte sted.
-        creationSuccessNotification: Markør er sat.
+        description: Left-click a marker to jump to it, right-click to delete
+            it.<br><br>Press <keybinding> to create a marker from the current
+            view, or <strong>right-click</strong> to create a marker at the
+            selected location.
+        creationSuccessNotification: Marker has been created.
     shapeViewer:
-        title: Lag
-        empty: Tom
-        copyKey: Kopier Kode
+        title: Layers
+        empty: Empty
+        copyKey: Copy Key
     interactiveTutorial:
         title: Tutorial
         hints:
-            1_1_extractor: Sæt en <strong>udvinder</strong> på toppen af
-                en<strong>cirkelfigur</strong> for at begynde produktion af den!
-            1_2_conveyor: "Forbind udvinderen til din hub med et
-                <strong>transportbælte</strong>!<br><br>Tip: <strong>Tryk og
-                træk</strong> bæltet med din mus!"
-            1_3_expand: "Dette er <strong>IKKE</strong> et idle game! Byg flere udvindere og
-                bælter for at færdiggøre målet hurtigere.<br><br>Tip: Hold
-                <strong>SKIFT</strong> for at sætte flere udvindere, og tryk
-                <strong>R</strong> for at rotere dem."
+            1_1_extractor: Place an <strong>extractor</strong> on top of a <strong>circle
+                shape</strong> to extract it!
+            1_2_conveyor: "Connect the extractor with a <strong>conveyor belt</strong> to
+                your hub!<br><br>Tip: <strong>Click and drag</strong> the belt
+                with your mouse!"
+            1_3_expand: "This is <strong>NOT</strong> an idle game! Build more extractors
+                and belts to finish the goal quicker.<br><br>Tip: Hold
+                <strong>SHIFT</strong> to place multiple extractors, and use
+                <strong>R</strong> to rotate them."
             2_1_place_cutter: "Now place a <strong>Cutter</strong> to cut the circles in two
                 halves!<br><br> PS: The cutter always cuts from <strong>top to
                 bottom</strong> regardless of its orientation."
@@ -379,98 +374,100 @@ ingame:
                 desc: I develop it in my spare time!
 shopUpgrades:
     belt:
-        name: Bælter, Fordelere & Tuneller
-        description: Fart x<currentMult> → x<newMult>
+        name: Belts, Distributor & Tunnels
+        description: Speed x<currentMult> → x<newMult>
     miner:
-        name: Udvinding
-        description: Fart x<currentMult> → x<newMult>
+        name: Extraction
+        description: Speed x<currentMult> → x<newMult>
     processors:
-        name: Klipning, Rotering & Stabling
-        description: Fart x<currentMult> → x<newMult>
+        name: Cutting, Rotating & Stacking
+        description: Speed x<currentMult> → x<newMult>
     painting:
-        name: Blanding & Maling
-        description: Fart x<currentMult> → x<newMult>
+        name: Mixing & Painting
+        description: Speed x<currentMult> → x<newMult>
 buildings:
     hub:
-        deliver: Aflever
-        toUnlock: for at få adgang til
-        levelShortcut: NIV
+        deliver: Deliver
+        toUnlock: to unlock
+        levelShortcut: LVL
         endOfDemo: End of Demo
     belt:
         default:
-            name: Transportbælte
-            description: Transporterer figurer, hold og træk for at sætte flere.
+            name: Conveyor Belt
+            description: Transports items, hold and drag to place multiple.
+    wire:
+        default:
+            name: Energy Wire
+            description: Allows you to transport energy.
+        second:
+            name: Wire
+            description: Transfers signals, which can be items, colors or booleans (1 / 0).
+                Different colored wires do not connect.
     miner:
         default:
-            name: Udvinder
-            description: Placer over en figur eller farve for at udvinde den.
+            name: Extractor
+            description: Place over a shape or color to extract it.
         chainable:
-            name: Udvinder (Kæde)
-            description: Placer over en figur eller farve for at udvinde den. Kan kædes.
+            name: Extractor (Chain)
+            description: Place over a shape or color to extract it. Can be chained.
     underground_belt:
         default:
             name: Tunnel
-            description: Laver tunneller under bygninger og bælter.
+            description: Allows you to tunnel resources under buildings and belts.
         tier2:
-            name: Tunnel Trin II
-            description: Laver tunneller under bygninger og bælter.
+            name: Tunnel Tier II
+            description: Allows you to tunnel resources under buildings and belts.
     cutter:
         default:
-            name: Klipper
-            description: Klipper figurer fra top til bund og udsender begge halvdele.
-                <strong>Hvis du kun bruger den ene halvdel så husk at ødelægge
-                den anden del, ellers går maskinen i stå!</strong>
+            name: Cutter
+            description: Cuts shapes from top to bottom and outputs both halves. <strong>If
+                you use only one part, be sure to destroy the other part or it
+                will stall!</strong>
         quad:
-            name: Klipper (firdeler)
-            description: Klipper figurer om til fire dele. <strong>Hvis du kun bruger nogle
-                af dem så husk at ødelægge de andre dele, ellers går maskinen i
-                stå!</strong>
+            name: Cutter (Quad)
+            description: Cuts shapes into four parts. <strong>If you use only one part, be
+                sure to destroy the other parts or it will stall!</strong>
     rotater:
         default:
-            name: Drejer
-            description: Drejer figurer 90 grader med uret.
+            name: Rotate
+            description: Rotates shapes clockwise by 90 degrees.
         ccw:
-            name: Drejer (mod uret)
-            description: Drejer figurer 90 grader mod uret.
+            name: Rotate (CCW)
+            description: Rotates shapes counter-clockwise by 90 degrees.
         rotate180:
             name: Rotate (180)
             description: Rotates shapes by 180 degrees.
     stacker:
         default:
-            name: Stabler
-            description: Stabler begge figurer. Hvis de ikke kan sammensmeltes, så sættes
-                den højre figur oven på den venstre.
+            name: Stacker
+            description: Stacks both items. If they can not be merged, the right item is
+                placed above the left item.
     mixer:
         default:
-            name: Farveblander
-            description: Blander to farver med additiv blanding.
+            name: Color Mixer
+            description: Mixes two colors using additive blending.
     painter:
         default:
-            name: Maler
-            description: Farver hele figuren fra venstre side med farven fra toppen.
+            name: Painter
+            description: Colors the whole shape on the left input with the color from the
+                top input.
         mirrored:
-            name: Maler
-            description: Farver hele figuren fra venstre side med farven fra toppen.
+            name: Painter
+            description: Colors the whole shape on the left input with the color from the
+                top input.
         double:
-            name: Maler (Dobbelt)
-            description: Farver figurerne fra venstre side med farven fra toppen.
+            name: Painter (Double)
+            description: Colors the shapes on the left inputs with the color from the top
+                input.
         quad:
-            name: Maler (Quad)
+            name: Painter (Quad)
             description: Allows you to color each quadrant of the shape individually. Only
                 slots with a <strong>truthy signal</strong> on the wires layer
                 will be painted!
     trash:
         default:
-            name: Skraldespand
-            description: Tillader input fra alle sider og ødelægger dem. For evigt.
-    wire:
-        default:
-            name: Energiledning
-            description: Lader dig transportere energi.
-        second:
-            name: Wire
-            description: Transfers signals, which can be items, colors or booleans (1 / 0).
-                Different colored wires do not connect.
+            name: Trash
+            description: Accepts inputs from all sides and destroys them. Forever.
     balancer:
         default:
             name: Balancer
@@ -583,7 +580,7 @@ buildings:
                 wires layer on the regular layer.
 storyRewards:
     reward_cutter_and_trash:
-        title: Klippe Figurer
+        title: Cutting Shapes
         desc: You just unlocked the <strong>cutter</strong>, which cuts shapes in half
             from top to bottom <strong>regardless of its
             orientation</strong>!<br><br>Be sure to get rid of the waste, or
@@ -591,68 +588,67 @@ storyRewards:
             I have given you the <strong>trash</strong>, which destroys
             everything you put into it!
     reward_rotater:
-        title: Rotation
-        desc: <strong>Drejeren</strong> er nu tilgængelig! Den drejer figurer 90 grader
-            med uret.
+        title: Rotating
+        desc: The <strong>rotater</strong> has been unlocked! It rotates shapes
+            clockwise by 90 degrees.
     reward_painter:
-        title: Maling
-        desc: "<strong>Maleren</strong> er nu tilgængelig - Få noget farve med
-            udvinderen (som du også gør med figurer) og kombiner det med en
-            farve i maleren for at farve dem!<br><br>PS: Hvis du er farveblind,
-            så er der en <strong>farveblindstilstand</strong> i
-            indstillingerne!"
+        title: Painting
+        desc: "The <strong>painter</strong> has been unlocked - Extract some color veins
+            (just as you do with shapes) and combine it with a shape in the
+            painter to color them!<br><br>PS: If you are colorblind, there is a
+            <strong>colorblind mode</strong> in the settings!"
     reward_mixer:
-        title: Farveblanding
-        desc: The <strong>mixer</strong> has been unlocked - It mixes two colors using
-            <strong>additive blending</strong>!
+        title: Color Mixing
+        desc: The <strong>mixer</strong> has been unlocked - Combine two colors using
+            <strong>additive blending</strong> with this building!
     reward_stacker:
-        title: Stabler
-        desc: Du kan du stable figurer med <strong>stableren</strong>! Begge inputs
-            stables. Hvis de kan sættes ved siden af hinanden,
-            <strong>sammensmeltes de</strong>. Hvis ikke, bliver det højre input
-            <strong>stablet ovenpå</strong> det venstre!
+        title: Combiner
+        desc: You can now combine shapes with the <strong>combiner</strong>! Both inputs
+            are combined, and if they can be put next to each other, they will
+            be <strong>fused</strong>. If not, the right input is
+            <strong>stacked on top</strong> of the left input!
     reward_splitter:
-        title: Fordeler/Sammenlægger
+        title: Splitter/Merger
         desc: You have unlocked a <strong>splitter</strong> variant of the
             <strong>balancer</strong> - It accepts one input and splits them
             into two!
     reward_tunnel:
         title: Tunnel
-        desc: <strong>Tunnellen</strong> er nu tilgængelig - Du kan nu lave tuneller
-            under bælter og bygninger!
+        desc: The <strong>tunnel</strong> has been unlocked - You can now tunnel items
+            through belts and buildings with it!
     reward_rotater_ccw:
-        title: Rotation mod uret
-        desc: Du har fået adgang til en variant af <strong>drejeren</strong> - Den lader
-            dig dreje ting mod uret! For at bygge den skal du vælge drejeren og
-            <strong>trykke 'T'</strong>!
+        title: CCW Rotating
+        desc: You have unlocked a variant of the <strong>rotater</strong> - It allows
+            you to rotate shapes counter-clockwise! To build it, select the
+            rotater and <strong>press 'T' to cycle through its
+            variants</strong>!
     reward_miner_chainable:
-        title: Kædeudvinder
+        title: Chaining Extractor
         desc: "You have unlocked the <strong>chained extractor</strong>! It can
             <strong>forward its resources</strong> to other extractors so you
             can more efficiently extract resources!<br><br> PS: The old
             extractor has been replaced in your toolbar now!"
     reward_underground_belt_tier_2:
-        title: Tunnel Trin II
-        desc: Du har fået adgang til en variant af <strong>tunnellen</strong> - Den har
-            en <strong>større rækkevidde</strong>, og du kan også bruge begge
-            typer tunneller på den samme strækning!
+        title: Tunnel Tier II
+        desc: You have unlocked a new variant of the <strong>tunnel</strong> - It has a
+            <strong>bigger range</strong>, and you can also mix-n-match those
+            tunnels now!
     reward_cutter_quad:
-        title: Quad Klipining
-        desc: Du har fået adgang til en variant af <strong>klipperen</strong> - Den
-            lader dig klippe figurer i <strong>fire dele</strong> i stedet for
-            kun to!
+        title: Quad Cutting
+        desc: You have unlocked a variant of the <strong>cutter</strong> - It allows you
+            to cut shapes in <strong>four parts</strong> instead of just two!
     reward_painter_double:
-        title: Dobbelt Maling
-        desc: Du har fået adgang til en variant af <strong>maleren</strong> - Den virker
-            som en normal maler, men maler <strong>to figurer samtidig</strong>
-            og bruger kun en farve i stedet for to.
+        title: Double Painting
+        desc: You have unlocked a variant of the <strong>painter</strong> - It works as
+            the regular painter but processes <strong>two shapes at
+            once</strong> consuming just one color instead of two!
     reward_storage:
-        title: Opbevaringsbuffer
+        title: Storage Buffer
         desc: You have unlocked the <strong>storage</strong> building - It allows you to
             store items up to a given capacity!<br><br> It priorities the left
             output, so you can also use it as an <strong>overflow gate</strong>!
     reward_freeplay:
-        title: Frit spil
+        title: Freeplay
         desc: You did it! You unlocked the <strong>free-play mode</strong>! This means
             that shapes are now <strong>randomly</strong> generated!<br><br>
             Since the hub will require a <strong>throughput</strong> from now
@@ -661,21 +657,20 @@ storyRewards:
             shape on the wires layer, so all you have to do is to analyze it and
             automatically configure your factory based on that.
     reward_blueprints:
-        title: Arbejdstegninger
-        desc: Du kan nu <strong>kopiere og indsætte</strong> dele af din fabrik! Vælg et
-            område (Hold CTRL, og træk med musen), og tryk 'C' for at kopiere
-            det.<br><br>At sætte det ind er <strong>ikke gratis</strong>. Du
-            skal producere <strong>arbejdstegning figurer</strong> for at have
-            råd til det! (Dem du lige har leveret).
+        title: Blueprints
+        desc: You can now <strong>copy and paste</strong> parts of your factory! Select
+            an area (Hold CTRL, then drag with your mouse), and press 'C' to
+            copy it.<br><br>Pasting it is <strong>not free</strong>, you need to
+            produce <strong>blueprint shapes</strong> to afford it! (Those you
+            just delivered).
     no_reward:
-        title: Næste niveau
-        desc: "Dette niveau gav dig ingen belønninger, men det vil det næste! <br><br>
-            PS: Du må hellere lade være med at ødelægge din fabrik - Du får brug
-            for <strong>alle</strong> de figurer senere igen for at <strong>få
-            opgraderinger</strong>!"
+        title: Next level
+        desc: "This level gave you no reward, but the next one will! <br><br> PS: Better
+            don't destroy your existing factory - You need <strong>all</strong>
+            those shapes later again to <strong>unlock upgrades</strong>!"
     no_reward_freeplay:
-        title: Næste niveau
-        desc: Tillykke! Forresten er mere indhold planlagt for den betalte version!
+        title: Next level
+        desc: Congratulations! By the way, more content is planned for the standalone!
     reward_balancer:
         title: Balancer
         desc: The multifunctional <strong>balancer</strong> has been unlocked - It can
@@ -743,122 +738,119 @@ storyRewards:
         title: End of Demo
         desc: You have reached the end of the demo version!
 settings:
-    title: Indstillinger
+    title: Settings
     categories:
-        general: Generelt
-        userInterface: Brugerflade
-        advanced: Avanceret
+        general: General
+        userInterface: User Interface
+        advanced: Advanced
         performance: Performance
     versionBadges:
-        dev: Udvikling
-        staging: Iscenesættelse
-        prod: Produktion
-    buildDate: Bygget <at-date>
+        dev: Development
+        staging: Staging
+        prod: Production
+    buildDate: Built <at-date>
     labels:
         uiScale:
-            title: Grænseflade størrelse
-            description: Ændrer størrelsen på brugerfladen. Den vil stadig skalere baseret
-                på opløsningen af din skærm, men denne indstilling bestemmer
-                hvor meget den skalerer.
+            title: Interface scale
+            description: Changes the size of the user interface. The interface will still
+                scale based on your device's resolution, but this setting
+                controls the amount of scaling.
             scales:
-                super_small: Meget lille
-                small: Lille
-                regular: Normal
-                large: Store
-                huge: Kæmpe
+                super_small: Super small
+                small: Small
+                regular: Regular
+                large: Large
+                huge: Huge
         autosaveInterval:
-            title: Autogem Interval
-            description: Ændrer hvor ofte spillet gemmer automatisk. Du kan også slå det
-                helt fra her.
+            title: Autosave Interval
+            description: Controls how often the game saves automatically. You can also
+                disable it entirely here.
             intervals:
-                one_minute: 1 Minut
-                two_minutes: 2 Minutter
-                five_minutes: 5 Minutter
-                ten_minutes: 10 Minutter
-                twenty_minutes: 20 Minutter
-                disabled: Slået fra
+                one_minute: 1 Minute
+                two_minutes: 2 Minutes
+                five_minutes: 5 Minutes
+                ten_minutes: 10 Minutes
+                twenty_minutes: 20 Minutes
+                disabled: Disabled
         scrollWheelSensitivity:
-            title: Zoom følsomhed
-            description: Ændrer hvor følsomt zoomet er (Enten musehjulet eller trackpad).
+            title: Zoom sensitivity
+            description: Changes how sensitive the zoom is (Either mouse wheel or trackpad).
             sensitivity:
-                super_slow: Meget langsom
-                slow: Langsom
-                regular: Normal
-                fast: Hurtig
-                super_fast: Meget hurtig
+                super_slow: Super slow
+                slow: Slow
+                regular: Regular
+                fast: Fast
+                super_fast: Super fast
         movementSpeed:
-            title: Bevægelseshastighed
-            description: Ændrer hvor hurtigt du kan bevæge dit overblik når du bruger
-                tastaturet.
+            title: Movement speed
+            description: Changes how fast the view moves when using the keyboard.
             speeds:
-                super_slow: Meget langsom
-                slow: Langsom
-                regular: Normal
-                fast: Hurtig
-                super_fast: Meget hurtig
-                extremely_fast: Ekstremt hurtig
+                super_slow: Super slow
+                slow: Slow
+                regular: Regular
+                fast: Fast
+                super_fast: Super Fast
+                extremely_fast: Extremely Fast
         language:
-            title: Sprog
-            description: Ændrer sproget. All oversættelser er lavet af fælleskabet og kan
-                være ufuldstændige!
+            title: Language
+            description: Change the language. All translations are user-contributed and
+                might be incomplete!
         enableColorBlindHelper:
-            title: Farveblindstilstand
-            description: Aktiverer forskellige redskaber der lader dig spille, selv hvis du
-                er farveblind.
+            title: Color Blind Mode
+            description: Enables various tools which allow you to play the game if you are
+                color blind.
         fullscreen:
-            title: Fuld skærm
-            description: Det er foreslået at spille i fuld skærm for den bedste oplevelse.
-                Kun tilgængelig i den betalte version.
+            title: Fullscreen
+            description: It is recommended to play the game in fullscreen to get the best
+                experience. Only available in the standalone.
         soundsMuted:
-            title: Slå lydeffekterne fra
-            description: Aktiver for at slå alle lydeffekter fra.
+            title: Mute Sounds
+            description: If enabled, mutes all sound effects.
         musicMuted:
-            title: Slå musik fra
-            description: Aktiver for at slå al musik fra.
+            title: Mute Music
+            description: If enabled, mutes all music.
         theme:
-            title: Tema
-            description: Vælg tema (lys / mørk).
+            title: Game theme
+            description: Choose the game theme (light / dark).
             themes:
-                dark: Mørk
-                light: Lys
+                dark: Dark
+                light: Light
         refreshRate:
-            title: Simulationsmål
-            description: Hvis du har en 144hz skærm, så ændr opdateringshastigheden her så
-                spillet vil simulere den højere opdateringshastighed korrekt.
-                Dette kan faktisk sænke din FPS hvis din computer er for
-                langsom.
+            title: Simulation Target
+            description: If you have a 144hz monitor, change the refresh rate here so the
+                game will properly simulate at higher refresh rates. This might
+                actually decrease the FPS if your computer is too slow.
         alwaysMultiplace:
-            title: Multiplacér
-            description: Aktiver for at alle bygninger fortsætter med at være valgt efter
-                placering, indtil du vælger dem fra. Dette svarer til altid at
-                holde SKIFT nede.
+            title: Multiplace
+            description: If enabled, all buildings will stay selected after placement until
+                you cancel it. This is equivalent to holding SHIFT permanently.
         offerHints:
-            title: Hints & Vejledning
-            description: Om spillet skal tilbyde hints og vejledning imens du spiller.
-                Skjuler også visse dele af brugerfladen indtil et givent niveau
-                for at gøre det nemmere at lære spillet at kende.
+            title: Hints & Tutorials
+            description: Whether to offer hints and tutorials while playing. Also hides
+                certain UI elements up to a given level to make it easier to get
+                into the game.
         enableTunnelSmartplace:
-            title: Smarte Tunneller
-            description: Aktiver for at placering af tunneller automatisk fjerner unødige
-                bælter. Dette gør igså at du kan trække tunneller så
-                overskydende tunneller fjernes.
+            title: Smart Tunnels
+            description: When enabled, placing tunnels will automatically remove unnecessary
+                belts. This also enables you to drag tunnels and excess tunnels
+                will get removed.
         vignette:
             title: Vignette
-            description: Aktiverer vignette hvilket mørkner kanterne af skærmen og gør
-                teksten nemmere at læse.
+            description: Enables the vignette, which darkens the screen corners and makes
+                text easier to read.
         rotationByBuilding:
-            title: Rotation baseret på bygningstype
-            description: Hver bygningstype husker den rotation du sidst satte den til. Dette
-                kan være komfortabelt hvis du ofte skifter mellem at placere
-                forskellige bygninger.
+            title: Rotation by building type
+            description: Each building type remembers the rotation you last set it to
+                individually. This may be more comfortable if you frequently
+                switch between placing different building types.
         compactBuildingInfo:
-            title: Kompakt Bygningsinfo
-            description: Forkorter infobokse til bygninger ved kun at vise deres forhold.
-                Ellers er en beskrivelse og et billede også vist.
+            title: Compact Building Infos
+            description: Shortens info boxes for buildings by only showing their ratios.
+                Otherwise a description and image is shown.
         disableCutDeleteWarnings:
-            title: Slå klip/slet advarsler fra
-            description: Slå advarselsboksene, der dukker op når mere end 100 ting slettes,
-                fra.
+            title: Disable Cut/Delete Warnings
+            description: Disables the warning dialogs brought up when cutting/deleting more
+                than 100 entities.
         soundVolume:
             title: Sound Volume
             description: Set the volume for sound effects
@@ -912,62 +904,62 @@ settings:
     rangeSliderPercentage: <amount> %
 keybindings:
     title: Keybindings
-    hint: "Tip: Husk at bruge CTRL, SKIFT og ALT! De byder på forskellige
-        placeringsmuligheder."
-    resetKeybindings: Nulstil Keybindings
+    hint: "Tip: Be sure to make use of CTRL, SHIFT and ALT! They enable different
+        placement options."
+    resetKeybindings: Reset Keybindings
     categoryLabels:
-        general: Applikation
-        ingame: Spil
-        navigation: Navigation
-        placement: Placering
-        massSelect: Massemarkering
-        buildings: Bygningsgenveje
-        placementModifiers: Placeringsmodifikationer
+        general: Application
+        ingame: Game
+        navigation: Navigating
+        placement: Placement
+        massSelect: Mass Select
+        buildings: Building Shortcuts
+        placementModifiers: Placement Modifiers
     mappings:
-        confirm: Bekræft
-        back: Tilbage
-        mapMoveUp: Bevæg dig op
-        mapMoveRight: Bevæg dig til højre
-        mapMoveDown: Bevæg dig ned
-        mapMoveLeft: Bevæg dig til venstre
-        mapMoveFaster: Bevæg dig hurtigere
-        centerMap: Centrer kortet
-        mapZoomIn: Zoom ind
-        mapZoomOut: Zoom ud
-        createMarker: Lav Markør
-        menuOpenShop: Opgraderinger
-        menuOpenStats: Statistikker
-        toggleHud: Slå HUD til/fra
-        toggleFPSInfo: Slå FPS og Debug Info til/fra
-        switchLayers: Skift lag
-        exportScreenshot: Eksporter hele basen som et billede
-        belt: Transportbælte
+        confirm: Confirm
+        back: Back
+        mapMoveUp: Move Up
+        mapMoveRight: Move Right
+        mapMoveDown: Move Down
+        mapMoveLeft: Move Left
+        mapMoveFaster: Move Faster
+        centerMap: Center Map
+        mapZoomIn: Zoom in
+        mapZoomOut: Zoom out
+        createMarker: Create Marker
+        menuOpenShop: Upgrades
+        menuOpenStats: Statistics
+        menuClose: Close Menu
+        toggleHud: Toggle HUD
+        toggleFPSInfo: Toggle FPS and Debug Info
+        switchLayers: Switch layers
+        exportScreenshot: Export whole Base as Image
+        belt: Conveyor Belt
         underground_belt: Tunnel
-        miner: Udvinder
-        cutter: Klipper
-        rotater: Drejer
-        stacker: Stabler
-        mixer: Farveblander
-        painter: Maler
-        trash: Skraldespand
+        miner: Extractor
+        cutter: Cutter
+        rotater: Rotate
+        stacker: Stacker
+        mixer: Color Mixer
+        painter: Painter
+        trash: Trash
+        wire: Energy Wire
         pipette: Pipette
-        rotateWhilePlacing: Roter
-        rotateInverseModifier: "Modifier: Roter mod uret i stedet"
-        cycleBuildingVariants: Gennemgå Varianter
-        confirmMassDelete: Slet område
-        pasteLastBlueprint: Sæt sidste arbejdstegning ind
-        cycleBuildings: Gennemgå bygninger
-        lockBeltDirection: Slå bælteplanlægger til
-        switchDirectionLockSide: "Planner: Skift side"
-        massSelectStart: Hold og træk for at starte
-        massSelectSelectMultiple: Vælg flere områder
-        massSelectCopy: Kopier område
-        massSelectCut: Klip område
-        placementDisableAutoOrientation: Slå automatisk rotation fra
-        placeMultiple: Bliv i placeringstilstand
-        placeInverse: Spejlvend automatisk bælteorientering
-        menuClose: Luk Menu
-        wire: Energiledning
+        rotateWhilePlacing: Rotate
+        rotateInverseModifier: "Modifier: Rotate CCW instead"
+        cycleBuildingVariants: Cycle Variants
+        confirmMassDelete: Delete area
+        pasteLastBlueprint: Paste last blueprint
+        cycleBuildings: Cycle Buildings
+        lockBeltDirection: Enable belt planner
+        switchDirectionLockSide: "Planner: Switch side"
+        massSelectStart: Hold and drag to start
+        massSelectSelectMultiple: Select multiple areas
+        massSelectCopy: Copy area
+        massSelectCut: Cut area
+        placementDisableAutoOrientation: Disable automatic orientation
+        placeMultiple: Stay in placement mode
+        placeInverse: Invert automatic belt orientation
         balancer: Balancer
         storage: Storage
         constant_signal: Constant Signal
@@ -984,31 +976,29 @@ keybindings:
         item_producer: Item Producer (Sandbox)
         copyWireValue: "Wires: Copy value below cursor"
 about:
-    title: Om dette spil
+    title: About this Game
     body: >-
-        Dette spil er open source og er udviklet af <a
+        This game is open source and developed by <a
         href="https://github.com/tobspr" target="_blank">Tobias Springer</a>
-        (det er mig).<br><br>
+        (this is me).<br><br>
 
-        Hvis du vil kontribuere, tjek <a href="<githublink>" target="_blank">shapez.io på github</a>.<br><br>
+        If you want to contribute, check out <a href="<githublink>" target="_blank">shapez.io on GitHub</a>.<br><br>
 
-        Dette spil ville ikke have været muligt uden det fremragende
-        Discord-fælleskab omkring mine spil - Du burde virkelig deltage på <a
-        href="<discordlink>" target="_blank">Discordserveren</a>!<br><br>
+        This game wouldn't have been possible without the great Discord community around my games - You should really join the <a href="<discordlink>" target="_blank">Discord server</a>!<br><br>
 
-        Lydsporet er lavet af <a href="https://soundcloud.com/pettersumelius" target="_blank">Peppsen</a> - Han er fantastisk.<br><br>
+        The soundtrack was made by <a href="https://soundcloud.com/pettersumelius" target="_blank">Peppsen</a> - He's awesome.<br><br>
 
-        Endelig, tusind tak til min bedste ven <a href="https://github.com/niklas-dahl" target="_blank">Niklas</a> - Uden vi havde spillet factorio sammen ville dette spil aldrig have eksisteret.
+        Finally, huge thanks to my best friend <a href="https://github.com/niklas-dahl" target="_blank">Niklas</a> - Without our Factorio sessions, this game would never have existed.
 changelog:
     title: Changelog
 demo:
     features:
-        restoringGames: Genopretter gem
-        importingGames: Importerer gem
-        oneGameLimit: Afgrænset til et gem
-        customizeKeybindings: Tilpasser Keybindings
-        exportingBase: Eksportere hele basen som et billede
-    settingNotAvailable: Ikke tilgængelig i demoen.
+        restoringGames: Restoring savegames
+        importingGames: Importing savegames
+        oneGameLimit: Limited to one savegame
+        customizeKeybindings: Customizing Keybindings
+        exportingBase: Exporting whole Base as Image
+    settingNotAvailable: Not available in the demo.
 tips:
     - The hub accepts input of any kind, not just the current shape!
     - Make sure your factories are modular - it will pay out!
