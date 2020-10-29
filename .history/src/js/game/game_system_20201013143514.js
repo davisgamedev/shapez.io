@@ -22,8 +22,6 @@ export class GameSystem {
      */
     update() {}
 
-    async updateAsync() {}
-
     /**
      * Override, do not call this directly, use startDraw()
      * @param {DrawParameters} parameters

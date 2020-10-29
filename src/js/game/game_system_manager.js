@@ -24,6 +24,7 @@ import { ItemProcessorOverlaysSystem } from "./systems/item_processor_overlays";
 import { BeltReaderSystem } from "./systems/belt_reader";
 import { FilterSystem } from "./systems/filter";
 import { ItemProducerSystem } from "./systems/item_producer";
+import { globalConfig } from "../core/config";
 
 const logger = createLogger("game_system_manager");
 
@@ -172,9 +173,12 @@ export class GameSystemManager {
      * Updates all systems
      */
     update() {
-        for (let i = 0; i < this.systemUpdateOrder.length; ++i) {
-            const system = this.systems[this.systemUpdateOrder[i]];
-            system.update();
+        if (globalConfig.asyncUpdatesEnabled) {
+        } else {
+            for (let i = 0; i < this.systemUpdateOrder.length; ++i) {
+                const system = this.systems[this.systemUpdateOrder[i]];
+                system.update();
+            }
         }
     }
 

@@ -6,8 +6,6 @@ import { Entity } from "./entity";
 import { GameRoot } from "./root";
 import { GameSystem } from "./game_system";
 
-import SWorker from "simple-web-worker";
-
 export class GameSystemWithFilter extends GameSystem {
     /**
      * Constructs a new game system with the given component filter. It will process
@@ -36,34 +34,6 @@ export class GameSystemWithFilter extends GameSystem {
 
         this.root.signals.postLoadHook.add(this.internalPostLoadHook, this);
         this.root.signals.bulkOperationFinished.add(this.refreshCaches, this);
-
-        this.createClone();
-    }
-
-    createClone() {
-        this.clone = null;
-        this.clone = Object.assign(this.clone, this);
-        this.cloneUpdate = this.clone.update.bind(this.clone);
-    }
-
-    updateCloneEntities() {
-        this.clone.allEntitiesArray = [...this.allEntitiesArray];
-        this.clone.allEntitiesSet = new Set(this.clone.allEntitiesArray);
-    }
-
-    assignEntitiesFromClone() {
-        this.allEntitiesArray = [...this.clone.allEntitiesArray];
-        this.allEntitiesSet = new Set(this.clone.allEntitiesArray);
-    }
-
-    async updateAsync() {
-        this.updateCloneEntities();
-
-        const updateProcess = this.cloneUpdate;
-
-        return SWorker.run(updateProcess)
-            .then(this.assignEntitiesFromClone)
-            .catch(e => console.error(e));
     }
 
     tryUpdateEntitiesArray() {
