@@ -47,9 +47,6 @@ export class GameSystemWithFilter extends GameSystem {
 
         // clones only needed for async updates
         globalConfig.useAsyncUpdates && this.createClone();
-
-        this.virtualId = (requiredComponents && requiredComponents[0]);
-        assert()
     }
 
     getVirtualId() {
@@ -72,39 +69,8 @@ export class GameSystemWithFilter extends GameSystem {
         this.cloneUpdate = this.clone.update.bind(this.clone);
         this.cloneSyncRequired = true;
     }
-        
-    /**
-     * async processes:
-     *  U1: acquireInternalDeltas:
-     *      - call update() on clone [internal working copy]
-     *      - will update controlled components, and external components will 
-     *          potentially update other components within entities
-     *              - we can probably do this per entity
-     */
 
-    /**
-     * In system manager, we modify the master copy, based on all of the virtual changes created within the virtual updates
-     * 
-     * THE COMPONENT SYSTEMS CONTAIN A COPIED SET TOO DURING UPDATE
-     * 
-     * 
-     * 
-     * ********BIG ISSUE*****************
-     *      => there is no scope in a thread, what actulaly happens to entities
-     * 
-     */
-     
-
-     // receive the read only copy, so we can safely avoid double writes
-     //     notes, still a risk of multi
-     async u0_asyncDeepCopyEntities(readOnlyEntityCopy) {
-
-     }
-
-
-
-     // performs internal update on cloned elements
-    async u1_async_internalVirtualUpdate() {
+    async updateAsync() {
         
         if (this.clone && this.clone.clone != null) {
             // this can be caused by calling updateAsync within the clone
@@ -120,23 +86,6 @@ export class GameSystemWithFilter extends GameSystem {
         const updateProcess = this.cloneUpdate;
 
         return SWorker.run(updateProcess).catch(e => console.error(e));
-    }
-
-    // creates set of affected components for affected entities (by uid)
-    async u2_async_aggregateDeltas() {
-
-    }
-
-    // returns the delta containers
-    u3_sync_getDeltas() {
-
-    }
-
-    // u4, in system manager, applies a
-    
-
-    async asyncU4_UpdateCaches() {
-
     }
 
     tryUpdateEntitiesArray() {

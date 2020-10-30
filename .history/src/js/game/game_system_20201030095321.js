@@ -26,7 +26,7 @@ export class GameSystem {
      */
     update() {}
 
-    async asyncU1_UpdateOnClone() {}
+    async updateAsync() {}
 
     /**
      * Override, do not call this directly, use startDraw()

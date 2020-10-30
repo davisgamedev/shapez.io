@@ -173,7 +173,10 @@ export class GameSystemManager {
      * Updates all systems
      */
     update() {
-        if (globalConfig.asyncUpdatesEnabled) {
+        if (globalConfig.useAsyncUpdates) {
+            /**
+             * TODO: await Promise.all[...]
+             */
         } else {
             for (let i = 0; i < this.systemUpdateOrder.length; ++i) {
                 const system = this.systems[this.systemUpdateOrder[i]];

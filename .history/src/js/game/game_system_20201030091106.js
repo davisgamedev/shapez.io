@@ -17,7 +17,7 @@ export class GameSystem {
 
     ///// PUBLIC API /////
 
-    getVirtualId() {
+    static getId() {
         throw new Error("GameSystem.getId() called without an implementation!!");
     }
 
@@ -26,7 +26,7 @@ export class GameSystem {
      */
     update() {}
 
-    async asyncU1_UpdateOnClone() {}
+    async updateAsync() {}
 
     /**
      * Override, do not call this directly, use startDraw()
