@@ -423,7 +423,7 @@ export class GameCore {
         this.root.gameInitialized = true;
     }
 
-    async draw() {
+    draw() {
         const root = this.root;
         const systems = root.systemMgr.systems;
 
@@ -504,7 +504,7 @@ export class GameCore {
             root.map.drawBackground(params);
 
             // Belt items
-            await systems.belt.drawBeltItems(params);
+            systems.belt.drawBeltItems(params);
 
             // Miner & Static map entities etc.
             root.map.drawForeground(params);
