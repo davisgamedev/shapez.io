@@ -1,3 +1,4 @@
+import { makeOffscreenBuffer } from "../../core/buffer_utils.js";
 import { globalConfig } from "../../core/config";
 import { DrawParameters } from "../../core/draw_parameters";
 import { gMetaBuildingRegistry } from "../../core/global_registries";
@@ -64,6 +65,8 @@ export class BeltSystem extends GameSystemWithFilter {
 
         /** @type {Array<BeltPath>} */
         this.beltPaths = [];
+
+        this.beltBuffers;
     }
 
     /**
@@ -320,16 +323,81 @@ export class BeltSystem extends GameSystemWithFilter {
         }
     }
 
+    async drawBeltItemsSection(section, totalSections, itemCount, totalItems, parameters) {
+        if (window.logBeltPaths == null) window.logBeltPaths = 20;
+
+        const start = totalItems - itemCount * section - 1;
+        const stop = totalItems - itemCount * (section + 1) - 1;
+
+        //console.log(this);
+        const beltBuffer = this.beltBuffers[section];
+        const beltParams = new DrawParameters({ ...parameters, context: beltBuffer[1] });
+
+        beltBuffer[1].clearRect(0, 0, beltBuffer[0].width, beltBuffer[0].height);
+
+        if (window.logBeltPaths-- > 0) {
+            console.log(`Section number: ${section} out of ${totalSections}`);
+            console.log(`Items per section: ${itemCount} out of ${totalItems}`);
+            console.log(`Drawing: ${start} to ${stop}`);
+            console.log(this);
+            console.log(beltBuffer);
+            console.log(parameters);
+            console.log(beltParams);
+        }
+
+        for (let i = start; i >= Math.max(stop, 0); --i) {
+            this.beltPaths[i].draw(beltParams);
+        }
+    }
+
     /**
      * Draws all belt paths
      * @param {DrawParameters} parameters
      */
-    drawBeltItems(parameters) {
-        for (let i = 0; i < this.beltPaths.length; ++i) {
-            this.beltPaths[i].draw(parameters);
+    async drawBeltItems(parameters) {
+        if (window.doMultiThreadBeltDraw == null) window.doMultiThreadBeltDraw = true;
+
+        if (window.doMultiThreadBeltDraw) {
+            if (this.beltBuffers == null) {
+                this.beltBuffers = [...new Array(4)].map((_, i) => {
+                    return makeOffscreenBuffer(this.root.canvas.width, this.root.canvas.height, {
+                        smooth: true,
+                        reusable: false,
+                        label: "beltPathBuffer_" + i,
+                    });
+                });
+            }
+
+            const split = 4;
+            const beltCount = Math.floor(this.beltPaths.length / split);
+
+            await Promise.all(
+                [...new Array(split)].map(
+                    (_, sect) =>
+                        new Promise((resolve, reject) =>
+                            setTimeout(() => {
+                                this.drawBeltItemsSection(
+                                    sect,
+                                    split,
+                                    beltCount,
+                                    this.beltPaths.length,
+                                    parameters
+                                );
+
+                                resolve();
+                            }, 0)
+                        )
+                )
+            );
+            this.beltBuffers.forEach(b => {
+                parameters.context.drawImage(b[0], 0, 0);
+            });
+        } else {
+            for (let i = 0; i < this.beltPaths.length; ++i) {
+                this.beltPaths[i].draw(parameters);
+            }
         }
     }
-
     /**
      * Verifies all belt paths
      */
