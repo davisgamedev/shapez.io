@@ -6,6 +6,15 @@ const { getRevision, getVersion, getAllResourceImages } = require("./buildutils"
 const lzString = require("lz-string");
 const CircularDependencyPlugin = require("circular-dependency-plugin");
 
+/**
+// I dream of
+*!  process.env.UV_THREADPOOL_SIZE = 64;
+*!  process.stdout.write("[UV_THREADPOOL_SIZE]", process.env.UV_THREADPOOL_SIZE);
+// which would increase the node libuv threadpool, and could be nice
+// however I have no idea if this would actually give any benefit to clients
+// likely the default, 4, is good enough, but on beefy systems could have benefit higher
+*/
+
 module.exports = ({ watch = false, standalone = false, chineseVersion = false }) => {
     return {
         mode: "development",

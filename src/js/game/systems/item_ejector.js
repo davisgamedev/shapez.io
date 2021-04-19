@@ -141,11 +141,11 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
         const start = this.allEntitiesArray.length - sect * max - 1;
         const stop = Math.max(0, this.allEntitiesArray.length - (sect + 1) * max - 1);
 
-        // if (window.logEject == null) window.logEject = 100;
-        // if (window.logEject-- > 0) {
-        //     console.log(`Total items: ${this.allEntitiesArray.length}, this sect: ${sect}, this max: ${max}`);
-        //     console.log(`this start: ${start}, this stop: ${stop}`);
-        // }
+        if (window.logEject == null) window.logEject = 100;
+        if (window.logEject-- > 0) {
+            // console.log(`Total items: ${this.allEntitiesArray.length}, this sect: ${sect}, this max: ${max}`);
+            // console.log(`this start: ${start}, this stop: ${stop}`);
+        }
 
         if (!window.doEjectMultiThread) {
             console.log("aborting multi thread: eject");
@@ -223,7 +223,7 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
         }
     }
 
-    update() {
+    async update() {
         this.staleAreaDetector.update();
 
         // Precompute effective belt speed
@@ -241,21 +241,17 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
 
             let resolved = false;
 
-            (async () => {
-                await Promise.all(
-                    [...Array(count)].map(
-                        (_, i) =>
-                            new Promise((resolve, reject) => {
-                                setTimeout(() => {
-                                    this.updateEntities(i, max, progressGrowth);
-                                    resolve();
-                                }, 0);
-                            })
-                    )
-                ).then(() => {
-                    resolved = true;
-                });
-            })();
+            await Promise.all(
+                [...Array(count)].map(
+                    (_, i) =>
+                        new Promise((resolve, reject) => {
+                            setTimeout(() => {
+                                this.updateEntities(i, max, progressGrowth);
+                                resolve();
+                            }, 0);
+                        })
+                )
+            );
 
             return;
         } else {

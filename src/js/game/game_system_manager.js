@@ -181,8 +181,8 @@ export class GameSystemManager {
                 Object.values(this.systems).map(
                     s =>
                         new Promise((resolve, reject) => {
-                            setTimeout(() => {
-                                s.update();
+                            setTimeout(async () => {
+                                await s.update();
                                 resolve();
                             }, 0);
                         })
@@ -207,8 +207,8 @@ export class GameSystemManager {
                 Object.values(this.systems).map(
                     s =>
                         new Promise((resolve, reject) => {
-                            setTimeout(() => {
-                                s.refreshCaches();
+                            setTimeout(async () => {
+                                await s.refreshCaches();
                                 resolve();
                             }, 0);
                         })
