@@ -88,7 +88,11 @@ let app = null;
 function bootApp() {
     logger.log("Page Loaded");
     app = new Application();
-    app.boot();
+    new Promise((resolve, reject) => {
+        setTimeout(() => {
+            app.boot() && resolve();
+        }, 0);
+    });
 }
 
 window.addEventListener("load", bootApp);

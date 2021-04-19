@@ -31,7 +31,7 @@ export class Blueprint {
      * @param {Array<number>} uids
      */
     static fromUids(root, uids) {
-        const newEntities = [];
+        const newEntities = new Array(uids.length);
 
         let averagePosition = new Vector();
 
@@ -41,7 +41,7 @@ export class Blueprint {
             assert(entity, "Entity for blueprint not found:" + uids[i]);
 
             const clone = entity.clone();
-            newEntities.push(clone);
+            newEntities[i] = clone;
 
             const pos = entity.components.StaticMapEntity.getTileSpaceBounds().getCenter();
             averagePosition.addInplace(pos);
@@ -63,7 +63,7 @@ export class Blueprint {
      * @param {Array<Entity>} entities
      */
     static fromEntities(entities) {
-        const newEntities = [];
+        const newEntities = new Array(entities.length);
 
         let averagePosition = new Vector();
 
@@ -72,7 +72,7 @@ export class Blueprint {
             const entity = entities[i];
 
             const clone = entity.clone();
-            newEntities.push(clone);
+            newEntities[i] = clone;
 
             const pos = entity.components.StaticMapEntity.getTileSpaceBounds().getCenter();
             averagePosition.addInplace(pos);

@@ -215,12 +215,12 @@ export class InGameState extends GameState {
     /**
      * Creates the game core instance, and thus the root
      */
-    stage3CreateCore() {
+    async stage3CreateCore() {
         if (this.switchStage(stages.s3_createCore)) {
             logger.log("Creating new game core");
             this.core = new GameCore(this.app);
 
-            this.core.initializeRoot(this, this.savegame);
+            await this.core.initializeRoot(this, this.savegame);
 
             if (this.savegame.hasGameDump()) {
                 this.stage4bResumeGame();
@@ -361,7 +361,13 @@ export class InGameState extends GameState {
         // Remove unneded default element
         document.body.querySelector(".modalDialogParent").remove();
 
-        this.asyncChannel.watch(waitNextFrame()).then(() => this.stage3CreateCore());
+        this.asyncChannel.watch(waitNextFrame()).then(
+            // exit sync here
+            new Promise((resolve, reject) => {
+                this.stage3CreateCore();
+                resolve();
+            })
+        );
     }
 
     /**

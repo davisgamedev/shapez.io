@@ -110,7 +110,7 @@ export class GameTime extends BasicSerializableObject {
      * @param {number} deltaMs
      * @param {function():boolean} updateMethod
      */
-    performTicks(deltaMs, updateMethod) {
+    async performTicks(deltaMs, updateMethod) {
         this.internalAddDeltaToBudget(deltaMs);
 
         const speedAtStart = this.root.time.getSpeed();
@@ -124,7 +124,8 @@ export class GameTime extends BasicSerializableObject {
         while (this.logicTimeBudget >= effectiveDelta) {
             this.logicTimeBudget -= effectiveDelta;
 
-            if (!updateMethod()) {
+            const updateResolved = await updateMethod(); // this should be clearer it is invoked
+            if (!updateResolved) {
                 // Gameover happened or so, do not update anymore
                 return;
             }

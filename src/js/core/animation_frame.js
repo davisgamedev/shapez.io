@@ -26,7 +26,7 @@ export class AnimationFrame {
         this.backgroundWorker.addEventListener("message", this.handleBackgroundTick.bind(this));
     }
 
-    handleBackgroundTick() {
+    async handleBackgroundTick() {
         const time = performance.now();
 
         let dt = time - this.bgLastTime;
@@ -35,7 +35,7 @@ export class AnimationFrame {
             dt = resetDtMs;
         }
 
-        this.bgFrameEmitted.dispatch(dt);
+        await this.bgFrameEmitted.dispatchAsync(dt);
         this.bgLastTime = time;
     }
 
@@ -44,14 +44,14 @@ export class AnimationFrame {
         this.handleAnimationFrame();
     }
 
-    handleAnimationFrame(time) {
+    async handleAnimationFrame(time) {
         let dt = time - this.lastTime;
 
         if (dt > maxDtMs) {
             dt = resetDtMs;
         }
 
-        this.frameEmitted.dispatch(dt);
+        await this.frameEmitted.dispatchAsync(dt);
         this.lastTime = time;
 
         window.requestAnimationFrame(this.boundMethod);

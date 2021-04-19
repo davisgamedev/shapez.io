@@ -27,7 +27,30 @@ export class Signal {
         const n = this.receivers.length;
         for (let i = 0; i < n; ++i) {
             const { receiver, scope } = this.receivers[i];
-            if (receiver.apply(scope, arguments) === STOP_PROPAGATION) {
+            const result = receiver.apply(scope, arguments); // make invocation clear
+            if (result === STOP_PROPAGATION) {
+                return STOP_PROPAGATION;
+            }
+
+            if (modifyState !== this.modifyCount) {
+                // Signal got modified during iteration
+                return STOP_PROPAGATION;
+            }
+        }
+    }
+
+    /**
+     * Dispatches the signal
+     * @param  {...any} payload
+     */
+    async dispatchAsync() {
+        const modifyState = this.modifyCount;
+
+        const n = this.receivers.length;
+        for (let i = 0; i < n; ++i) {
+            const { receiver, scope } = this.receivers[i];
+            const result = await receiver.apply(scope, arguments); // make invocation clear
+            if (result === STOP_PROPAGATION) {
                 return STOP_PROPAGATION;
             }
 

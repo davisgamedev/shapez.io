@@ -168,13 +168,13 @@ export class GameState {
      * Render callback
      * @param {number} dt Delta time in ms since last render
      */
-    onRender(dt) {}
+    async onRender(dt) {}
 
     /**
      * Background tick callback, called while the game is inactiev
      * @param {number} dt Delta time in ms since last tick
      */
-    onBackgroundTick(dt) {}
+    async onBackgroundTick(dt) {}
 
     /**
      * Called when the screen resized

@@ -74,6 +74,11 @@ export class GameCore {
          * @TODO Doesn't belong here
          */
         this.overlayAlpha = 0;
+
+        this.internalIsThreadActive = false;
+        this.internalThreadStallCheckID = null;
+        this.internalUpdateFrameStalled = null;
+        this.internalUpdateFrameNumber = 0;
     }
 
     /**
@@ -82,7 +87,7 @@ export class GameCore {
      * @param {import("../states/ingame").InGameState} parentState
      * @param {Savegame} savegame
      */
-    initializeRoot(parentState, savegame) {
+    async initializeRoot(parentState, savegame) {
         // Construct the root element, this is the data representation of the game
         this.root = new GameRoot(this.app);
         this.root.gameState = parentState;
@@ -137,6 +142,15 @@ export class GameCore {
             window.globalRoot = root;
         }
 
+        new Promise((resolve, reject) => {
+            setTimeout(() => {
+                this.initManualTick.bind(this);
+                resolve();
+            }, 0);
+        });
+    }
+
+    async initManualTick() {
         // @todo Find better place
         if (G_IS_DEV && globalConfig.debug.manualTickOnly) {
             this.root.gameState.inputReciever.keydown.add(key => {
@@ -147,7 +161,7 @@ export class GameCore {
                     this.root.time.updateRealtimeNow();
 
                     // Perform logic ticks
-                    this.root.time.performTicks(this.root.dynamicTickrate.deltaMs, this.boundInternalTick);
+                    //await this.root.time.performTicks(this.root.dynamicTickrate.deltaMs, this.boundInternalTick);
 
                     // Update analytics
                     root.productionAnalytics.update();
@@ -264,7 +278,7 @@ export class GameCore {
         this.app = null;
     }
 
-    tick(deltaMs) {
+    async tick(deltaMs) {
         const root = this.root;
 
         // Extract current real time
@@ -275,7 +289,7 @@ export class GameCore {
 
         if (!(G_IS_DEV && globalConfig.debug.manualTickOnly)) {
             // Perform logic ticks
-            this.root.time.performTicks(deltaMs, this.boundInternalTick);
+            await this.root.time.performTicks(deltaMs, this.boundInternalTick);
 
             // Update analytics
             root.productionAnalytics.update();
@@ -306,8 +320,55 @@ export class GameCore {
         return true;
     }
 
-    updateLogic() {
+    handleStallCheck() {
+        if (this.internalThreadStallCheckID) {
+            // we are already checking for a stalled thread, we can leave now
+            console.error("Excess thread aborted");
+        } else {
+            // set data for stall check, and call resolve stall thread
+            this.internalUpdateFrameStalled = this.internalUpdateFrameNumber;
+            this.internalThreadStallCheckID = window.setTimeout(this.resolveStalledThread.bind(this), 100);
+        }
+    }
+
+    resolveStalledThread() {
+        // always called by the timeout in handleStallCheck
+        if (
+            this.internalIsThreadActive && // there is a thread active
+            this.internalUpdateFrameNumber != this.internalUpdateFrameStalled // and we noted that this was the thread we were watching was stalled
+        ) {
+            console.error("Async updateLogic thread stalled, and is being restarted!");
+
+            // clear stall check data
+            this.internalThreadStallCheckID = null;
+            this.internalUpdateFrameStalled = null;
+
+            this.internalIsThreadActive = false; // terminate the thread
+
+            this.updateLogic(); // restart
+        } else {
+            // this thread was luckily resolved, we don't need to do anything, clear stall check data
+            this.internalThreadStallCheckID = null;
+            this.internalUpdateFrameStalled = null;
+        }
+    }
+
+    async updateLogic() {
         const root = this.root;
+
+        /**
+         * Async stall/misfire check
+         *
+         */
+
+        if (this.internalIsThreadActive) {
+            console.trace();
+            this.handleStallCheck();
+            return;
+        }
+
+        this.internalIsThreadActive = true;
+        this.internalUpdateFrameNumber++;
 
         root.dynamicTickrate.beginTick();
 
@@ -319,21 +380,26 @@ export class GameCore {
         this.duringLogicUpdate = true;
 
         // Update entities, this removes destroyed entities
-        root.entityMgr.update();
+        await root.entityMgr.update();
 
         // IMPORTANT: At this point, the game might be game over. Stop if this is the case
         if (!this.root) {
             logger.log("Root destructed, returning false");
             root.dynamicTickrate.endTick();
 
+            this.internalIsThreadActive = false;
+
             return false;
         }
 
-        root.systemMgr.update();
+        await root.systemMgr.update();
         // root.particleMgr.update();
 
         this.duringLogicUpdate = false;
         root.dynamicTickrate.endTick();
+
+        this.internalIsThreadActive = false;
+
         return true;
     }
 

@@ -171,17 +171,54 @@ export class GameSystemManager {
     /**
      * Updates all systems
      */
-    update() {
-        for (let i = 0; i < this.systemUpdateOrder.length; ++i) {
-            const system = this.systems[this.systemUpdateOrder[i]];
-            system.update();
+
+    async update() {
+        if (window.doMultiThread == null) {
+            window.doMultiThread = true;
         }
+        if (window.doMultiThread) {
+            await Promise.all(
+                Object.values(this.systems).map(
+                    s =>
+                        new Promise((resolve, reject) => {
+                            setTimeout(() => {
+                                s.update();
+                                resolve();
+                            }, 0);
+                        })
+                )
+            );
+        } else {
+            for (let i = 0; i < this.systemUpdateOrder.length; ++i) {
+                const system = this.systems[this.systemUpdateOrder[i]];
+                system.update();
+            }
+        }
+
+        // for (let i = 0; i < this.systemUpdateOrder.length; ++i) {
+        //     const system = this.systems[this.systemUpdateOrder[i]];
+        //     system.update();
+        // }
     }
 
-    refreshCaches() {
-        for (let i = 0; i < this.systemUpdateOrder.length; ++i) {
-            const system = this.systems[this.systemUpdateOrder[i]];
-            system.refreshCaches();
+    async refreshCaches() {
+        if (window.doMultiThread) {
+            await Promise.all(
+                Object.values(this.systems).map(
+                    s =>
+                        new Promise((resolve, reject) => {
+                            setTimeout(() => {
+                                s.refreshCaches();
+                                resolve();
+                            }, 0);
+                        })
+                )
+            );
+        } else {
+            for (let i = 0; i < this.systemUpdateOrder.length; ++i) {
+                const system = this.systems[this.systemUpdateOrder[i]];
+                system.refreshCaches();
+            }
         }
     }
 }

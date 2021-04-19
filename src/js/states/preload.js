@@ -228,7 +228,7 @@ export class PreloadState extends GameState {
             );
     }
 
-    update() {
+    async update() {
         if (G_CHINA_VERSION) {
             return;
         }
@@ -248,12 +248,12 @@ export class PreloadState extends GameState {
         }
     }
 
-    onRender() {
-        this.update();
+    async onRender() {
+        await this.update();
     }
 
-    onBackgroundTick() {
-        this.update();
+    async onBackgroundTick() {
+        await this.update();
     }
 
     /**

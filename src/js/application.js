@@ -317,7 +317,7 @@ export class Application {
     /**
      * Boots the application
      */
-    boot() {
+    async boot() {
         console.log("Booting ...");
         this.registerStates();
         this.registerEventListeners();
@@ -350,14 +350,14 @@ export class Application {
      * Background frame update callback
      * @param {number} dt
      */
-    onBackgroundFrame(dt) {
+    async onBackgroundFrame(dt) {
         if (this.isRenderable()) {
             return;
         }
 
         const currentState = this.stateMgr.getCurrentState();
         if (currentState) {
-            currentState.onBackgroundTick(dt);
+            await currentState.onBackgroundTick(dt);
         }
     }
 
@@ -365,7 +365,7 @@ export class Application {
      * Frame update callback
      * @param {number} dt
      */
-    onFrameEmitted(dt) {
+    async onFrameEmitted(dt) {
         if (!this.isRenderable()) {
             return;
         }
@@ -380,7 +380,7 @@ export class Application {
 
         const currentState = this.stateMgr.getCurrentState();
         if (currentState) {
-            currentState.onRender(dt);
+            await currentState.onRender(dt);
         }
     }
 
