@@ -180,9 +180,11 @@ export class GameSystemManager {
             await Promise.all(
                 Object.values(this.systems).map(
                     s =>
-                        new Promise(async (resolve, reject) => {
-                            await s.update();
-                            resolve();
+                        new Promise((resolve, reject) => {
+                            Promise.resolve(1).then(async () => {
+                                await s.update();
+                                resolve();
+                            });
                         })
                 )
             );
