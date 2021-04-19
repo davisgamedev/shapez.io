@@ -368,7 +368,7 @@ export class InGameState extends GameState {
      * Render callback
      * @param {number} dt
      */
-    onRender(dt) {
+    async onRender(dt) {
         if (APPLICATION_ERROR_OCCURED) {
             // Application somehow crashed, do not do anything
             return;
@@ -384,14 +384,14 @@ export class InGameState extends GameState {
         }
 
         if (this.stage === stages.s10_gameRunning) {
-            this.core.tick(dt);
+            await this.core.tick(dt);
         }
 
         // If the stage is still active (This might not be the case if tick() moved us to game over)
         if (this.stage === stages.s10_gameRunning) {
             // Only draw if page visible
             if (this.app.pageVisible) {
-                this.core.draw();
+                await this.core.draw();
             }
 
             this.loadingOverlay.removeIfAttached();
@@ -402,8 +402,8 @@ export class InGameState extends GameState {
         }
     }
 
-    onBackgroundTick(dt) {
-        this.onRender(dt);
+    async onBackgroundTick(dt) {
+        await this.onRender(dt);
     }
 
     /**
