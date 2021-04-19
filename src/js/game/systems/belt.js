@@ -471,12 +471,12 @@ export class BeltSystem extends GameSystemWithFilter {
     /**
      * Updates all belts
      */
-    update() {
+    async update() {
         if (G_IS_DEV && globalConfig.debug.checkBeltPaths) {
             this.debug_verifyBeltPaths();
         }
 
-        for (let i = 0; i < this.beltPaths.length; ++i) {
+        for (let i = this.beltPaths.length - 1; i >= 0; --i) {
             this.beltPaths[i].update();
         }
 

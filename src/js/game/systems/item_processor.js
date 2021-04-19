@@ -67,74 +67,217 @@ export class ItemProcessorSystem extends GameSystemWithFilter {
         }
     }
 
-    update() {
-        for (let i = this.allEntitiesArray.length - 1; i >= 0; --i) {
-            const entity = this.allEntitiesArray[i];
-            const processorComp = entity.components.ItemProcessor;
-            const ejectorComp = entity.components.ItemEjector;
+    /*
+   }
 
-            const currentCharge = processorComp.ongoingCharges[0];
+        const split = 2;
+        const items = Math.floor(this.beltPaths.length / split);
 
-            if (currentCharge) {
-                // Process next charge
-                if (currentCharge.remainingTime > 0.0) {
-                    currentCharge.remainingTime -= this.root.dynamicTickrate.deltaSeconds;
-                    if (currentCharge.remainingTime < 0.0) {
-                        // Add bonus time, this is the time we spent too much
-                        processorComp.bonusTime += -currentCharge.remainingTime;
-                    }
-                }
+        if (window.doMultiThreadBeltPaths == null) {
+            window.doMultiThreadBeltPaths = true;
+            window.logBelts = 100;
+        }
+        if (window.doMultiThreadBeltPaths) {
+            await Promise.all(
+                [...new Array(split)].map(
+                    (_, i) =>
+                        new Promise(async (resolve, reject) => {
+                            const start = this.beltPaths.length - i * items - 1;
+                            const stop = this.beltPaths.length - (i + 1) * items - 1;
 
-                // Check if it finished
-                if (currentCharge.remainingTime <= 0.0) {
-                    const itemsToEject = currentCharge.items;
-
-                    // Go over all items and try to eject them
-                    for (let j = 0; j < itemsToEject.length; ++j) {
-                        const { item, requiredSlot, preferredSlot } = itemsToEject[j];
-
-                        assert(ejectorComp, "To eject items, the building needs to have an ejector");
-
-                        let slot = null;
-                        if (requiredSlot !== null && requiredSlot !== undefined) {
-                            // We have a slot override, check if that is free
-                            if (ejectorComp.canEjectOnSlot(requiredSlot)) {
-                                slot = requiredSlot;
+                            if (window.logBelts-- > 0) {
+                                console.log(
+                                    `total: ${this.beltPaths.length}, items: ${items}, from: ${start}, to: ${stop}`
+                                );
                             }
-                        } else if (preferredSlot !== null && preferredSlot !== undefined) {
-                            // We have a slot preference, try using it but otherwise use a free slot
-                            if (ejectorComp.canEjectOnSlot(preferredSlot)) {
-                                slot = preferredSlot;
+
+                            for (let i = start; i >= Math.max(stop, 0); --i) {
+                                this.beltPaths[i].update();
+                            }
+
+                            resolve();
+                        })
+                )
+            );
+        } else {
+
+
+    */
+
+    async update() {
+        const split = 2;
+        const items = Math.floor(this.allEntitiesArray.length / split);
+
+        if (window.doMultiThreadProcess == null) {
+            window.doMultiThreadProcess = true;
+            window.logProcess = 50;
+        }
+        if (window.doMultiThreadProcess) {
+            await Promise.all(
+                [...new Array(split)].map(
+                    (_, i) =>
+                        new Promise((resolve, reject) => {
+                            const start = this.allEntitiesArray.length - i * items - 1;
+                            const stop = this.allEntitiesArray.length - (i + 1) * items - 1;
+
+                            if (window.logProcess-- > 0) {
+                                console.log(
+                                    `total: ${this.allEntitiesArray.length}, items: ${items}, from: ${start}, to: ${stop}`
+                                );
+                            }
+
+                            for (let i = start; i >= Math.max(stop, 0); --i) {
+                                const entity = this.allEntitiesArray[i];
+                                const processorComp = entity.components.ItemProcessor;
+                                const ejectorComp = entity.components.ItemEjector;
+
+                                const currentCharge = processorComp.ongoingCharges[0];
+
+                                if (currentCharge) {
+                                    // Process next charge
+                                    if (currentCharge.remainingTime > 0.0) {
+                                        currentCharge.remainingTime -= this.root.dynamicTickrate.deltaSeconds;
+                                        if (currentCharge.remainingTime < 0.0) {
+                                            // Add bonus time, this is the time we spent too much
+                                            processorComp.bonusTime += -currentCharge.remainingTime;
+                                        }
+                                    }
+
+                                    // Check if it finished
+                                    if (currentCharge.remainingTime <= 0.0) {
+                                        const itemsToEject = currentCharge.items;
+
+                                        // Go over all items and try to eject them
+                                        for (let j = 0; j < itemsToEject.length; ++j) {
+                                            const { item, requiredSlot, preferredSlot } = itemsToEject[j];
+
+                                            assert(
+                                                ejectorComp,
+                                                "To eject items, the building needs to have an ejector"
+                                            );
+
+                                            let slot = null;
+                                            if (requiredSlot !== null && requiredSlot !== undefined) {
+                                                // We have a slot override, check if that is free
+                                                if (ejectorComp.canEjectOnSlot(requiredSlot)) {
+                                                    slot = requiredSlot;
+                                                }
+                                            } else if (
+                                                preferredSlot !== null &&
+                                                preferredSlot !== undefined
+                                            ) {
+                                                // We have a slot preference, try using it but otherwise use a free slot
+                                                if (ejectorComp.canEjectOnSlot(preferredSlot)) {
+                                                    slot = preferredSlot;
+                                                } else {
+                                                    slot = ejectorComp.getFirstFreeSlot();
+                                                }
+                                            } else {
+                                                // We can eject on any slot
+                                                slot = ejectorComp.getFirstFreeSlot();
+                                            }
+
+                                            if (slot !== null) {
+                                                // Alright, we can actually eject
+                                                if (!ejectorComp.tryEject(slot, item)) {
+                                                    assert(false, "Failed to eject");
+                                                } else {
+                                                    itemsToEject.splice(j, 1);
+                                                    j -= 1;
+                                                }
+                                            }
+                                        }
+
+                                        // If the charge was entirely emptied to the outputs, start the next charge
+                                        if (itemsToEject.length === 0) {
+                                            processorComp.ongoingCharges.shift();
+                                        }
+                                    }
+                                }
+
+                                // Check if we have an empty queue and can start a new charge
+                                if (processorComp.ongoingCharges.length < MAX_QUEUED_CHARGES) {
+                                    if (this.canProcess(entity)) {
+                                        this.startNewCharge(entity);
+                                    }
+                                }
+                            }
+
+                            resolve();
+                        })
+                )
+            );
+        } else {
+            window.logProcess = 50;
+
+            for (let i = this.allEntitiesArray.length - 1; i >= 0; --i) {
+                const entity = this.allEntitiesArray[i];
+                const processorComp = entity.components.ItemProcessor;
+                const ejectorComp = entity.components.ItemEjector;
+
+                const currentCharge = processorComp.ongoingCharges[0];
+
+                if (currentCharge) {
+                    // Process next charge
+                    if (currentCharge.remainingTime > 0.0) {
+                        currentCharge.remainingTime -= this.root.dynamicTickrate.deltaSeconds;
+                        if (currentCharge.remainingTime < 0.0) {
+                            // Add bonus time, this is the time we spent too much
+                            processorComp.bonusTime += -currentCharge.remainingTime;
+                        }
+                    }
+
+                    // Check if it finished
+                    if (currentCharge.remainingTime <= 0.0) {
+                        const itemsToEject = currentCharge.items;
+
+                        // Go over all items and try to eject them
+                        for (let j = 0; j < itemsToEject.length; ++j) {
+                            const { item, requiredSlot, preferredSlot } = itemsToEject[j];
+
+                            assert(ejectorComp, "To eject items, the building needs to have an ejector");
+
+                            let slot = null;
+                            if (requiredSlot !== null && requiredSlot !== undefined) {
+                                // We have a slot override, check if that is free
+                                if (ejectorComp.canEjectOnSlot(requiredSlot)) {
+                                    slot = requiredSlot;
+                                }
+                            } else if (preferredSlot !== null && preferredSlot !== undefined) {
+                                // We have a slot preference, try using it but otherwise use a free slot
+                                if (ejectorComp.canEjectOnSlot(preferredSlot)) {
+                                    slot = preferredSlot;
+                                } else {
+                                    slot = ejectorComp.getFirstFreeSlot();
+                                }
                             } else {
+                                // We can eject on any slot
                                 slot = ejectorComp.getFirstFreeSlot();
                             }
-                        } else {
-                            // We can eject on any slot
-                            slot = ejectorComp.getFirstFreeSlot();
-                        }
 
-                        if (slot !== null) {
-                            // Alright, we can actually eject
-                            if (!ejectorComp.tryEject(slot, item)) {
-                                assert(false, "Failed to eject");
-                            } else {
-                                itemsToEject.splice(j, 1);
-                                j -= 1;
+                            if (slot !== null) {
+                                // Alright, we can actually eject
+                                if (!ejectorComp.tryEject(slot, item)) {
+                                    assert(false, "Failed to eject");
+                                } else {
+                                    itemsToEject.splice(j, 1);
+                                    j -= 1;
+                                }
                             }
                         }
-                    }
 
-                    // If the charge was entirely emptied to the outputs, start the next charge
-                    if (itemsToEject.length === 0) {
-                        processorComp.ongoingCharges.shift();
+                        // If the charge was entirely emptied to the outputs, start the next charge
+                        if (itemsToEject.length === 0) {
+                            processorComp.ongoingCharges.shift();
+                        }
                     }
                 }
-            }
 
-            // Check if we have an empty queue and can start a new charge
-            if (processorComp.ongoingCharges.length < MAX_QUEUED_CHARGES) {
-                if (this.canProcess(entity)) {
-                    this.startNewCharge(entity);
+                // Check if we have an empty queue and can start a new charge
+                if (processorComp.ongoingCharges.length < MAX_QUEUED_CHARGES) {
+                    if (this.canProcess(entity)) {
+                        this.startNewCharge(entity);
+                    }
                 }
             }
         }

@@ -143,10 +143,8 @@ export class GameCore {
         }
 
         new Promise((resolve, reject) => {
-            setTimeout(() => {
-                this.initManualTick.bind(this);
-                resolve();
-            }, 0);
+            this.initManualTick.bind(this);
+            resolve();
         });
     }
 
