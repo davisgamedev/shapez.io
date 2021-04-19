@@ -14,7 +14,7 @@ export class ItemAcceptorSystem extends GameSystemWithFilter {
         this.accumulatedTicksWhileInMapOverview = 0;
     }
 
-    async update() {
+    update() {
         if (this.root.app.settings.getAllSettings().simplifiedBelts) {
             // Disabled in potato mode
             return;
@@ -39,65 +39,18 @@ export class ItemAcceptorSystem extends GameSystemWithFilter {
         // Reset accumulated ticks
         this.accumulatedTicksWhileInMapOverview = 0;
 
-        const split = 2;
-        const items = Math.floor(this.allEntitiesArray.length / split);
+        for (let i = this.allEntitiesArray.length - 1; i >= 0; --i) {
+            const entity = this.allEntitiesArray[i];
+            const aceptorComp = entity.components.ItemAcceptor;
+            const animations = aceptorComp.itemConsumptionAnimations;
 
-        if (window.doMultiThreadProcess == null) {
-            window.doMultiThreadProcess = true;
-            window.logProcess = 50;
-        }
-        if (window.doMultiThreadProcess) {
-            await Promise.all(
-                [...new Array(split)].map(
-                    (_, i) =>
-                        new Promise((resolve, reject) => {
-                            Promise.resolve(1).then(() => {
-                                const start = this.allEntitiesArray.length - i * items - 1;
-                                const stop = this.allEntitiesArray.length - (i + 1) * items - 1;
-
-                                if (window.logProcess-- > 0) {
-                                    console.log(
-                                        `total: ${this.allEntitiesArray.length}, items: ${items}, from: ${start}, to: ${stop}`
-                                    );
-                                }
-
-                                for (let i = start; i >= Math.max(stop, 0); --i) {
-                                    const entity = this.allEntitiesArray[i];
-                                    const aceptorComp = entity.components.ItemAcceptor;
-                                    const animations = aceptorComp.itemConsumptionAnimations;
-
-                                    // Process item consumption animations to avoid items popping from the belts
-                                    for (let animIndex = 0; animIndex < animations.length; ++animIndex) {
-                                        const anim = animations[animIndex];
-                                        anim.animProgress += progress;
-                                        if (anim.animProgress > 1) {
-                                            fastArrayDelete(animations, animIndex);
-                                            animIndex -= 1;
-                                        }
-                                    }
-                                }
-
-                                resolve();
-                            });
-                        })
-                )
-            );
-        } else {
-            window.logProcess = 50;
-
-            for (let i = this.allEntitiesArray.length - 1; i >= 0; --i) {
-                const entity = this.allEntitiesArray[i];
-                const aceptorComp = entity.components.ItemAcceptor;
-                const animations = aceptorComp.itemConsumptionAnimations;
-
-                // Process item consumption animations to avoid items popping from the belts
-                for (let animIndex = 0; animIndex < animations.length; ++animIndex) {
-                    const anim = animations[animIndex];
-                    anim.animProgress += progress;
-                    if (anim.animProgress > 1) {
-                        fastArrayDelete(animations, animIndex);
-                        animIndex -= 1;
-                    }
+            // Process item consumption animations to avoid items popping from the belts
+            for (let animIndex = 0; animIndex < animations.length; ++animIndex) {
+                const anim = animations[animIndex];
+                anim.animProgress += progress;
+                if (anim.animProgress > 1) {
+                    fastArrayDelete(animations, animIndex);
+                    animIndex -= 1;
                 }
             }
         }
