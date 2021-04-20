@@ -103,19 +103,30 @@ export function drawSpriteClipped({ parameters, sprite, x, y, w, h, originalW, o
         return;
     }
 
-    parameters.context.drawImage(
-        sprite,
+    if (window.noScaleTest)
+        parameters.context.drawImage(
+            sprite,
 
-        // src pos and size
-        ((intersection.x - x) / w) * originalW,
-        ((intersection.y - y) / h) * originalH,
-        (originalW * intersection.w) / w,
-        (originalH * intersection.h) / h,
+            // src pos and size
+            ((intersection.x - x) / w) * originalW,
+            ((intersection.y - y) / h) * originalH,
+            (originalW * intersection.w) / w,
+            (originalH * intersection.h) / h
+        );
+    else
+        parameters.context.drawImage(
+            sprite,
 
-        // dest pos and size
-        intersection.x,
-        intersection.y,
-        intersection.w,
-        intersection.h
-    );
+            // src pos and size
+            ((intersection.x - x) / w) * originalW,
+            ((intersection.y - y) / h) * originalH,
+            (originalW * intersection.w) / w,
+            (originalH * intersection.h) / h,
+
+            // dest pos and size
+            intersection.x,
+            intersection.y,
+            intersection.w,
+            intersection.h
+        );
 }

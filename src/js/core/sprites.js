@@ -103,19 +103,27 @@ export class AtlasSprite extends BaseSprite {
         const scaleW = width / link.w;
         const scaleH = height / link.h;
 
-        context.drawImage(
-            link.atlas,
+        if (window.noScaleTest)
+            context.drawImage(
+                link.atlas,
 
-            link.packedX,
-            link.packedY,
-            link.packedW,
-            link.packedH,
+                link.packedX,
+                link.packedY
+            );
+        else
+            context.drawImage(
+                link.atlas,
 
-            x + link.packOffsetX * scaleW,
-            y + link.packOffsetY * scaleH,
-            link.packedW * scaleW,
-            link.packedH * scaleH
-        );
+                link.packedX,
+                link.packedY,
+                link.packedW,
+                link.packedH,
+
+                x + link.packOffsetX * scaleW,
+                y + link.packOffsetY * scaleH,
+                link.packedW * scaleW,
+                link.packedH * scaleH
+            );
     }
 
     /**
@@ -201,23 +209,32 @@ export class AtlasSprite extends BaseSprite {
             destH = intersection.h;
         }
 
-        parameters.context.drawImage(
-            link.atlas,
+        if (window.noScaleTest)
+            parameters.context.drawImage(
+                link.atlas,
 
-            // atlas src pos
-            srcX,
-            srcY,
+                // atlas src pos
+                srcX,
+                srcY
+            );
+        else
+            parameters.context.drawImage(
+                link.atlas,
 
-            // atlas src size
-            srcW,
-            srcH,
+                // atlas src pos
+                srcX,
+                srcY,
 
-            // dest pos and size
-            destX - EXTRUDE,
-            destY - EXTRUDE,
-            destW + 2 * EXTRUDE,
-            destH + 2 * EXTRUDE
-        );
+                // atlas src size
+                srcW,
+                srcH,
+
+                // dest pos and size
+                destX - EXTRUDE,
+                destY - EXTRUDE,
+                destW + 2 * EXTRUDE,
+                destH + 2 * EXTRUDE
+            );
     }
 
     /**
@@ -372,7 +389,9 @@ export class RegularSprite extends BaseSprite {
         assert(y !== undefined, "No y given");
         assert(w !== undefined, "No width given");
         assert(h !== undefined, "No height given");
-        context.drawImage(this.sprite, x, y, w, h);
+
+        if (window.noScaleTest) context.drawImage(this.sprite, x, yarn);
+        else context.drawImage(this.sprite, x, y, w, h);
     }
 
     /**
@@ -390,6 +409,8 @@ export class RegularSprite extends BaseSprite {
         assert(y !== undefined, "No y given");
         assert(w !== undefined, "No width given");
         assert(h !== undefined, "No height given");
-        context.drawImage(this.sprite, x - w / 2, y - h / 2, w, h);
+
+        if (window.noScaleTest) context.drawImage(this.sprite, x - w / 2, y - h / 2);
+        else context.drawImage(this.sprite, x - w / 2, y - h / 2, w, h);
     }
 }

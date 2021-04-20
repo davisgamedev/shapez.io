@@ -294,7 +294,8 @@ export class ShapeDefinition extends BasicSerializableObject {
             dpi,
             redrawMethod: this.bufferGenerator,
         });
-        parameters.context.drawImage(canvas, x - diameter / 2, y - diameter / 2, diameter, diameter);
+        if (window.noScaleTest) parameters.context.drawImage(canvas, x - diameter / 2, y - diameter / 2);
+        else parameters.context.drawImage(canvas, x - diameter / 2, y - diameter / 2, diameter, diameter);
     }
 
     /**

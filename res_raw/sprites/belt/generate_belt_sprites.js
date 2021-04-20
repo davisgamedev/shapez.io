@@ -162,7 +162,9 @@ async function run() {
         flippedContext.quality = "best";
         flippedContext.clearRect(0, 0, dimensions, dimensions);
         flippedContext.scale(-1, 1);
-        flippedContext.drawImage(canvas, -dimensions, 0, dimensions, dimensions);
+
+        if (window.noScaleTest) flippedContext.drawImage(canvas, -dimensions, 0);
+        else flippedContext.drawImage(canvas, -dimensions, 0, dimensions, dimensions);
 
         const outRight = fs.createWriteStream(path.join(__dirname, "built", "right_" + i + ".png"));
         const streamRight = canvas.createPNGStream();

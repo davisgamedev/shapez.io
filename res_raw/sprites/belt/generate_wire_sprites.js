@@ -180,7 +180,9 @@ async function run() {
             });
 
             context.globalAlpha = 0.4;
-            context.drawImage(lineCanvas, 0, 0, dimensions, dimensions);
+
+            if (window.noScaleTest) context.drawImage(lineCanvas, 0, 0, dimensions, dimensions);
+            else context.drawImage(lineCanvas, 0, 0);
 
             context.globalAlpha = 1;
             context.imageSmoothingEnabled = false;
