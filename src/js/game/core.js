@@ -378,7 +378,7 @@ export class GameCore {
         this.duringLogicUpdate = true;
 
         // Update entities, this removes destroyed entities
-        root.entityMgr.update();
+        await root.entityMgr.update();
 
         // IMPORTANT: At this point, the game might be game over. Stop if this is the case
         if (!this.root) {
@@ -421,7 +421,7 @@ export class GameCore {
         this.root.gameInitialized = true;
     }
 
-    async draw() {
+    draw() {
         const root = this.root;
         const systems = root.systemMgr.systems;
 
@@ -502,7 +502,7 @@ export class GameCore {
             root.map.drawBackground(params);
 
             // Belt items
-            await systems.belt.drawBeltItems(params);
+            systems.belt.drawBeltItems(params);
 
             // Miner & Static map entities etc.
             root.map.drawForeground(params);
