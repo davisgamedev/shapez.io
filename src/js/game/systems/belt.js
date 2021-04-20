@@ -4,7 +4,7 @@ import { gMetaBuildingRegistry } from "../../core/global_registries";
 import { Loader } from "../../core/loader";
 import { createLogger } from "../../core/logging";
 import { AtlasSprite } from "../../core/sprites";
-import { fastArrayDeleteValue } from "../../core/utils";
+import { fastArrayDelete, fastArrayDeleteValue } from "../../core/utils";
 import { enumDirection, enumDirectionToVector, enumInvertedDirections, Vector } from "../../core/vector";
 import { BeltPath } from "../belt_path";
 import { arrayBeltVariantToRotation, MetaBeltBuilding } from "../buildings/belt";
@@ -64,6 +64,9 @@ export class BeltSystem extends GameSystemWithFilter {
 
         /** @type {Array<BeltPath>} */
         this.beltPaths = [];
+
+        /** @type {Array<BeltPath>} */
+        this.nearViewBeltPaths = [];
     }
 
     /**
@@ -324,9 +327,26 @@ export class BeltSystem extends GameSystemWithFilter {
      * Draws all belt paths
      * @param {DrawParameters} parameters
      */
-    drawBeltItems(parameters) {
-        for (let i = 0; i < this.beltPaths.length; ++i) {
-            this.beltPaths[i].draw(parameters);
+    async drawBeltItems(parameters) {
+        if (window.drawBeltOpto == null) {
+            window.logProcess = 100;
+            window.drawBeltOpto = true;
+        }
+
+        if (window.drawBeltOpto) {
+            if (window.logProcess-- > 0) {
+                console.log(this.beltPaths.length);
+                console.log(this.nearViewBeltPaths.length);
+            }
+
+            for (let i = 0; i < this.nearViewBeltPaths.length; ++i) {
+                this.nearViewBeltPaths[i].draw(parameters);
+            }
+        } else {
+            window.logProcess = 100;
+            for (let i = 0; i < this.beltPaths.length; ++i) {
+                this.beltPaths[i].draw(parameters);
+            }
         }
     }
 
@@ -476,9 +496,25 @@ export class BeltSystem extends GameSystemWithFilter {
             this.debug_verifyBeltPaths();
         }
 
+        let nearPathsIndex = -1;
+        const nearPathsLength = this.nearViewBeltPaths.length;
+
+        const viewRect = this.root.camera.getVisibleRect().expandedInAllDirections(1); // TODO: what are the units here?
+
         for (let i = this.beltPaths.length - 1; i >= 0; --i) {
-            this.beltPaths[i].update();
+            const path = this.beltPaths[i];
+            path.update();
+
+            if (path.isNearView(viewRect)) {
+                if (++nearPathsIndex < nearPathsLength) {
+                    this.nearViewBeltPaths[nearPathsIndex] = path;
+                } else {
+                    this.nearViewBeltPaths.push(path);
+                }
+            }
         }
+
+        if (nearPathsIndex < nearPathsLength) this.nearViewBeltPaths.splice(nearPathsIndex + 1);
 
         if (G_IS_DEV && globalConfig.debug.checkBeltPaths) {
             this.debug_verifyBeltPaths();

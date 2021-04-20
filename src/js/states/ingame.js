@@ -381,7 +381,7 @@ export class InGameState extends GameState {
         }
 
         if (this.stage === stages.s7_warmup) {
-            this.core.draw();
+            await this.core.draw();
             this.warmupTimeSeconds -= dt / 1000.0;
             if (this.warmupTimeSeconds < 0) {
                 logger.log("Warmup completed");

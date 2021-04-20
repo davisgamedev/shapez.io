@@ -1236,6 +1236,14 @@ export class BeltPath extends BasicSerializableObject {
 
     /**
      *
+     * @param {Rectangle} viewRect
+     */
+    isNearView(viewRect) {
+        return this.worldBounds.getIntersection(viewRect);
+    }
+
+    /**
+     *
      * @param {DrawParameters} parameters
      */
     drawDebug(parameters) {
@@ -1345,7 +1353,7 @@ export class BeltPath extends BasicSerializableObject {
      * @param {DrawParameters} parameters
      */
     draw(parameters) {
-        if (!parameters.visibleRect.containsRect(this.worldBounds)) {
+        if (!window.drawBeltOpto && !parameters.visibleRect.containsRect(this.worldBounds)) {
             return;
         }
 
