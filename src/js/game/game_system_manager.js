@@ -35,6 +35,17 @@ export class GameSystemManager {
     constructor(root) {
         this.root = root;
 
+        /**
+         * ! Adding systems has now changed:
+         * !
+         * !  - in addition to adding in the class in systems and in initSystems
+         * !    a method must be created in the body of this class
+         * !
+         * !  - this is to allow debug performance tools to read what system is
+         * !    specifically being called during its update() --critical when finding bottlenecks--
+         * !
+         * !  - these will only be used during debug to prevent extra overhead in production
+         */
         this.systems = {
             /* typehints:start */
             /** @type {BeltSystem} */
@@ -102,9 +113,74 @@ export class GameSystemManager {
 
             /* typehints:end */
         };
+
         this.systemUpdateOrder = [];
 
         this.internalInitSystems();
+    }
+
+    async beltUpdate(id, system) {
+        await system.update.call(system);
+    }
+    async itemEjectorUpdate(id, system) {
+        await system.update.call(system);
+    }
+    async mapResourcesUpdate(id, system) {
+        await system.update.call(system);
+    }
+    async minerUpdate(id, system) {
+        await system.update.call(system);
+    }
+    async itemProcessorUpdate(id, system) {
+        await system.update.call(system);
+    }
+    async undergroundBeltUpdate(id, system) {
+        await system.update.call(system);
+    }
+    async hubUpdate(id, system) {
+        await system.update.call(system);
+    }
+    async staticMapEntitiesUpdate(id, system) {
+        await system.update.call(system);
+    }
+    async itemAcceptorUpdate(id, system) {
+        await system.update.call(system);
+    }
+    async storageUpdate(id, system) {
+        await system.update.call(system);
+    }
+    async wiredPinsUpdate(id, system) {
+        await system.update.call(system);
+    }
+    async beltUnderlaysUpdate(id, system) {
+        await system.update.call(system);
+    }
+    async wireUpdate(id, system) {
+        await system.update.call(system);
+    }
+    async constantSignalUpdate(id, system) {
+        await system.update.call(system);
+    }
+    async logicGateUpdate(id, system) {
+        await system.update.call(system);
+    }
+    async leverUpdate(id, system) {
+        await system.update.call(system);
+    }
+    async displayUpdate(id, system) {
+        await system.update.call(system);
+    }
+    async itemProcessorOverlaysUpdate(id, system) {
+        await system.update.call(system);
+    }
+    async beltReaderUpdate(id, system) {
+        await system.update.call(system);
+    }
+    async filterUpdate(id, system) {
+        await system.update.call(system);
+    }
+    async itemProducerUpdate(id, system) {
+        await system.update.call(system);
     }
 
     /**
@@ -112,11 +188,15 @@ export class GameSystemManager {
      */
     internalInitSystems() {
         const add = (id, systemClass) => {
-            this.systems[id] = new systemClass(this.root);
+            const system = new systemClass(this.root);
+            this.systems[id] = system;
             this.systemUpdateOrder.push(id);
         };
 
         // Order is important!
+        //  - lol don't @me about these being async now
+        //  - haven't seen too many issues so far
+        // TODO: fix async handling errors about order mismatching
 
         // IMPORTANT: Item acceptor must be before the belt, because it may not tick after the belt
         // has put in the item into the acceptor animation, otherwise its off
@@ -173,31 +253,29 @@ export class GameSystemManager {
      */
 
     async update() {
-        if (window.doMultiThread == null) {
-            window.doMultiThread = true;
-        }
-        if (window.doMultiThread) {
-            await Promise.all(
-                Object.values(this.systems).map(
-                    s =>
-                        new Promise((resolve, reject) => {
-                            Promise.resolve(1).then(async () => {
-                                await s.update();
-                                resolve();
-                            });
-                        })
-                )
-            );
-        } else {
-            for (let i = 0; i < this.systemUpdateOrder.length; ++i) {
-                const system = this.systems[this.systemUpdateOrder[i]];
-                system.update();
-            }
-        }
+        await Promise.all(
+            Object.entries(this.systems).map(
+                ([key, system]) =>
+                    new Promise((resolve, reject) => {
+                        Promise.resolve(1).then(async () => {
+                            if (G_IS_DEV) {
+                                await this[key + "Update"](key, system);
+                            } else {
+                                await system.update();
+                            }
+                            resolve();
+                        });
+                    })
+            )
+        );
 
         // for (let i = 0; i < this.systemUpdateOrder.length; ++i) {
         //     const system = this.systems[this.systemUpdateOrder[i]];
-        //     system.update();
+        //     if (G_IS_DEV) {
+        //         await this[key + "Update"](key, system);
+        //     } else {
+        //         await system.update();
+        //     }
         // }
     }
 
