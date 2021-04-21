@@ -31,6 +31,10 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
         );
 
         this.root.signals.postLoadHook.add(this.recomputeCacheFull, this);
+
+        this.handleEjectArrayA = true;
+        this.handleItemEjectArrayA = [];
+        this.handleItemEjectArrayB = [];
     }
 
     /**
@@ -136,7 +140,146 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
         }
     }
 
-    update() {
+    async asyncUpdate() {
+        this.handleEjectArrayA = !this.handleEjectArrayA;
+
+        const handleStaleAreaPromise = new Promise((resolve, reject) => {
+            new Promise.resolve(1).then(() => {
+                this.staleAreaDetector.update();
+                resolve();
+            });
+        });
+
+        const handleProgressPromise = new Promise((resolve, reject) => {
+            new Promise.resolve(1).then(() => {
+                let workingArrayIndex = 0;
+
+                // while handleItemPromise is working on A, work on B
+                let workingArray = this.handleEjectArrayA
+                    ? this.handleItemEjectArrayB
+                    : this.handleItemEjectArrayA;
+
+                // Precompute effective belt speed
+                let progressGrowth = 2 * this.root.dynamicTickrate.deltaSeconds;
+
+                if (G_IS_DEV && globalConfig.debug.instantBelts) {
+                    progressGrowth = 1;
+                }
+
+                for (let i = this.allEntitiesArray.length - 1; i >= 0; --i) {
+                    const sourceEntity = this.allEntitiesArray[i];
+                    const sourceEjectorComp = sourceEntity.components.ItemEjector;
+
+                    const slots = sourceEjectorComp.slots;
+                    for (let j = 0; j < slots.length; ++j) {
+                        const sourceSlot = slots[j];
+                        const item = sourceSlot.item;
+                        if (!item) {
+                            // No item available to be ejected
+                            continue;
+                        }
+
+                        // Advance items on the slot
+                        sourceSlot.progress = Math.min(
+                            1,
+                            sourceSlot.progress +
+                                progressGrowth *
+                                    this.root.hubGoals.getBeltBaseSpeed() *
+                                    globalConfig.itemSpacingOnBelts
+                        );
+
+                        if (G_IS_DEV && globalConfig.debug.disableEjectorProcessing) {
+                            sourceSlot.progress = 1.0;
+                        }
+
+                        // Check if we are still in the process of ejecting, can't proceed then
+                        if (sourceSlot.progress >= 1.0) {
+                            if (workingArray.length >= workingArrayIndex) workingArray.push(i);
+                            else workingArray[workingArrayIndex++] = i;
+                        }
+                    }
+                }
+
+                if (workingArrayIndex < workingArray.length) workingArray.splice(workingArrayIndex);
+
+                resolve();
+            });
+        });
+
+        const handleItemPromise = new Promise((resolve, reject) => {
+            new Promise.resolve(1).then(() => {
+                let workingArray = this.handleEjectArrayA
+                    ? this.handleItemEjectArrayA
+                    : this.handleItemEjectArrayB;
+
+                for (
+                    let workingArrayIndex = workingArrayIndex.length - 1;
+                    workingArrayIndex >= 0;
+                    --workingArrayIndex
+                ) {
+                    const sourceEntity = this.allEntitiesArray[workingArray[workingArrayIndex]];
+                    const sourceEjectorComp = sourceEntity.components.ItemEjector;
+
+                    const slots = sourceEjectorComp.slots;
+                    for (let j = 0; j < slots.length; ++j) {
+                        const sourceSlot = slots[j];
+                        const item = sourceSlot.item;
+                        if (!item) {
+                            // No item available to be ejected
+                            continue;
+                        }
+
+                        // Check if we are ejecting to a belt path
+                        const destPath = sourceSlot.cachedBeltPath;
+                        if (destPath) {
+                            // Try passing the item over
+                            if (destPath.tryAcceptItem(item)) {
+                                sourceSlot.item = null;
+                            }
+
+                            // Always stop here, since there can *either* be a belt path *or*
+                            // a slot
+                            continue;
+                        }
+
+                        // Check if the target acceptor can actually accept this item
+                        const destEntity = sourceSlot.cachedTargetEntity;
+                        const destSlot = sourceSlot.cachedDestSlot;
+                        if (destSlot) {
+                            const targetAcceptorComp = destEntity.components.ItemAcceptor;
+                            if (!targetAcceptorComp.canAcceptItem(destSlot.index, item)) {
+                                continue;
+                            }
+
+                            // Try to hand over the item
+                            if (this.tryPassOverItem(item, destEntity, destSlot.index)) {
+                                // Handover successful, clear slot
+                                if (!this.root.app.settings.getAllSettings().simplifiedBelts) {
+                                    targetAcceptorComp.onItemAccepted(
+                                        destSlot.index,
+                                        destSlot.acceptedDirection,
+                                        item
+                                    );
+                                }
+                                sourceSlot.item = null;
+                                continue;
+                            }
+                        }
+                    }
+                }
+                resolve();
+            });
+        });
+
+        await Promise.all([handleStaleAreaPromise, handleProgressPromise, handleItemPromise]);
+    }
+
+    async update() {
+        if (window.doEjectorMultiThread) {
+            await asyncUpdate();
+            return;
+        }
+
         this.staleAreaDetector.update();
 
         // Precompute effective belt speed
@@ -227,6 +370,14 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
     tryPassOverItem(item, receiver, slotIndex) {
         // Try figuring out how what to do with the item
         // @TODO: Kinda hacky. How to solve this properly? Don't want to go through inheritance hell.
+
+        // this might be spead up by having an early escape
+        /**
+         * top methods: drawImage from draw cached (caching canvas by scale would improve performance)
+         * update (anonymous, find source) => oh fuck wrap every class update in another function, easy peasy
+         * tryPassOverItem from tryHandOverItem
+         *
+         */
 
         const beltComp = receiver.components.Belt;
         if (beltComp) {
