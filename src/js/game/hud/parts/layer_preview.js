@@ -5,7 +5,7 @@ import { Vector } from "../../../core/vector";
 import { MapChunkView } from "../../map_chunk_view";
 import { THEME } from "../../theme";
 import { BaseHUDPart } from "../base_hud_part";
-import { drawImageUtil } from "../../../core/buffer_maintainer";
+import { drawCropImageUtil, drawImageUtil } from "../../../core/buffer_maintainer";
 
 /**
  * Helper class which allows peaking through to the wires layer
@@ -112,23 +112,14 @@ export class HUDLayerPreview extends BaseHUDPart {
         const canvas = this.prepareCanvasForPreview(worldPos, scale);
 
         parameters.context.globalAlpha = 0.3;
-        if (window.doNormalDrawImage)
-            parameters.context.drawImage(
-                canvas,
-                worldPos.x - (scale * this.previewSize) / 2,
-                worldPos.y - (scale * this.previewSize) / 2,
-                scale * this.previewSize,
-                scale * this.previewSize
-            );
-        else
-            drawImageUtil(
-                parameters.context,
-                canvas,
-                worldPos.x - (scale * this.previewSize) / 2,
-                worldPos.y - (scale * this.previewSize) / 2,
-                scale * this.previewSize,
-                scale * this.previewSize
-            );
+        drawCropImageUtil(
+            parameters.context,
+            canvas,
+            worldPos.x - (scale * this.previewSize) / 2,
+            worldPos.y - (scale * this.previewSize) / 2,
+            scale * this.previewSize,
+            scale * this.previewSize
+        );
         parameters.context.globalAlpha = 1;
     }
 }

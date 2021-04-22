@@ -1,7 +1,7 @@
 import { DrawParameters } from "./draw_parameters";
 import { Rectangle } from "./rectangle";
 import { round3Digits } from "./utils";
-import { drawImageUtil } from "./buffer_maintainer";
+import { drawCropImageUtil, drawImageUtil } from "./buffer_maintainer";
 
 export const ORIGINAL_SPRITE_SCALE = "0.75";
 export const FULL_CLIP_RECT = new Rectangle(0, 0, 1, 1);
@@ -104,35 +104,20 @@ export class AtlasSprite extends BaseSprite {
         const scaleW = width / link.w;
         const scaleH = height / link.h;
 
-        if (window.doNormalDrawImage)
-            context.drawImage(
-                link.atlas,
+        drawCropImageUtil(
+            context,
+            link.atlas,
 
-                link.packedX,
-                link.packedY,
-                link.packedW,
-                link.packedH,
+            link.packedX,
+            link.packedY,
+            link.packedW,
+            link.packedH,
 
-                x + link.packOffsetX * scaleW,
-                y + link.packOffsetY * scaleH,
-                link.packedW * scaleW,
-                link.packedH * scaleH
-            );
-        else
-            drawImageUtil(
-                context,
-                link.atlas,
-
-                link.packedX,
-                link.packedY,
-                link.packedW,
-                link.packedH,
-
-                x + link.packOffsetX * scaleW,
-                y + link.packOffsetY * scaleH,
-                link.packedW * scaleW,
-                link.packedH * scaleH
-            );
+            x + link.packOffsetX * scaleW,
+            y + link.packOffsetY * scaleH,
+            link.packedW * scaleW,
+            link.packedH * scaleH
+        );
     }
 
     /**
@@ -218,43 +203,24 @@ export class AtlasSprite extends BaseSprite {
             destH = intersection.h;
         }
 
-        if (window.doNormalDrawImage)
-            parameters.context.drawImage(
-                link.atlas,
+        drawCropImageUtil(
+            parameters.context,
+            link.atlas,
 
-                // atlas src pos
-                srcX,
-                srcY,
+            // atlas src pos
+            srcX,
+            srcY,
 
-                // atlas src size
-                srcW,
-                srcH,
+            // atlas src size
+            srcW,
+            srcH,
 
-                // dest pos and size
-                destX - EXTRUDE,
-                destY - EXTRUDE,
-                destW + 2 * EXTRUDE,
-                destH + 2 * EXTRUDE
-            );
-        else
-            drawImageUtil(
-                parameters.context,
-                link.atlas,
-
-                // atlas src pos
-                srcX,
-                srcY,
-
-                // atlas src size
-                srcW,
-                srcH,
-
-                // dest pos and size
-                destX - EXTRUDE,
-                destY - EXTRUDE,
-                destW + 2 * EXTRUDE,
-                destH + 2 * EXTRUDE
-            );
+            // dest pos and size
+            destX - EXTRUDE,
+            destY - EXTRUDE,
+            destW + 2 * EXTRUDE,
+            destH + 2 * EXTRUDE
+        );
     }
 
     /**
@@ -294,43 +260,24 @@ export class AtlasSprite extends BaseSprite {
         let srcW = link.packedW * clipRect.w;
         let srcH = link.packedH * clipRect.h;
 
-        if (window.doNormalDrawImage)
-            parameters.context.drawImage(
-                link.atlas,
+        drawCropImageUtil(
+            parameters.context,
+            link.atlas,
 
-                // atlas src pos
-                srcX,
-                srcY,
+            // atlas src pos
+            srcX,
+            srcY,
 
-                // atlas src siize
-                srcW,
-                srcH,
+            // atlas src siize
+            srcW,
+            srcH,
 
-                // dest pos and size
-                destX - EXTRUDE,
-                destY - EXTRUDE,
-                destW + 2 * EXTRUDE,
-                destH + 2 * EXTRUDE
-            );
-        else
-            drawImageUtil(
-                parameters.context,
-                link.atlas,
-
-                // atlas src pos
-                srcX,
-                srcY,
-
-                // atlas src siize
-                srcW,
-                srcH,
-
-                // dest pos and size
-                destX - EXTRUDE,
-                destY - EXTRUDE,
-                destW + 2 * EXTRUDE,
-                destH + 2 * EXTRUDE
-            );
+            // dest pos and size
+            destX - EXTRUDE,
+            destY - EXTRUDE,
+            destW + 2 * EXTRUDE,
+            destH + 2 * EXTRUDE
+        );
     }
 
     /**
@@ -429,10 +376,7 @@ export class RegularSprite extends BaseSprite {
         assert(y !== undefined, "No y given");
         assert(w !== undefined, "No width given");
         assert(h !== undefined, "No height given");
-        if (window.doNormalDrawImage)
-            // todo whoops wrong variable
-            context.drawImage(this.sprite, x, y, w, h);
-        else drawImageUtil(context, this.sprite, x, y, w, h);
+        drawImageUtil(context, this.sprite, x, y, w, h);
     }
 
     /**
@@ -450,7 +394,6 @@ export class RegularSprite extends BaseSprite {
         assert(y !== undefined, "No y given");
         assert(w !== undefined, "No width given");
         assert(h !== undefined, "No height given");
-        if (window.doNormalDrawImage) context.drawImage(this.sprite, x - w / 2, y - h / 2, w, h);
-        else drawImageUtil(context, this.sprite, x - w / 2, y - h / 2, w, h);
+        drawImageUtil(context, this.sprite, x - w / 2, y - h / 2, w, h);
     }
 }

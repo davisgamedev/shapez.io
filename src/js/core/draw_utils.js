@@ -6,7 +6,7 @@
 import { globalConfig } from "./config";
 import { createLogger } from "./logging";
 import { Rectangle } from "./rectangle";
-import { drawImageUtil } from "./buffer_maintainer";
+import { drawCropImageUtil, drawImageUtil } from "./buffer_maintainer";
 
 const logger = createLogger("draw_utils");
 
@@ -104,35 +104,18 @@ export function drawSpriteClipped({ parameters, sprite, x, y, w, h, originalW, o
         return;
     }
 
-    if (window.doNormalDrawImage)
-        parameters.context.drawImage(
-            sprite,
+    drawCropImageUtil(
+        parameters.context, // src pos and size
+        sprite,
+        ((intersection.x - x) / w) * originalW,
+        ((intersection.y - y) / h) * originalH,
+        (originalW * intersection.w) / w,
+        (originalH * intersection.h) / h,
 
-            // src pos and size
-            ((intersection.x - x) / w) * originalW,
-            ((intersection.y - y) / h) * originalH,
-            (originalW * intersection.w) / w,
-            (originalH * intersection.h) / h,
-
-            // dest pos and size
-            intersection.x,
-            intersection.y,
-            intersection.w,
-            intersection.h
-        );
-    else
-        drawImageUtil(
-            parameters.context, // src pos and size
-            sprite,
-            ((intersection.x - x) / w) * originalW,
-            ((intersection.y - y) / h) * originalH,
-            (originalW * intersection.w) / w,
-            (originalH * intersection.h) / h,
-
-            // dest pos and size
-            intersection.x,
-            intersection.y,
-            intersection.w,
-            intersection.h
-        );
+        // dest pos and size
+        intersection.x,
+        intersection.y,
+        intersection.w,
+        intersection.h
+    );
 }

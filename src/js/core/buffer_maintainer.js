@@ -89,7 +89,7 @@ export class BufferMaintainer {
 
         // if (G_IS_DEV) {
         //     const bufferStats = getBufferStats();
-        //     const mbUsed = round1Digit(bufferStats.vramUsage / (1024 * 1024));
+        //     const mbUsed = Math.round1Digit(bufferStats.vramUsage / (1024 * 1024));
         //     logger.log(
         //         "GC: Remove",
         //         (deletedKeys + "").padStart(4),
@@ -226,11 +226,37 @@ export class BufferMaintainer {
 
 // let nextKey = 100000;
 
-export function drawImageUtil(destContext, img, adx, ady, adWidth, adHeight, ...args) {
-    if (arguments.length > 7) {
-        drawImageUtilFullArgs(...arguments);
-        return;
-    }
+export function drawCropImageUtil(
+    destContext,
+    img,
+    asx,
+    asy,
+    asWidth,
+    asHeight,
+    adx,
+    ady,
+    adWidth,
+    adHeight
+) {
+    destContext.drawImage(
+        img,
+        Math.round(asx),
+        Math.round(asy),
+        Math.round(asWidth),
+        Math.round(asHeight),
+        Math.round(adx),
+        Math.round(ady),
+        Math.round(adWidth),
+        Math.round(adHeight)
+    );
+    return;
+}
+
+export function drawImageUtil(destContext, img, adx, ady, adWidth, adHeight) {
+    // if (arguments.length > 7) {
+    //     drawImageUtilFullArgs(...arguments);
+    //     return;
+    // }
 
     destContext.drawImage(img, Math.round(adx), Math.round(ady), Math.round(adWidth), Math.round(adHeight));
 
