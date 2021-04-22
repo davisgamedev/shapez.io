@@ -29,7 +29,7 @@ export class BufferMaintainer {
         this.lastIteration = 0;
 
         this.root.signals.gameFrameStarted.add(this.update, this);
-        localBufferProvider = this;
+        //localBufferProvider = this;
     }
 
     /**
@@ -216,15 +216,15 @@ export class BufferMaintainer {
     }
 }
 
-/** @type {BufferMaintainer} */
-let localBufferProvider;
+// /** @type {BufferMaintainer} */
+// let localBufferProvider;
 
-/** @type {Map<string, string>} */
-let drawImageUtilKeys = new Map();
+// /** @type {Map<string, string>} */
+// let drawImageUtilKeys = new Map();
 
-const drawUtilParentKey = "drawImageUtilBuffers";
+// const drawUtilParentKey = "drawImageUtilBuffers";
 
-let nextKey = 100000;
+// let nextKey = 100000;
 
 export function drawImageUtil(destContext, img, adx, ady, adWidth, adHeight, ...args) {
     if (arguments.length > 7) {
@@ -236,72 +236,72 @@ export function drawImageUtil(destContext, img, adx, ady, adWidth, adHeight, ...
 
     return;
 
-    const [dx, dy, dWidth, dHeight] = [
-        Math.round(adx),
-        Math.round(ady),
-        Math.round(adWidth),
-        Math.round(adHeight),
-    ];
+    // const [dx, dy, dWidth, dHeight] = [
+    //     Math.round(adx),
+    //     Math.round(ady),
+    //     Math.round(adWidth),
+    //     Math.round(adHeight),
+    // ];
 
-    if (!localBufferProvider) {
-        console.warn(
-            "BufferMainter has not been initialized, drawImageUtil will not be optimized during this drawImage call"
-        );
-        destContext.drawImage(img, dx, dy, dWidth, dHeight);
-        return;
-    }
+    // if (!localBufferProvider) {
+    //     console.warn(
+    //         "BufferMainter has not been initialized, drawImageUtil will not be optimized during this drawImage call"
+    //     );
+    //     destContext.drawImage(img, dx, dy, dWidth, dHeight);
+    //     return;
+    // }
 
-    const argKey = img.label + dWidth + dHeight;
+    // const argKey = img.label + dWidth + dHeight;
 
-    let bufferKey = drawImageUtilKeys.get(argKey);
-    if (!bufferKey) {
-        bufferKey = nextKey++ + "#";
-        drawImageUtilKeys.set(argKey, bufferKey);
-    }
+    // let bufferKey = drawImageUtilKeys.get(argKey);
+    // if (!bufferKey) {
+    //     bufferKey = nextKey++ + "#";
+    //     drawImageUtilKeys.set(argKey, bufferKey);
+    // }
 
-    const [canvas, context, wasCached] = localBufferProvider.getCachedOrCreate({
-        key: drawUtilParentKey,
-        subKey: bufferKey,
-        w: dWidth,
-        h: dHeight,
-        redrawMethod: (canvas, context) => {
-            context.drawImage(img, 0, 0, dWidth, dHeight);
-        },
-    });
+    // const [canvas, context, wasCached] = localBufferProvider.getCachedOrCreate({
+    //     key: drawUtilParentKey,
+    //     subKey: bufferKey,
+    //     w: dWidth,
+    //     h: dHeight,
+    //     redrawMethod: (canvas, context) => {
+    //         context.drawImage(img, 0, 0, dWidth, dHeight);
+    //     },
+    // });
 
-    destContext.drawImage(canvas, dx, dy);
+    // destContext.drawImage(canvas, dx, dy);
 }
 
-const usesInit = 5;
-const usesAdd = 10;
-const usesRemove = 0;
+// const usesInit = 5;
+// const usesAdd = 10;
+// const usesRemove = 0;
 
-/**
- * @typedef {{
- *  key: string,
- *  uses: number
- * }} FullArgsCacheEntry
- */
-/**
- * @type {Map<string, lastUse>}
- */
-let drawFullArgsCache = new Map();
+// /**
+//  * @typedef {{
+//  *  key: string,
+//  *  uses: number
+//  * }} FullArgsCacheEntry
+//  */
+// /**
+//  * @type {Map<string, lastUse>}
+//  */
+// let drawFullArgsCache = new Map();
 
-async function sortCache() {
-    await new Promise((resolve, reject) => {
-        let arr = drawFullArgsCache.entries();
-        for (let i = arr.length; arr >= 0; --i) {
-            let [key, val] = arr[i];
-            val.lastUse--;
-            if (val.lastUse <= usesRemove) {
-                drawFullArgsCache.delete(key);
-                drawImageUtilKeys.delete(val.key);
-            }
-        }
-    });
-    setTimeout(15000, sortCache);
-}
-setTimeout(15000, sortCache);
+// async function sortCache() {
+//     await new Promise((resolve, reject) => {
+//         let arr = drawFullArgsCache.entries();
+//         for (let i = arr.length; arr >= 0; --i) {
+//             let [key, val] = arr[i];
+//             val.lastUse--;
+//             if (val.lastUse <= usesRemove) {
+//                 drawFullArgsCache.delete(key);
+//                 drawImageUtilKeys.delete(val.key);
+//             }
+//         }
+//     });
+//     setTimeout(15000, sortCache);
+// }
+// setTimeout(15000, sortCache);
 
 function drawImageUtilFullArgs(destContext, img, asx, asy, asWidth, asHeight, adx, ady, adWidth, adHeight) {
     destContext.drawImage(
@@ -317,55 +317,55 @@ function drawImageUtilFullArgs(destContext, img, asx, asy, asWidth, asHeight, ad
     );
     return;
 
-    // prettier-ignore
-    let [sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight] = [
-        Math.round(asx), Math.round(asy), Math.round(asWidth), Math.round(asHeight), Math.round(adx), Math.round(ady), Math.round(adWidth), Math.round(adHeight)
-    ];
-    //console.log(arguments);
-    //console.log([sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight]);
+    // // prettier-ignore
+    // let [sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight] = [
+    //     Math.round(asx), Math.round(asy), Math.round(asWidth), Math.round(asHeight), Math.round(adx), Math.round(ady), Math.round(adWidth), Math.round(adHeight)
+    // ];
+    // //console.log(arguments);
+    // //console.log([sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight]);
 
-    if (!localBufferProvider) {
-        console.warn(
-            "BufferMainter has not been initialized, drawImageUtil will not be optimized during this drawImage call"
-        );
-        destContext.drawImage(img, asx, asy, asWidth, asHeight, adx, ady, adWidth, adHeight);
-        return;
-    }
+    // if (!localBufferProvider) {
+    //     console.warn(
+    //         "BufferMainter has not been initialized, drawImageUtil will not be optimized during this drawImage call"
+    //     );
+    //     destContext.drawImage(img, asx, asy, asWidth, asHeight, adx, ady, adWidth, adHeight);
+    //     return;
+    // }
 
-    const argKey = img.label + sx + sy + sWidth + sHeight + dWidth + dHeight;
+    // const argKey = img.label + sx + sy + sWidth + sHeight + dWidth + dHeight;
 
-    let cacheEntry = drawFullArgsCache.get(argKey);
-    if (!cacheEntry) {
-        cacheEntry = {
-            key: argKey,
-            lastUse: usesInit,
-        };
-        drawFullArgsCache.set(argKey, cacheEntry);
-    }
-    if (cacheEntry.uses++ < usesAdd) {
-        destContext.drawImage(img, asx, asy, asWidth, asHeight, adx, ady, adWidth, adHeight);
-        return;
-    }
+    // let cacheEntry = drawFullArgsCache.get(argKey);
+    // if (!cacheEntry) {
+    //     cacheEntry = {
+    //         key: argKey,
+    //         lastUse: usesInit,
+    //     };
+    //     drawFullArgsCache.set(argKey, cacheEntry);
+    // }
+    // if (cacheEntry.uses++ < usesAdd) {
+    //     destContext.drawImage(img, asx, asy, asWidth, asHeight, adx, ady, adWidth, adHeight);
+    //     return;
+    // }
 
-    let bufferKey = drawFullArgsCache.get(argKey);
-    if (!bufferKey) {
-        console.log(arguments);
-        console.log(img.label);
-        console.log([sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight]);
-        console.log(argKey);
-        bufferKey = nextKey++ + "#";
-        drawImageUtilKeys.set(argKey, bufferKey);
-    }
+    // let bufferKey = drawFullArgsCache.get(argKey);
+    // if (!bufferKey) {
+    //     console.log(arguments);
+    //     console.log(img.label);
+    //     console.log([sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight]);
+    //     console.log(argKey);
+    //     bufferKey = nextKey++ + "#";
+    //     drawImageUtilKeys.set(argKey, bufferKey);
+    // }
 
-    const [canvas, context, wasCached] = localBufferProvider.getCachedOrCreate({
-        key: drawUtilParentKey,
-        subKey: bufferKey,
-        w: dWidth,
-        h: dHeight,
-        redrawMethod: (canvas, context) => {
-            context.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, dWidth, dHeight);
-        },
-    });
+    // const [canvas, context, wasCached] = localBufferProvider.getCachedOrCreate({
+    //     key: drawUtilParentKey,
+    //     subKey: bufferKey,
+    //     w: dWidth,
+    //     h: dHeight,
+    //     redrawMethod: (canvas, context) => {
+    //         context.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, dWidth, dHeight);
+    //     },
+    // });
 
-    destContext.drawImage(canvas, dx, dy);
+    // destContext.drawImage(canvas, dx, dy);
 }
