@@ -25,6 +25,7 @@ import { ShapeDefinition } from "../../shape_definition";
 import { BaseHUDPart } from "../base_hud_part";
 import { DynamicDomAttach } from "../dynamic_dom_attach";
 import { enumNotificationType } from "./notifications";
+import { drawImageUtil } from "../../../core/buffer_maintainer";
 
 /** @typedef {{
  *   label: string | null,
@@ -212,7 +213,7 @@ export class HUDWaypoints extends BaseHUDPart {
                     smooth: true,
                     label: label + "-waypoint-" + i,
                 });
-                context.drawImage(canvas, 0, 0);
+                context.drawImage(canvas, 0, 0); // this one is fine and optimised
                 element.appendChild(newCanvas);
                 element.classList.add("shapeIcon");
             } else {
@@ -613,13 +614,23 @@ export class HUDWaypoints extends BaseHUDPart {
             if (waypointData.item) {
                 const canvas = this.getWaypointCanvas(waypoint);
                 const itemSize = 14 * scale;
-                parameters.context.drawImage(
-                    canvas,
-                    bounds.x + contentPaddingX + 6 * scale,
-                    bounds.y + bounds.h / 2 - itemSize / 2,
-                    itemSize,
-                    itemSize
-                );
+                if (window.doNormalDrawImage)
+                    parameters.context.drawImage(
+                        canvas,
+                        bounds.x + contentPaddingX + 6 * scale,
+                        bounds.y + bounds.h / 2 - itemSize / 2,
+                        itemSize,
+                        itemSize
+                    );
+                else
+                    drawImageUtil(
+                        parameters.context,
+                        canvas,
+                        bounds.x + contentPaddingX + 6 * scale,
+                        bounds.y + bounds.h / 2 - itemSize / 2,
+                        itemSize,
+                        itemSize
+                    );
             } else if (waypointData.text) {
                 // Render the text
                 parameters.context.fillStyle = "#000";

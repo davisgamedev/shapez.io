@@ -180,6 +180,7 @@ async function run() {
             });
 
             context.globalAlpha = 0.4;
+
             context.drawImage(lineCanvas, 0, 0, dimensions, dimensions);
 
             context.globalAlpha = 1;

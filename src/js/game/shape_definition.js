@@ -1,3 +1,4 @@
+import { drawImageUtil } from "../core/buffer_maintainer.js";
 import { makeOffscreenBuffer } from "../core/buffer_utils";
 import { globalConfig } from "../core/config";
 import { smoothenDpi } from "../core/dpi_manager";
@@ -294,7 +295,10 @@ export class ShapeDefinition extends BasicSerializableObject {
             dpi,
             redrawMethod: this.bufferGenerator,
         });
-        parameters.context.drawImage(canvas, x - diameter / 2, y - diameter / 2, diameter, diameter);
+        if (window.doNormalDrawImage)
+            parameters.context.drawImage(canvas, x - diameter / 2, y - diameter / 2, diameter, diameter);
+        else
+            drawImageUtil(parameters.context, canvas, x - diameter / 2, y - diameter / 2, diameter, diameter);
     }
 
     /**

@@ -64,7 +64,7 @@ async function run() {
 
         for (let k = 0; k < 5; ++k) {
             let y = dimensions - arrowH - (k - 1) * spacingTotal - procentual * spacingTotal;
-            context.drawImage(arrowSprite, dimensions / 2 - arrowW / 2, y);
+            parameters.context.drawImage(arrowSprite, dimensions / 2 - arrowW / 2, y);
         }
 
         const out = fs.createWriteStream(path.join(__dirname, "built", "forward_" + i + ".png"));
@@ -162,7 +162,8 @@ async function run() {
         flippedContext.quality = "best";
         flippedContext.clearRect(0, 0, dimensions, dimensions);
         flippedContext.scale(-1, 1);
-        flippedContext.drawImage(canvas, -dimensions, 0, dimensions, dimensions);
+
+        noflippedContext.drawImage(canvas, -dimensions, 0, dimensions, dimensions);
 
         const outRight = fs.createWriteStream(path.join(__dirname, "built", "right_" + i + ".png"));
         const streamRight = canvas.createPNGStream();

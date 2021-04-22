@@ -18,6 +18,7 @@ import { THEME } from "../../theme";
 import { DynamicDomAttach } from "../dynamic_dom_attach";
 import { HUDBuildingPlacerLogic } from "./building_placer_logic";
 import { makeOffscreenBuffer } from "../../../core/buffer_utils";
+import { drawImageUtil } from "../../../core/buffer_maintainer";
 import { layers } from "../../root";
 import { getCodeFromBuildingData } from "../../building_codes";
 
@@ -438,16 +439,33 @@ export class HUDBuildingPlacer extends HUDBuildingPlacerLogic {
 
                 parameters.context.translate(worldPos.x, worldPos.y);
                 parameters.context.rotate(angle);
-                parameters.context.drawImage(
-                    arrowSprite,
-                    -6,
-                    -globalConfig.halfTileSize -
-                        clamp((this.root.time.realtimeNow() * 1.5) % 1.0, 0, 1) * 1 * globalConfig.tileSize +
-                        globalConfig.halfTileSize -
-                        6,
-                    12,
-                    12
-                );
+                if (window.doNormalDrawImage)
+                    parameters.context.drawImage(
+                        arrowSprite,
+                        -6,
+                        -globalConfig.halfTileSize -
+                            clamp((this.root.time.realtimeNow() * 1.5) % 1.0, 0, 1) *
+                                1 *
+                                globalConfig.tileSize +
+                            globalConfig.halfTileSize -
+                            6,
+                        12,
+                        12
+                    );
+                else
+                    drawImageUtil(
+                        parameters.context,
+                        arrowSprite,
+                        -6,
+                        -globalConfig.halfTileSize -
+                            clamp((this.root.time.realtimeNow() * 1.5) % 1.0, 0, 1) *
+                                1 *
+                                globalConfig.tileSize +
+                            globalConfig.halfTileSize -
+                            6,
+                        12,
+                        12
+                    );
                 parameters.context.rotate(-angle);
                 parameters.context.translate(-worldPos.x, -worldPos.y);
             }
