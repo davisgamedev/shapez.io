@@ -169,6 +169,11 @@ export class BufferMaintainer {
         return canvas;
     }
 
+    // TODO let's reuse the cache system here, and similar to what we did with fullArgs, only cache if it's used several times
+    static DrawImageOpto() {
+        // TODO get DPI, this is actually important
+    }
+
     /**
      * Similar to getForKey but with less parameters, and no callback
      * @param {object} param0
@@ -219,18 +224,23 @@ let drawImageUtilKeys = new Map();
 
 const drawUtilParentKey = "drawImageUtilBuffers";
 
+let nextKey = 100000;
+
 export function drawImageUtil(destContext, img, adx, ady, adWidth, adHeight, ...args) {
     if (arguments.length > 7) {
         drawImageUtilFullArgs(...arguments);
-        destContext.drawImage(...[...arguments].slice(1));
         return;
     }
 
+    destContext.drawImage(img, Math.round(adx), Math.round(ady), Math.round(adWidth), Math.round(adHeight));
+
+    return;
+
     const [dx, dy, dWidth, dHeight] = [
-        Math.floor(adx),
-        Math.floor(ady),
-        Math.floor(adWidth),
-        Math.floor(adHeight),
+        Math.round(adx),
+        Math.round(ady),
+        Math.round(adWidth),
+        Math.round(adHeight),
     ];
 
     if (!localBufferProvider) {
@@ -245,7 +255,7 @@ export function drawImageUtil(destContext, img, adx, ady, adWidth, adHeight, ...
 
     let bufferKey = drawImageUtilKeys.get(argKey);
     if (!bufferKey) {
-        bufferKey = "" + Math.floor(100000000 + Math.random() * Math.random() * 900000000);
+        bufferKey = nextKey++ + "#";
         drawImageUtilKeys.set(argKey, bufferKey);
     }
 
@@ -294,9 +304,22 @@ async function sortCache() {
 setTimeout(15000, sortCache);
 
 function drawImageUtilFullArgs(destContext, img, asx, asy, asWidth, asHeight, adx, ady, adWidth, adHeight) {
+    destContext.drawImage(
+        img,
+        Math.round(asx),
+        Math.round(asy),
+        Math.round(asWidth),
+        Math.round(asHeight),
+        Math.round(adx),
+        Math.round(ady),
+        Math.round(adWidth),
+        Math.round(adHeight)
+    );
+    return;
+
     // prettier-ignore
     let [sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight] = [
-        Math.floor(asx), Math.floor(asy), Math.floor(asWidth), Math.floor(asHeight), Math.floor(adx), Math.floor(ady), Math.floor(adWidth), Math.floor(adHeight)
+        Math.round(asx), Math.round(asy), Math.round(asWidth), Math.round(asHeight), Math.round(adx), Math.round(ady), Math.round(adWidth), Math.round(adHeight)
     ];
     //console.log(arguments);
     //console.log([sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight]);
@@ -330,7 +353,7 @@ function drawImageUtilFullArgs(destContext, img, asx, asy, asWidth, asHeight, ad
         console.log(img.label);
         console.log([sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight]);
         console.log(argKey);
-        bufferKey = "" + Math.floor(100000000 + Math.random() * Math.random() * 900000000);
+        bufferKey = nextKey++ + "#";
         drawImageUtilKeys.set(argKey, bufferKey);
     }
 
