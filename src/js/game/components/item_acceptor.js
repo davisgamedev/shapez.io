@@ -91,7 +91,7 @@ export class ItemAcceptorComponent extends Component {
             item,
             slotIndex,
             direction,
-            animProgress: Math.min(1, remainingProgress * 2),
+            animProgress: remainingProgress > 0.5 ? remainingProgress * 2 : 1,
         });
     }
 

@@ -1041,6 +1041,8 @@ export class BeltPath extends BasicSerializableObject {
 
     /**
      * Performs one tick
+    /**
+     * Performs one tick
      */
     update() {
         if (G_IS_DEV && globalConfig.debug.checkBeltPaths) {
@@ -1074,55 +1076,105 @@ export class BeltPath extends BasicSerializableObject {
             const minimumSpacing =
                 lastItemProcessed === this.items.length - 1 ? 0 : globalConfig.itemSpacingOnBelts;
 
-            // Compute how much we can advance
-            const clampedProgress = Math.max(
-                0,
-                Math.min(remainingVelocity, nextDistanceAndItem[_nextDistance] - minimumSpacing)
-            );
+            const dif = nextDistanceAndItem[_nextDistance] - minimumSpacing;
 
-            // Reduce our velocity by the amount we consumed
-            remainingVelocity -= clampedProgress;
+            if (dif == 0 && remainingVelocity == 0) {
+                // both are 0
 
-            // Reduce the spacing
-            nextDistanceAndItem[_nextDistance] -= clampedProgress;
-
-            // Advance all items behind by the progress we made
-            this.spacingToFirstItem += clampedProgress;
-
-            // If the last item can be ejected, eject it and reduce the spacing, because otherwise
-            // we lose velocity
-            if (isFirstItemProcessed && nextDistanceAndItem[_nextDistance] < 1e-7) {
-                // Store how much velocity we "lost" because we bumped the item to the end of the
-                // belt but couldn't move it any farther. We need this to tell the item acceptor
-                // animation to start a tad later, so everything matches up. Yes I'm a perfectionist.
-                const excessVelocity = beltSpeed - clampedProgress;
-
-                // Try to directly get rid of the item
-                if (this.tryHandOverItem(nextDistanceAndItem[_item], excessVelocity)) {
-                    this.items.pop();
-
-                    const itemBehind = this.items[lastItemProcessed - 1];
-                    if (itemBehind && this.numCompressedItemsAfterFirstItem > 0) {
-                        // So, with the next tick we will skip this item, but it actually has the potential
-                        // to process farther -> If we don't advance here, we loose a tiny bit of progress
-                        // every tick which causes the belt to be slower than it actually is.
-                        // Also see #999
-                        const fixupProgress = Math.max(
-                            0,
-                            Math.min(remainingVelocity, itemBehind[_nextDistance])
-                        );
-
-                        // See above
-                        itemBehind[_nextDistance] -= fixupProgress;
-                        remainingVelocity -= fixupProgress;
-                        this.spacingToFirstItem += fixupProgress;
+                // If the last item can be ejected, eject it and reduce the spacing, because otherwise
+                // we lose velocity
+                if (isFirstItemProcessed && nextDistanceAndItem[_nextDistance] < 1e-7) {
+                    // Try to directly get rid of the item
+                    if (this.tryHandOverItem(nextDistanceAndItem[_item], beltSpeed)) {
+                        this.items.pop();
+                        if (--this.numCompressedItemsAfterFirstItem < 0)
+                            this.numCompressedItemsAfterFirstItem = 0;
                     }
+                }
+            }
 
-                    // Reduce the number of compressed items since the first item no longer exists
-                    this.numCompressedItemsAfterFirstItem = Math.max(
-                        0,
-                        this.numCompressedItemsAfterFirstItem - 1
-                    );
+            if (dif < 0) {
+                if (isFirstItemProcessed && nextDistanceAndItem[_nextDistance] < 1e-7) {
+                    // Try to directly get rid of the item
+                    if (this.tryHandOverItem(nextDistanceAndItem[_item], beltSpeed)) {
+                        this.items.pop();
+
+                        if (this.numCompressedItemsAfterFirstItem > 0) {
+                            const itemBehind = this.items[lastItemProcessed - 1];
+
+                            if (itemBehind) {
+                                // remaining is never < 0
+                                if (itemBehind[_nextDistance] > remainingVelocity) {
+                                    // pick remain
+                                    // See above
+                                    itemBehind[_nextDistance] -= remainingVelocity;
+                                    this.spacingToFirstItem += remainingVelocity;
+                                    remainingVelocity = -1;
+                                } else if (itemBehind[_nextDistance] > 0) {
+                                    // pick behind
+                                    remainingVelocity -= itemBehind[_nextDistance];
+                                    this.spacingToFirstItem += itemBehind[_nextDistance];
+                                    itemBehind[_nextDistance] = 0;
+                                }
+                            }
+                            this.numCompressedItemsAfterFirstItem--;
+                        }
+                    }
+                }
+
+                if (isFirstItemProcessed) {
+                    // Skip N null items after first items
+                    lastItemProcessed -= this.numCompressedItemsAfterFirstItem;
+                }
+
+                isFirstItemProcessed = false;
+                if (remainingVelocity < 1e-7) {
+                    break;
+                }
+            } else if (dif <= remainingVelocity) {
+                remainingVelocity -= dif;
+
+                nextDistanceAndItem[_nextDistance] -= dif;
+
+                this.spacingToFirstItem += dif;
+
+                if (isFirstItemProcessed && nextDistanceAndItem[_nextDistance] < 1e-7) {
+                    const excessVelocity = beltSpeed - dif;
+
+                    // Try to directly get rid of the item
+                    if (this.tryHandOverItem(nextDistanceAndItem[_item], excessVelocity)) {
+                        this.items.pop();
+
+                        if (--this.numCompressedItemsAfterFirstItem < 0)
+                            this.numCompressedItemsAfterFirstItem = 0;
+                    }
+                }
+            } else if (remainingVelocity < dif) {
+                nextDistanceAndItem[_nextDistance] -= remainingVelocity;
+                this.spacingToFirstItem += remainingVelocity;
+
+                if (isFirstItemProcessed && nextDistanceAndItem[_nextDistance] < 1e-7) {
+                    // Try to directly get rid of the item
+                    if (this.tryHandOverItem(nextDistanceAndItem[_item], beltSpeed - remainingVelocity)) {
+                        this.items.pop();
+                        if (--this.numCompressedItemsAfterFirstItem < 0)
+                            this.numCompressedItemsAfterFirstItem = 0;
+                    }
+                }
+
+                remainingVelocity = 0;
+            } else {
+                // both are 0
+
+                // If the last item can be ejected, eject it and reduce the spacing, because otherwise
+                // we lose velocity
+                if (isFirstItemProcessed && nextDistanceAndItem[_nextDistance] < 1e-7) {
+                    // Try to directly get rid of the item
+                    if (this.tryHandOverItem(nextDistanceAndItem[_item], beltSpeed)) {
+                        this.items.pop();
+                        if (--this.numCompressedItemsAfterFirstItem < 0)
+                            this.numCompressedItemsAfterFirstItem = 0;
+                    }
                 }
             }
 

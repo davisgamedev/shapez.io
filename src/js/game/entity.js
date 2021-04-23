@@ -23,6 +23,7 @@ export class Entity extends BasicSerializableObject {
         /**
          * Handle to the global game root
          */
+        // TODO: since this is on the class, won't this cause a copy of root on _every_ single entity? Shouldn't this be on a prototype instead?
         this.root = root;
 
         /**
