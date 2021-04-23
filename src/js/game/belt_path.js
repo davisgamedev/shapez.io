@@ -1070,6 +1070,8 @@ export class BeltPath extends BasicSerializableObject {
         let lastItemProcessed;
 
         for (lastItemProcessed = this.items.length - 1; lastItemProcessed >= 0; --lastItemProcessed) {
+            if (!isFirstItemProcessed) break;
+
             const nextDistanceAndItem = this.items[lastItemProcessed];
 
             // Compute how much spacing we need at least
@@ -1078,102 +1080,61 @@ export class BeltPath extends BasicSerializableObject {
 
             const dif = nextDistanceAndItem[_nextDistance] - minimumSpacing;
 
-            if (dif == 0 && remainingVelocity == 0) {
-                // both are 0
-
-                // If the last item can be ejected, eject it and reduce the spacing, because otherwise
-                // we lose velocity
-                if (isFirstItemProcessed && nextDistanceAndItem[_nextDistance] < 1e-7) {
-                    // Try to directly get rid of the item
-                    if (this.tryHandOverItem(nextDistanceAndItem[_item], beltSpeed)) {
-                        this.items.pop();
-                        if (--this.numCompressedItemsAfterFirstItem < 0)
-                            this.numCompressedItemsAfterFirstItem = 0;
-                    }
-                }
-            }
-
+            // distance ahead to our buddy is too smol to move right now, but...
             if (dif < 0) {
+                // if we're in the front, and ahead is
                 if (isFirstItemProcessed && nextDistanceAndItem[_nextDistance] < 1e-7) {
-                    // Try to directly get rid of the item
+                    // can we eject and make space?
                     if (this.tryHandOverItem(nextDistanceAndItem[_item], beltSpeed)) {
                         this.items.pop();
 
+                        // neat, let's give our buddies some room
                         if (this.numCompressedItemsAfterFirstItem > 0) {
                             const itemBehind = this.items[lastItemProcessed - 1];
 
                             if (itemBehind) {
-                                // remaining is never < 0
                                 if (itemBehind[_nextDistance] > remainingVelocity) {
-                                    // pick remain
-                                    // See above
+                                    // scoot forward as much as you can
                                     itemBehind[_nextDistance] -= remainingVelocity;
                                     this.spacingToFirstItem += remainingVelocity;
+
+                                    // that's it we're stuck now womp womp
                                     remainingVelocity = -1;
                                 } else if (itemBehind[_nextDistance] > 0) {
-                                    // pick behind
+                                    // yay we can friggin go man
                                     remainingVelocity -= itemBehind[_nextDistance];
                                     this.spacingToFirstItem += itemBehind[_nextDistance];
-                                    itemBehind[_nextDistance] = 0;
+                                    itemBehind[_nextDistance] = 0; // i think this means he's clear to go?
                                 }
                             }
                             this.numCompressedItemsAfterFirstItem--;
                         }
                     }
                 }
+            } else {
+                let excessSpeed = beltSpeed; // try to go full speed unless ya can't
+
+                if (dif != 0 && dif <= remainingVelocity) {
+                    remainingVelocity -= dif;
+                    nextDistanceAndItem[_nextDistance] -= dif;
+                    this.spacingToFirstItem += dif;
+                    excessSpeed = beltSpeed - dif;
+                } else if (remainingVelocity < dif) {
+                    nextDistanceAndItem[_nextDistance] -= remainingVelocity;
+                    this.spacingToFirstItem += remainingVelocity;
+                    excessSpeed = beltSpeed - remainingVelocity;
+                    remainingVelocity = 0;
+                }
 
                 if (isFirstItemProcessed) {
-                    // Skip N null items after first items
-                    lastItemProcessed -= this.numCompressedItemsAfterFirstItem;
-                }
-
-                isFirstItemProcessed = false;
-                if (remainingVelocity < 1e-7) {
-                    break;
-                }
-            } else if (dif <= remainingVelocity) {
-                remainingVelocity -= dif;
-
-                nextDistanceAndItem[_nextDistance] -= dif;
-
-                this.spacingToFirstItem += dif;
-
-                if (isFirstItemProcessed && nextDistanceAndItem[_nextDistance] < 1e-7) {
-                    const excessVelocity = beltSpeed - dif;
-
-                    // Try to directly get rid of the item
-                    if (this.tryHandOverItem(nextDistanceAndItem[_item], excessVelocity)) {
+                    if (
+                        this.tryHandOverItem(
+                            nextDistanceAndItem[_item],
+                            excessSpeed,
+                            nextDistanceAndItem[_nextDistance]
+                        )
+                    ) {
                         this.items.pop();
-
-                        if (--this.numCompressedItemsAfterFirstItem < 0)
-                            this.numCompressedItemsAfterFirstItem = 0;
-                    }
-                }
-            } else if (remainingVelocity < dif) {
-                nextDistanceAndItem[_nextDistance] -= remainingVelocity;
-                this.spacingToFirstItem += remainingVelocity;
-
-                if (isFirstItemProcessed && nextDistanceAndItem[_nextDistance] < 1e-7) {
-                    // Try to directly get rid of the item
-                    if (this.tryHandOverItem(nextDistanceAndItem[_item], beltSpeed - remainingVelocity)) {
-                        this.items.pop();
-                        if (--this.numCompressedItemsAfterFirstItem < 0)
-                            this.numCompressedItemsAfterFirstItem = 0;
-                    }
-                }
-
-                remainingVelocity = 0;
-            } else {
-                // both are 0
-
-                // If the last item can be ejected, eject it and reduce the spacing, because otherwise
-                // we lose velocity
-                if (isFirstItemProcessed && nextDistanceAndItem[_nextDistance] < 1e-7) {
-                    // Try to directly get rid of the item
-                    if (this.tryHandOverItem(nextDistanceAndItem[_item], beltSpeed)) {
-                        this.items.pop();
-                        if (--this.numCompressedItemsAfterFirstItem < 0)
-                            this.numCompressedItemsAfterFirstItem = 0;
                     }
                 }
             }
@@ -1189,22 +1150,16 @@ export class BeltPath extends BasicSerializableObject {
             }
         }
 
-        // Compute compressed item count
-        this.numCompressedItemsAfterFirstItem = Math.max(
-            0,
-            this.numCompressedItemsAfterFirstItem,
-            this.items.length - 2 - lastItemProcessed
-        );
+        let newCompressed = this.items.length - 2 - lastItemProcessed;
+        this.numCompressedItemsAfterFirstItem > newCompressed
+            ? this.numCompressedItemsAfterFirstItem
+            : newCompressed;
 
         // Check if we have an item which is ready to be emitted
         const lastItem = this.items[this.items.length - 1];
         if (lastItem && lastItem[_nextDistance] === 0 && this.acceptorTarget) {
-            if (this.tryHandOverItem(lastItem[_item])) {
+            if (this.tryHandOverItem(lastItem[_item], 0, 0)) {
                 this.items.pop();
-                this.numCompressedItemsAfterFirstItem = Math.max(
-                    0,
-                    this.numCompressedItemsAfterFirstItem - 1
-                );
             }
         }
 
@@ -1217,9 +1172,13 @@ export class BeltPath extends BasicSerializableObject {
      * Tries to hand over the item to the end entity
      * @param {BaseItem} item
      */
-    tryHandOverItem(item, remainingProgress = 0.0) {
+    tryHandOverItem(item, remainingProgress = 0.0, nextDistance = null) {
         if (!this.acceptorTarget) {
-            return;
+            return false;
+        }
+
+        if (nextDistance && nextDistance >= 1e-7) {
+            return false;
         }
 
         const targetAcceptorComp = this.acceptorTarget.entity.components.ItemAcceptor;
@@ -1249,6 +1208,12 @@ export class BeltPath extends BasicSerializableObject {
                         remainingProgress
                     );
                 }
+            }
+
+            // prettier-ignore
+            if (nextDistance != null && this.numCompressedItemsAfterFirstItem > 0) {
+                this.numCompressedItemsAfterFirstItem--;
+                return 2; // don't sue me
             }
 
             return true;
