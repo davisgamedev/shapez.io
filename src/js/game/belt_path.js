@@ -1070,62 +1070,68 @@ export class BeltPath extends BasicSerializableObject {
         let lastItemProcessed;
 
         for (lastItemProcessed = this.items.length - 1; lastItemProcessed >= 0; --lastItemProcessed) {
-            if (!isFirstItemProcessed) break;
-
             const nextDistanceAndItem = this.items[lastItemProcessed];
 
             // Compute how much spacing we need at least
             const minimumSpacing =
                 lastItemProcessed === this.items.length - 1 ? 0 : globalConfig.itemSpacingOnBelts;
 
+            // how far is the next item
             const dif = nextDistanceAndItem[_nextDistance] - minimumSpacing;
 
-            // distance ahead to our buddy is too smol to move right now, but...
-            if (dif < 0) {
-                // if we're in the front, and ahead is
-                if (isFirstItemProcessed && nextDistanceAndItem[_nextDistance] < 1e-7) {
-                    // can we eject and make space?
-                    if (this.tryHandOverItem(nextDistanceAndItem[_item], beltSpeed)) {
-                        this.items.pop();
+            // if we're TOO CLOSE AH scary stuff, but we only care if we're the first
+            if (isFirstItemProcessed && dif < 0) {
+                // can we try to eject?
+                if (
+                    nextDistanceAndItem[_nextDistance] < 1e-7 && // not sure we need this check but whatever
+                    this.tryHandOverItem(nextDistanceAndItem[_item], beltSpeed)
+                ) {
+                    // poof
+                    this.items.pop();
 
-                        // neat, let's give our buddies some room
-                        if (this.numCompressedItemsAfterFirstItem > 0) {
-                            const itemBehind = this.items[lastItemProcessed - 1];
+                    // neat, let's give our buddies some room
+                    if (this.numCompressedItemsAfterFirstItem > 0) {
+                        // So, with the next tick we will skip this item, but it actually has the potential
+                        // to process farther -> If we don't advance here, we loose a tiny bit of progress
+                        // every tick which causes the belt to be slower than it actually is.
+                        // Also see #999
 
-                            if (itemBehind) {
-                                if (itemBehind[_nextDistance] > remainingVelocity) {
-                                    // scoot forward as much as you can
-                                    itemBehind[_nextDistance] -= remainingVelocity;
-                                    this.spacingToFirstItem += remainingVelocity;
+                        // ^ yeah totally that
+                        const itemBehind = this.items[lastItemProcessed - 1];
 
-                                    // that's it we're stuck now womp womp
-                                    remainingVelocity = -1;
-                                } else if (itemBehind[_nextDistance] > 0) {
-                                    // yay we can friggin go man
-                                    remainingVelocity -= itemBehind[_nextDistance];
-                                    this.spacingToFirstItem += itemBehind[_nextDistance];
-                                    itemBehind[_nextDistance] = 0; // i think this means he's clear to go?
-                                }
+                        if (itemBehind) {
+                            if (itemBehind[_nextDistance] > remainingVelocity) {
+                                itemBehind[_nextDistance] -= remainingVelocity;
+                                this.spacingToFirstItem += remainingVelocity;
+
+                                remainingVelocity = -1;
+                            } else if (itemBehind[_nextDistance] > 0) {
+                                remainingVelocity -= itemBehind[_nextDistance];
+                                this.spacingToFirstItem += itemBehind[_nextDistance];
+                                itemBehind[_nextDistance] = 0;
                             }
-                            this.numCompressedItemsAfterFirstItem--;
                         }
+                        this.numCompressedItemsAfterFirstItem--;
                     }
                 }
             } else {
                 let excessSpeed = beltSpeed; // try to go full speed unless ya can't
 
                 if (dif != 0 && dif <= remainingVelocity) {
+                    // we got some room let's get goin man
                     remainingVelocity -= dif;
                     nextDistanceAndItem[_nextDistance] -= dif;
                     this.spacingToFirstItem += dif;
                     excessSpeed = beltSpeed - dif;
                 } else if (remainingVelocity < dif) {
+                    // we're actually stuck here so let's just freeze why don't we
                     nextDistanceAndItem[_nextDistance] -= remainingVelocity;
                     this.spacingToFirstItem += remainingVelocity;
                     excessSpeed = beltSpeed - remainingVelocity;
                     remainingVelocity = 0;
                 }
 
+                // see if we can't process ourself
                 if (isFirstItemProcessed) {
                     if (
                         this.tryHandOverItem(
@@ -1150,10 +1156,9 @@ export class BeltPath extends BasicSerializableObject {
             }
         }
 
-        let newCompressed = this.items.length - 2 - lastItemProcessed;
-        this.numCompressedItemsAfterFirstItem > newCompressed
+        this.numCompressedItemsAfterFirstItem > this.items.length - 2
             ? this.numCompressedItemsAfterFirstItem
-            : newCompressed;
+            : this.items.length - 2;
 
         // Check if we have an item which is ready to be emitted
         const lastItem = this.items[this.items.length - 1];
@@ -1166,6 +1171,9 @@ export class BeltPath extends BasicSerializableObject {
         if (G_IS_DEV && globalConfig.debug.checkBeltPaths) {
             this.debug_checkIntegrity("post-update");
         }
+
+        // I don't know if this is necessary, but resetting to zero for this seemed to be a priority
+        if (this.numCompressedItemsAfterFirstItem < 0) this.numCompressedItemsAfterFirstItem;
     }
 
     /**
@@ -1178,6 +1186,7 @@ export class BeltPath extends BasicSerializableObject {
         }
 
         if (nextDistance && nextDistance >= 1e-7) {
+            // tried to eject from a distance but was too far
             return false;
         }
 
@@ -1213,7 +1222,7 @@ export class BeltPath extends BasicSerializableObject {
             // prettier-ignore
             if (nextDistance != null && this.numCompressedItemsAfterFirstItem > 0) {
                 this.numCompressedItemsAfterFirstItem--;
-                return 2; // don't sue me
+                return 2; // don't sue me // actually don't need this anymore but could be nifty in the future
             }
 
             return true;
