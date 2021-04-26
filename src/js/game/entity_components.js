@@ -89,6 +89,9 @@ export class EntityComponentStorage {
         /** @type {ItemProducerComponent} */
         this.ItemProducer;
 
+        // set by Item_Ejector
+        this.PassOverImplementation = null;
+
         /* typehints:end */
     }
 }

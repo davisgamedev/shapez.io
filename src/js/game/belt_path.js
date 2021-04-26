@@ -131,8 +131,9 @@ export class BeltPath extends BasicSerializableObject {
                 globalConfig.itemSpacingOnBelts;
 
             // First, compute how much progress we can make *at max*
-            const maxProgress = Math.max(0, this.spacingToFirstItem - globalConfig.itemSpacingOnBelts);
-            const initialProgress = Math.min(maxProgress, beltProgressPerTick);
+            let maxProgress = this.spacingToFirstItem - globalConfig.itemSpacingOnBelts;
+            if (maxProgress < 0) maxProgress = 0;
+            const initialProgress = maxProgress < beltProgressPerTick ? maxProgress : beltProgressPerTick;
 
             this.items.unshift([this.spacingToFirstItem - initialProgress, item]);
             this.spacingToFirstItem = initialProgress;
@@ -1201,6 +1202,7 @@ export class BeltPath extends BasicSerializableObject {
         // Try to pass over
         if (
             this.root.systemMgr.systems.itemEjector.tryPassOverItem(
+                // this is the slow boy
                 item,
                 this.acceptorTarget.entity,
                 this.acceptorTarget.slot

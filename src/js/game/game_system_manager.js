@@ -253,30 +253,30 @@ export class GameSystemManager {
      */
 
     async update() {
-        await Promise.all(
-            Object.entries(this.systems).map(
-                ([key, system]) =>
-                    new Promise((resolve, reject) => {
-                        Promise.resolve(1).then(async () => {
-                            if (G_IS_DEV) {
-                                await this[key + "Update"](key, system);
-                            } else {
-                                await system.update();
-                            }
-                            resolve();
-                        });
-                    })
-            )
-        );
+        // await Promise.all(
+        //     Object.entries(this.systems).map(
+        //         ([key, system]) =>
+        //             new Promise((resolve, reject) => {
+        //                 Promise.resolve(1).then(async () => {
+        //                     if (G_IS_DEV) {
+        //                         await this[key + "Update"](key, system);
+        //                     } else {
+        //                         await system.update();
+        //                     }
+        //                     resolve();
+        //                 });
+        //             })
+        //     )
+        // );
 
-        // for (let i = 0; i < this.systemUpdateOrder.length; ++i) {
-        //     const system = this.systems[this.systemUpdateOrder[i]];
-        //     if (G_IS_DEV) {
-        //         await this[key + "Update"](key, system);
-        //     } else {
-        //         await system.update();
-        //     }
-        // }
+        for (let i = 0; i < this.systemUpdateOrder.length; ++i) {
+            const system = this.systems[this.systemUpdateOrder[i]];
+            if (G_IS_DEV) {
+                await this[this.systemUpdateOrder[i] + "Update"](this.systemUpdateOrder[i], system);
+            } else {
+                await system.update();
+            }
+        }
     }
 
     async refreshCaches() {

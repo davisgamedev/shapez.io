@@ -31,6 +31,8 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
         );
 
         this.root.signals.postLoadHook.add(this.recomputeCacheFull, this);
+
+        this.initPassOverImplementations();
     }
 
     /**
@@ -161,13 +163,11 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
                 }
 
                 // Advance items on the slot
-                sourceSlot.progress = Math.min(
-                    1,
+                sourceSlot.progress =
                     sourceSlot.progress +
-                        progressGrowth *
-                            this.root.hubGoals.getBeltBaseSpeed() *
-                            globalConfig.itemSpacingOnBelts
-                );
+                    progressGrowth * this.root.hubGoals.getBeltBaseSpeed() * globalConfig.itemSpacingOnBelts;
+
+                if (sourceSlot.progress > 1.0) sourceSlot.progress = 1.0;
 
                 if (G_IS_DEV && globalConfig.debug.disableEjectorProcessing) {
                     sourceSlot.progress = 1.0;
@@ -218,6 +218,49 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
         }
     }
 
+    initPassOverImplementations() {
+        this.passOverImplementations = {
+            Belt: (component, item, receiver, slotIndex) => {
+                const path = component.assignedPath;
+                assert(path, "belt has no path");
+                if (path.tryAcceptItem(item)) {
+                    return true;
+                }
+                // Belt can have nothing else
+                return false;
+            },
+
+            ItemProcessor: (component, item, receiver, slotIndex) => {
+                if (!this.root.systemMgr.systems.itemProcessor.checkRequirements(receiver, item, slotIndex)) {
+                    return false;
+                }
+
+                // Its an item processor ..
+                if (component.tryTakeItem(item, slotIndex)) {
+                    return true;
+                }
+                // Item processor can have nothing else
+                return false;
+            },
+
+            UndergroundBelt: (component, item, receiver, slotIndex) => {
+                // Its an underground belt. yay.
+                return component.tryAcceptExternalItem(
+                    item,
+                    this.root.hubGoals.getUndergroundBeltBaseSpeed()
+                );
+            },
+
+            Storage: (component, item, receiver, slotIndex) => {
+                return component.canAcceptItem(item) && component.takeItem(item) && true;
+            },
+            Filter: (component, item, receiver, slotIndex) => {
+                return this.root.systemMgr.systems.filter.tryAcceptItem(receiver, slotIndex, item);
+            },
+        };
+        window.logme = 100;
+    }
+
     /**
      *
      * @param {BaseItem} item
@@ -227,6 +270,40 @@ export class ItemEjectorSystem extends GameSystemWithFilter {
     tryPassOverItem(item, receiver, slotIndex) {
         // Try figuring out how what to do with the item
         // @TODO: Kinda hacky. How to solve this properly? Don't want to go through inheritance hell.
+
+        // prettier-ignore
+        // if((window.doLog = window.doLog || -10) && window.doLog-- > -100) {
+        //     console.log("item, reciever, slot");
+        //     console.log(item, receiver, slotIndex);
+        // }
+
+        if (!window.doNormalEjectorPassOverItem) {
+            // like this
+
+            let implementation = receiver.components.PassOverImplementation;
+            if (window.logme-- > 0) console.log(receiver, implementation);
+
+            if(implementation == undefined) {
+                Object.entries(this.passOverImplementations).forEach((k, v) => {
+                    if(receiver.components[k]) {
+                        implementation = v;
+                        if (window.logme-- > 0) {
+                            console.log(k, b, Object.keys(receiver.components));
+                        }
+                        return;
+                    }
+                    if (window.logme-- > 0) {
+                        console.log(k, b, Object.keys(receiver.components));
+                    }
+                });
+                receiver.components.PassOverImplementation = implementation;
+
+            }
+
+            if (window.logme-- > 0) console.log(receiver);
+            if(implementation) implementation(item, receiver, slotIndex);
+            else return false;
+        }
 
         const beltComp = receiver.components.Belt;
         if (beltComp) {
