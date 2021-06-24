@@ -234,11 +234,7 @@ export class InGameState extends GameState {
             logger.log("Creating new game core");
             this.core = new GameCore(this.app);
 
-<<<<<<< HEAD
-            await this.core.initializeRoot(this, this.savegame);
-=======
-            this.core.initializeRoot(this, this.savegame, this.gameModeId);
->>>>>>> 68f208181d3dca835547ec5ba0f55974e53646c0
+            await this.core.initializeRoot(this, this.savegame, this.gameModeId);
 
             if (this.savegame.hasGameDump()) {
                 this.stage4bResumeGame();

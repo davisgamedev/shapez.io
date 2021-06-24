@@ -26,7 +26,6 @@ export class ConstantSignalSystem extends GameSystemWithFilter {
         // Set signals
         for (let i = this.allEntitiesArray.length - 1; i >= 0; --i) {
             const entity = this.allEntitiesArray[i];
-            const pinsComp = entity.components.WiredPins;
             const signalComp = entity.components.ConstantSignal;
             const pinsComp = entity.components.WiredPins;
 
