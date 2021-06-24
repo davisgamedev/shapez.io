@@ -51,9 +51,12 @@ export class AnimationFrame {
             dt = resetDtMs;
         }
 
-        await this.frameEmitted.dispatchAsync(dt);
+        try {
+            await this.frameEmitted.dispatchAsync(dt);
+        } catch (ex) {
+            console.error(ex);
+        }
         this.lastTime = time;
-
         window.requestAnimationFrame(this.boundMethod);
     }
 }

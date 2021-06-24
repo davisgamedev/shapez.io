@@ -19,6 +19,7 @@ import { DisplayComponent } from "./components/display";
 import { BeltReaderComponent } from "./components/belt_reader";
 import { FilterComponent } from "./components/filter";
 import { ItemProducerComponent } from "./components/item_producer";
+import { GoalAcceptorComponent } from "./components/goal_acceptor";
 /* typehints:end */
 
 /**
@@ -89,8 +90,8 @@ export class EntityComponentStorage {
         /** @type {ItemProducerComponent} */
         this.ItemProducer;
 
-        // set by Item_Ejector
-        this.PassOverImplementation = null;
+        /** @type {GoalAcceptorComponent} */
+        this.GoalAcceptor;
 
         /* typehints:end */
     }
